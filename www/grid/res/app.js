@@ -52,7 +52,7 @@ var store = {
 		init: function() {
 			$('.qz-chart-holder').each(function() {
 				console.dir($(this));
-				$(this).resize();
+				$(this).resize(function() { console.log('Flot Chart(s) resized.'); });
 			});
 		},
 		one: function(data_obj, val, qty_max) {
