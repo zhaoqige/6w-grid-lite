@@ -6,6 +6,14 @@ var store = {
 	offlineCounterBar: 6,
 
 	defaultRecordQty: 200, // 200 records for each chart
+	flot: {
+		color: [
+			'lime', 'red', 'blue', 'purple', 'deep-purple', 
+			'indigo', 'pink', 'light-blue', 'cyan', 'teal', 
+			'green', 'light-green', 'yellow', 'amber', 'orange', 
+			'deep-orange', 'brown', 'grey', 'blue-grey'
+		]
+	}
 };
 
 // window.location.href
@@ -50,9 +58,10 @@ var store = {
 (function($) {
 	$.flot = {
 		init: function() {
-			$('.qz-chart-holder').each(function() {
-				console.dir($(this));
-				$(this).resize(function() { console.log('Flot Chart(s) resized.'); });
+			$('.qz-chart-holder').each(function(idx, item) {
+				var color = store.flot.color[idx];
+				$(this).addClass(color)
+					.resize(function() { console.log('Flot Chart(s) resized.'); });
 			});
 		},
 		one: function(data_obj, val, qty_max) {
@@ -61,6 +70,9 @@ var store = {
 				data_obj.shift();
 			}
 			data_obj.push(val);
+		},
+		color: function(idx) {
+			return store.flot.color[idx];
 		}
 	}
 }) (jQuery);
