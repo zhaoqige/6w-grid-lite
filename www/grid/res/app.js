@@ -12,7 +12,26 @@ var store = {
 			'indigo', 'pink', 'light-blue', 'cyan', 'teal', 
 			'green', 'light-green', 'yellow', 'amber', 'orange', 
 			'deep-orange', 'brown', 'grey', 'blue-grey'
-		]
+		],
+		data: {
+			local: {
+				wan_tx: [0,1,2,3,4,5,6,7,8,9],
+				wan_rx: [9,1,8,2,7,3,6,4,5,0],
+				lan_tx: [0],
+				lan_rx: [0]
+			},
+			peers: [{
+				wan_tx: [2,1,1,1,9,8,6],
+				wan_rx: [4,2,9,1,9,8,7],
+				lan_tx: [0],
+				lan_rx: [0]
+			},{
+				wan_tx: [7,0,3,2,0,0,6],
+				wan_rx: [2,0,0,6,7,0,3],
+				lan_tx: [0],
+				lan_rx: [0]
+			}]
+		}
 	}
 };
 
@@ -58,8 +77,67 @@ var store = {
 (function($) {
 	$.flot = {
 		init: function() {
-			$('.qz-chart-holder').each(function(idx, item) {
-				var color = store.flot.color[idx];
+			var flots = $('.qz-chart-holder');
+			flots.each(function(idx, item) {
+				var i, wan_tx, wan_rx, lan_tx, lan_rx;
+				var data_wan_tx = [], data_wan_rx = [];
+
+				if (idx) {
+					var index = idx - 1;
+					wan_tx = store.flot.data.peers[index].wan_tx;
+					wan_rx = store.flot.data.peers[index].wan_rx;
+				} else {
+					wan_tx = store.flot.data.local.wan_tx;
+					wan_rx = store.flot.data.local.wan_rx;
+				}
+
+				for(i = 0; i < wan_tx.length; i ++) {
+					data_wan_tx.push([i, wan_tx[i]]);
+				}
+
+				for(i = 0; i < wan_rx.length; i ++) {
+					data_wan_rx.push([i, wan_rx[i]]);
+				}
+				var data = [{
+					label: "WAN Tx",
+					data: data_wan_tx
+				}, {
+					label: "WAN Rx",
+					data: data_wan_rx
+				}];
+				var flot = $.plot($(this), data, {
+					series: {
+						stack: true, // stack lines
+						lines: {
+							show: true
+						},
+						points: {
+							show: true
+						},
+						shadowSize: 0 // remove shadow to draw faster
+					},
+					grid: {
+						//hoverable: true,
+						//clickable: true
+					},
+					yaxis: {
+						min: 0,
+						//max: 30
+					},
+					xaxis: {
+						show: true,
+						tickDecimals: 0
+					},
+					legend: {
+						show: false // TODO: fix legend size
+					}
+				});
+
+				//flot.setData([]);
+				//flot.draw();
+			});
+			flots.each(function(idx, item) {
+				var color = $.flot.color(idx) || 'cyan';
 				$(this).addClass(color)
 					.resize(function() { console.log('Flot Chart(s) resized.'); });
 			});
@@ -73,6 +151,9 @@ var store = {
 		},
 		color: function(idx) {
 			return store.flot.color[idx];
+		},
+		sync: function() {
+			console.log("$.Flot.sync()");
 		}
 	}
 }) (jQuery);
@@ -80,6 +161,8 @@ var store = {
 // data controller
 (function($) {
 	$.cache = {
+		init: function() {
+		},
 		demo: {
 			data_local_basic: function() {
 				var data = {
@@ -159,6 +242,8 @@ var store = {
 		init: function(mode) {
 			store.mode = mode;
 			$.ui.init();
+			$.cache.init();
+			$.flot.sync();
 		},
 		run: function(mode) {
 			$.app.init(mode);
@@ -180,101 +265,3 @@ $(function() {
 	$.app.run(m);
 });
 
-
-
-
-
-// import from flot examples
-$(function() {
-		// We use an inline data source in the example, usually data would
-		// be fetched from a server
-
-		var data = [],
-			totalPoints = 300;
-
-		function getRandomData() {
-
-			if (data.length > 0)
-				data = data.slice(1);
-
-			// Do a random walk
-
-			while (data.length < totalPoints) {
-
-				var prev = data.length > 0 ? data[data.length - 1] : 25,
-					y = prev + Math.random() * 10 - 5;
-
-				if (y < 0) {
-					y = 0;
-				} else if (y > 100) {
-					y = 100;
-				}
-
-				data.push(y);
-			}
-
-			// Zip the generated y values with the x values
-
-			var res = [];
-			for (var i = 0; i < data.length; ++i) {
-				res.push([i, data[i]])
-			}
-
-			return res;
-		}
-
-		var plot = $.plot("#qz-chart-local", [ getRandomData() ], {
-			series: {
-				shadowSize: 0	// Drawing is faster without shadows
-			},
-			yaxis: {
-				min: 0,
-				max: 100
-			},
-			xaxis: {
-				show: true
-			}
-		});
-
-		var chart_peers = $('.qz-chart-peer');
-		var plot2 = $.plot(chart_peers[0], [ getRandomData() ], {
-			series: {
-				shadowSize: 0	// Drawing is faster without shadows
-			},
-			yaxis: {
-				min: 0,
-				max: 100
-			},
-			xaxis: {
-				show: true
-			}
-		});
-
-		var plot3 = $.plot(chart_peers[1], [ getRandomData() ], {
-			series: {
-				shadowSize: 0	// Drawing is faster without shadows
-			},
-			yaxis: {
-				min: 0,
-				max: 100
-			},
-			xaxis: {
-				show: true
-			}
-		});
-
-		function update() {
-			plot.setData([getRandomData()]);
-			// Since the axes don't change, we don't need to call plot.setupGrid()
-			plot.draw();
-			plot2.setData([getRandomData()]);
-			plot2.draw();
-
-			plot3.setData([getRandomData()]);
-			plot3.draw();
-
-			setTimeout(update, 2500);
-		}
-		update();
-
-});

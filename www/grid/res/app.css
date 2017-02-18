@@ -26,3 +26,8 @@ main {
 	width: 100%;
 	height: 200px;
 }
+
+
+/* to fix Flot + Materialize */
+.legendColorBox,.legendLabel {
+}
