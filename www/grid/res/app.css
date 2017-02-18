@@ -22,7 +22,7 @@ main {
 	margin: 0 !important;
 }
 
-#qz-chart-abb-local,#qz-chart-nw-local,#qz-chart-snr-local {
+.qz-chart-holder {
 	width: 100%;
 	height: 200px;
 }

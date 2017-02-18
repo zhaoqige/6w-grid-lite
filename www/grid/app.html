@@ -22,13 +22,13 @@
 <div id="tab1" class="col s12">
 	<div class="container">
 		<div class="section">
-			<h5>Current Connection</h5>
+			<h5>Local Node</h5>
 			<div class="row">
 				<div class="col s12">
 					<div class="card">
 						<div class="card-image waves-effect waves-block waves-light">
       						<div class="qz-space">
-      							<div id="qz-chart-abb-local"></div>
+      							<div id="qz-chart-local" class="qz-chart-holder"></div>
       						</div>
     					</div>
     					<div class="card-content center">
@@ -51,13 +51,13 @@
   					</div>
 				</div>
 			</div>
-			<h5>Connected Stations</h5>
+			<h5>Connected Node(s)</h5>
 			<div class="row">
 				<div class="col s6">
 					<div class="card">
 						<div class="card-image waves-effect waves-block waves-light">
       						<div class="qz-space">
-      							<div id="qz-chart-nw-local"></div>
+      							<div class="qz-chart-holder qz-chart-peer"></div>
 							</div>
     					</div>
     					<div class="card-content center">
@@ -85,7 +85,7 @@
 					<div class="card">
 						<div class="card-image waves-effect waves-block waves-light">
       						<div class="qz-space">
-      							<div id="qz-chart-snr-local"></div>
+      							<div class="qz-chart-holder qz-chart-peer"></div>
 							</div>
     					</div>
     					<div class="card-content center">
@@ -157,6 +157,7 @@
 <script type="text/javascript" src="res/jquery.min.js"></script>
 <script type="text/javascript" src="res/materialize/js/materialize.min.js"></script>
 <script type="text/javascript" src="res/flot/jquery.flot.min.js"></script>
+<script type="text/javascript" src="res/flot/jquery.flot.resize.min.js"></script>
 <script type="text/javascript" src="res/app.js"></script>
 <!-- Design & Powered by Qige from 6Harmonics/6WiLink -->
 </body>
