@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link href="res/google/icon.css" rel="stylesheet">
+	<link type="text/css" rel="stylesheet" href="res/materialize/css/materialize.min.css"  media="screen,projection" />
+	<link type="text/css" rel="stylesheet" href="res/app.css" media="screen,projection" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>GRID lite from 6Harmonics</title>
+</head>
+<body class="blue-grey lighten-5">
+<nav class="nav-extended blue-grey">
+	<div class="nav-content">
+		<ul class="tabs tabs-transparent">
+			<li class="tab"><a class="active" href="#tab1">Status</a></li>
+			<li class="tab"><a href="#tab2">Settings</a></li>
+			<li class="tab"><a href="#tab3">Spectrum</a></li>
+			<li class="tab"><a href="#tab4">Tools!</a></li>
+			<li class="tab right"><a href="#tab5">Security</a></li>
+		</ul>
+	</div>
+</nav>
+<div id="tab1" class="col s12">
+	<div class="container">
+		<div class="section">
+			<h5>Current Connection</h5>
+			<div class="row">
+				<div class="col s12">
+					<div class="card">
+						<div class="card-image waves-effect waves-block waves-light">
+      						<div class="qz-space">
+      							<div id="qz-chart-abb-local"></div>
+      						</div>
+    					</div>
+    					<div class="card-content center">
+    						<p class="card-title activator grey-text text-darken-4">10.10.1.2 / 192.168.1.103</p>
+							<p>00:5E:AC:00:5E:B0 | CAR (router) | "gws2016" | Not encrypted | QoS</p>
+						</div>
+    					<div class="card-reveal">
+    						<span class="card-title grey-text text-darken-4">GWS Params<i class="material-icons right">...</i></span>
+      						<ul class="collection">
+								<li class="collection-item"><span class="badge">R1 - CH 43</span>Region - Channel</li>
+								<li class="collection-item"><span class="badge">650 MHz - 8 MHz</span>Frequency - Bandwidth</li>
+								<li class="collection-item"><span class="badge">33 dBm - TPC ON</span>Tx Power</li>
+								<li class="collection-item"><span class="badge">12 db - AGC ON</span>Rx Gain</li>
+							</ul>
+      					</div>
+      					<div class="card-action">
+              				<a href="#modal_local_settings">Settings</a>
+              				<a href="#">Reset</a>
+            			</div>
+  					</div>
+				</div>
+			</div>
+			<h5>Connected Stations</h5>
+			<div class="row">
+				<div class="col s6">
+					<div class="card">
+						<div class="card-image waves-effect waves-block waves-light">
+      						<div class="qz-space">
+      							<div id="qz-chart-nw-local"></div>
+							</div>
+    					</div>
+    					<div class="card-content center">
+    						<p class="card-title activator grey-text text-darken-4">192.168.1.100 / 192.168.66.1</p>
+							<p>00:5E:AC:00:5E:AE | EAR (router)</p>
+						</div>
+    					<div class="card-reveal">
+    						<span class="card-title grey-text text-darken-4">GWS Params<i class="material-icons right">.</i></span>
+      						<ul class="collection">
+								<li class="collection-item"><span class="badge">33 dBm</span>Tx Power</li>
+								<li class="collection-item"><span class="badge">12 db</span>Rx Gain</li>
+								<li class="collection-item"><span class="badge">ON</span>AGC</li>
+								<li class="collection-item"><span class="badge blue">OFF</span>TPC</li>
+								<li class="collection-item"><span class="badge grey">OFF</span>ATF</li>
+								<li class="collection-item"><span class="badge grey">OFF</span>TDMA</li>
+							</ul>
+      					</div>
+      					<div class="card-action">
+              				<a href="#modal_local_settings">Settings</a>
+              				<a href="#">Reset</a>
+            			</div>
+  					</div>
+				</div>
+				<div class="col s6">
+					<div class="card">
+						<div class="card-image waves-effect waves-block waves-light">
+      						<div class="qz-space">
+      							<div id="qz-chart-snr-local"></div>
+							</div>
+    					</div>
+    					<div class="card-content center">
+    						<p class="card-title activator grey-text text-darken-4">192.168.1.101</p>
+							<p>00:5E:AC:00:5E:AD | EAR (bridged) | QoS</p>
+						</div>
+    					<div class="card-reveal">
+    						<span class="card-title grey-text text-darken-4">GWS Params<i class="material-icons right">:</i></span>
+      						<ul class="collection">
+								<li class="collection-item"><span class="badge">33 dBm</span>Tx Power</li>
+								<li class="collection-item"><span class="badge new red">12 db</span>Rx Gain</li>
+								<li class="collection-item"><span class="badge">ON</span>AGC</li>
+								<li class="collection-item"><span class="badge blue">OFF</span>TPC</li>
+								<li class="collection-item"><span class="badge grey">OFF</span>ATF</li>
+								<li class="collection-item"><span class="badge grey">OFF</span>TDMA</li>
+							</ul>
+      					</div>
+      					<div class="card-action">
+              				<a href="#modal_local_settings">Settings</a>
+              				<a href="#">Reset</a>
+            			</div>
+  					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal Structure -->
+	<div id="modal_local_settings" class="modal">
+		<div class="modal-content">
+			<h4>Adjust</h4>
+			<p>If you are the owner of this device, or with propper authentication(s), then go ahead.</p>
+			<p>If not, this means you are breaking into others' property, in the meanwhile, breaking a "Federal Law". Please click "LEAVE" button and close this page.</p>
+			<p>Thank you</p>
+		</div>
+		<div class="modal-footer">
+			<a id="qz-owner" href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+			<button href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Save</button>
+		</div>
+	</div>
+</div>
+<div id="tab2" class="col s12">
+	<div class="container section">
+		<p>ABB, GWS, System, Network, Advanced Settings in TAB<p>
+		<p>ABB: CAR, EAR, Mesh</p>
+		<p>GWS: Region, Channel, TxPower, RxGain, AGC<p>
+		<p>System: ntp, firewall, QoS<p>
+		<p>Network: Bridged, Router, DHCP, Static/DHCP</p>
+		<p>Advanced: Firmware Upgrade, PAWS, ATF, TDMA, TPC<p>
+	</div>
+</div>
+<div id="tab3" class="col s12">
+	<div class="container section">
+		Channel Scan (Let user confirm that this op. will interrupt the communication with other radios)
+	</div>
+</div>
+<div id="tab4" class="col s12">
+	<div class="container section">
+		PING, iPerf, "SCAN", etc.
+	</div>
+</div>
+<div id="tab5" class="col s12">
+	<div class="container section">
+		Security
+	</div>
+</div>
+
+<script type="text/javascript" src="res/jquery.min.js"></script>
+<script type="text/javascript" src="res/materialize/js/materialize.min.js"></script>
+<script type="text/javascript" src="res/flot/jquery.flot.min.js"></script>
+<script type="text/javascript" src="res/app.js"></script>
+<!-- Design & Powered by Qige from 6Harmonics/6WiLink -->
+</body>
+</html>
