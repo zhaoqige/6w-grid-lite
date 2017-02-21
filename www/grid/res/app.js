@@ -7,31 +7,19 @@ var store = {
 
 	defaultRecordQty: 200, // 200 records for each chart
 	flot: {
+		intl: {
+			local: null,
+			peers: [],
+			DEMO: null
+		},
 		color: [
 			'lime', 'red', 'blue', 'purple', 'deep-purple', 
 			'indigo', 'pink', 'light-blue', 'cyan', 'teal', 
 			'green', 'light-green', 'yellow', 'amber', 'orange', 
 			'deep-orange', 'brown', 'grey', 'blue-grey'
 		],
-		data: {
-			local: {
-				wan_tx: [0,1,2,3,4,5,6,7,8,9],
-				wan_rx: [9,1,8,2,7,3,6,4,5,0],
-				lan_tx: [0],
-				lan_rx: [0]
-			},
-			peers: [{
-				wan_tx: [2,1,1,1,9,8,6],
-				wan_rx: [4,2,9,1,9,8,7],
-				lan_tx: [0],
-				lan_rx: [0]
-			},{
-				wan_tx: [7,0,3,2,0,0,6],
-				wan_rx: [2,0,0,6,7,0,3],
-				lan_tx: [0],
-				lan_rx: [0]
-			}]
-		}
+		chart: [],
+		data: null
 	}
 };
 
@@ -78,25 +66,40 @@ var store = {
 	$.flot = {
 		init: function() {
 			var flots = $('.qz-chart-holder');
-			flots.each(function(idx, item) {
+			var local = flots.first();
+			var local_chart = $.flot.chart(0, local);
+			store.flot.chart.length = 0;
+			store.flot.chart.push(local_chart);
+			$.flot.bg(0, local);
+		},
+		bg: function(idx, item) {
+				var color = $.flot.color(idx) || 'cyan';
+				if (typeof(item) == 'object') {
+					item.addClass(color)
+					.resize(function() { console.log('Flot Chart(s) resized.'); });
+				}
+		},
+		chart: function(idx, item) {
 				var i, wan_tx, wan_rx, lan_tx, lan_rx;
 				var data_wan_tx = [], data_wan_rx = [];
 
-				if (idx) {
-					var index = idx - 1;
-					wan_tx = store.flot.data.peers[index].wan_tx;
-					wan_rx = store.flot.data.peers[index].wan_rx;
-				} else {
-					wan_tx = store.flot.data.local.wan_tx;
-					wan_rx = store.flot.data.local.wan_rx;
-				}
+				if (store.flot.data) {
+					if (idx) {
+						var index = idx - 1;
+						wan_tx = store.flot.data.peers[index].wan_tx;
+						wan_rx = store.flot.data.peers[index].wan_rx;
+					} else {
+						wan_tx = store.flot.data.local.wan_tx;
+						wan_rx = store.flot.data.local.wan_rx;
+					}	
 
-				for(i = 0; i < wan_tx.length; i ++) {
-					data_wan_tx.push([i, wan_tx[i]]);
-				}
+					for(i = 0; i < wan_tx.length; i ++) {
+						data_wan_tx.push([i, wan_tx[i]]);
+					}
 
-				for(i = 0; i < wan_rx.length; i ++) {
-					data_wan_rx.push([i, wan_rx[i]]);
+					for(i = 0; i < wan_rx.length; i ++) {
+						data_wan_rx.push([i, wan_rx[i]]);
+					}
 				}
 				var data = [{
 					label: "WAN Tx",
@@ -105,7 +108,7 @@ var store = {
 					label: "WAN Rx",
 					data: data_wan_rx
 				}];
-				var flot = $.plot($(this), data, {
+				var flot = $.plot(item, data, {
 					series: {
 						stack: true, // stack lines
 						lines: {
@@ -126,7 +129,8 @@ var store = {
 					},
 					xaxis: {
 						show: true,
-						tickDecimals: 0
+						tickDecimals: 0,
+						min: 0
 					},
 					legend: {
 						show: false // TODO: fix legend size
@@ -135,12 +139,7 @@ var store = {
 
 				//flot.setData([]);
 				//flot.draw();
-			});
-			flots.each(function(idx, item) {
-				var color = $.flot.color(idx) || 'cyan';
-				$(this).addClass(color)
-					.resize(function() { console.log('Flot Chart(s) resized.'); });
-			});
+				return flot;
 		},
 		one: function(data_obj, val, qty_max) {
 			var max = qty_max || store.defaultRecordQty;
@@ -163,7 +162,72 @@ var store = {
 	$.cache = {
 		init: function() {
 		},
-		demo: {
+		RANDOM: {
+			int: function(range) {
+				return Math.random() * (range | 10);
+			}
+		},
+		fmt: {
+			dev: function(data) {
+				var dev = {
+					bridge: data.bridge,
+					mac: data.mac,
+					wan_ip: data.wan_ip,
+					wan_tx: data.wan_txb,
+					wan_rx: data.wan_rxb,
+					lan_ip: data.lan_ip,
+					lan_tx: data.lan_txb,
+					lan_rx: data.lan_rxb
+				};
+				return dev;	
+			}
+		},
+		query: {
+			local: function() {
+				return Math.random()*10;
+			},
+			DEMO: function(idx) {
+				var data = {
+					bridge: 0,
+					mac: '10:00:00:00:00:0'+idx,
+					wan_ip: '10.10.1.2'+idx,
+					wan_txb: $.cache.RANDOM.int(),
+					wan_rxb: $.cache.RANDOM.int(),
+					lan_ip: '192.168.1.2'+idx,
+					lan_txb: $.cache.RANDOM.int(),
+					lan_rxb: $.cache.RANDOM.int()
+				};
+				var dev = $.cache.fmt.dev(data);
+				return dev;
+			}
+		},
+		sync: {
+			local: function() {
+				var val = $.cache.query.local();
+				console.log(" val = "+val);
+				store.flot.data.local.wan_tx.push(val);
+			},
+			peers: function() {
+
+			},
+			DEMO: function() {
+				var demo = {
+					local: $.cache.query.DEMO(0),
+					peers: [ $.cache.query.DEMO(1), $.cache.query.DEMO(2) ]
+				};
+				console.dir(demo);
+				store.flot.data = demo;
+			}
+		},
+		update: function() {
+			// main data sync sequences
+			$.cache.sync.local();
+			$.cache.sync.peers();
+		},
+		DEMO: function() {
+			$.cache.sync.DEMO();
+		},
+		_: {
 			data_local_basic: function() {
 				var data = {
 					nw: [{
@@ -232,6 +296,9 @@ var store = {
 		init: function() {
 			$.materialize.init();
 			$.flot.init();
+		},
+		update: function() {
+			$.flot.sync();
 		}
 	}
 }) (jQuery);
@@ -243,16 +310,29 @@ var store = {
 			store.mode = mode;
 			$.ui.init();
 			$.cache.init();
-			$.flot.sync();
+		},
+		update: function() {
+			console.log("$.app.update()");
+			$.cache.update();
+			$.ui.update();
+		},
+		DEMO: function() {
+			console.log("$.app.DEMO()");
+			$.cache.DEMO();
+			$.ui.update();
 		},
 		run: function(mode) {
 			$.app.init(mode);
+
 			if (mode == 'realtime') {
 				console.log("App Running (realtime).");
+				// main loop
+				$.app.update();
+				store.flot.intl.local = setInterval("$.app.update", 1500);
 			} else {
 				console.log("App Running in DEMO mode.");
-				var data_local_basic = $.cache.demo.data_local_basic();
-				var data_local_update = $.cache.demo.data_local_update();
+				$.app.DEMO();
+				store.flot.intl.DEMO = setInterval("$.app.DEMO()", 2000);
 			}
 		}
 	}
