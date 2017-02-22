@@ -37,5 +37,12 @@ main {
 }
 
 /* to fix Flot + Materialize */
+.legend * {
+	margin:0;padding:0;
+}
+.legend table {
+	width: auto;
+}
 .legendColorBox,.legendLabel {
+	padding: 4px;
 }
