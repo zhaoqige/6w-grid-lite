@@ -15,7 +15,7 @@
 			<li class="tab"><a href="#tab2">Settings</a></li>
 			<li class="tab"><a href="#tab3">Spectrum</a></li>
 			<li class="tab"><a href="#tab4">Tools !</a></li>
-			<li class="tab right"><a href="#tab5">Security</a></li>
+			<li class="tab"><a href="#tab5">Security</a></li>
 		</ul>
 	</div>
 </nav>
@@ -139,7 +139,7 @@
 							<div class="col s5">
 								<div class="row">
 				    				<div class="input-field col s12">
-				    					<select id="qz-set-abb-mode" class="browser-default">
+				    					<select alt="abb" name="mode" id="qz-set-abb-mode" class="browser-default">
 											<option value="2" selected>Core Adaptive Radio (CAR, WDS)</option>
 											<option value="1">Edge Adaptive Radio (EAR, WDS)</option>
 											<option value="0">Mesh Node (Mesh, WDS)</option>
@@ -155,11 +155,11 @@
 				    		<div class="col s6 offset-s1">
 				    			<div class="row">
 									<div class="input-field col s12">
-										<input id="qz-set-abb-ssid" placeholder="Default is gws2016" class="validate" type="text" value="gws2016" />
+										<input alt="abb" name="ssid" id="qz-set-abb-ssid" placeholder="Default is gws2016" class="validate" type="text" value="gws2016" />
 										<label for="qz-set-abb-ssid">SSID</label>
 									</div>
 									<div class="input-field col s12">
-										<input id="qz-set-abb-passwd" placeholder="6Harmonics or 12345678" class="validate" type="password" value="" />
+										<input alt="abb" name="passwd" id="qz-set-abb-passwd" placeholder="6Harmonics or 12345678" class="validate" type="text" value="" />
 										<label for="qz-set-abb-passwd">Password</label>
 									</div>
 								</div>
@@ -175,19 +175,19 @@
 								<div class="row">
 									<h6>Tx Chain</h6>
 									<div class="input-field col s5">
-										<input id="qz-set-gws-tpc" type="checkbox" class="filled-in" checked="checked" />
+										<input alt="gws" name="tpc" id="qz-set-gws-tpc" type="checkbox" class="filled-in" checked="checked" />
 	      								<label for="qz-set-gws-tpc">Tx TPC</label>
 									</div>
 									<div class="input-field col s7">
-										<input id="qz-set-gws-txpwr" placeholder="Unit: dBm" class="validate" type="text" value="33" />
+										<input alt="gws" name="txpwr" id="qz-set-gws-txpwr" placeholder="Unit: dBm" class="validate" type="text" value="33" />
 										<label for="qz-set-gws-txpwr">Tx Power</label>
 									</div>
 									<div class="input-field col s12">
-										<input id="qz-set-gws-ch" placeholder="Unit: dBm" class="validate" type="text" value="33" />
+										<input alt="gws" name="ch" id="qz-set-gws-ch" placeholder="Unit: dBm" class="validate" type="text" value="33" />
 										<label for="qz-set-gws-ch">Channel</label>
 									</div>
 									<div class="input-field col s12">
-										<select id="qz-set-gws-rgn" class="browser-default">
+										<select alt="gws" name="rgn" id="qz-set-gws-rgn" class="browser-default">
 											<option value="0">Region 0</option>
 											<option value="1" selected>Region 1</option>
 										</select>
@@ -203,11 +203,11 @@
 								<div class="row">
 									<h6>Rx Chain</h6>
 									<div class="input-field col s5">
-										<input id="qz-set-gws-rxagc" type="checkbox" class="filled-in" checked="checked" />
+										<input alt="gws" name="rxagc" id="qz-set-gws-rxagc" type="checkbox" class="filled-in" checked="checked" />
 	      								<label for="qz-set-gws-rxagc">Rx AGC</label>
 									</div>
 									<div class="input-field col s7">
-										<input id="qz-set-gws-rxg" placeholder="Unit: dBm" class="validate" type="text" value="33" />
+										<input alt="gws" name="rxg" id="qz-set-gws-rxg" placeholder="Unit: dBm" class="validate" type="text" value="33" />
 										<label for="qz-set-gws-rxg">Rx Gain</label>
 									</div>
 								</div>
@@ -222,21 +222,21 @@
 							<div class="col s5">
 								<div class="row">
 				    				<div class="input-field col s12">
-				    					<select id="qz-set-nw-br" class="browser-default">
+				    					<select alt="nw" name="br" id="qz-set-nw-type" class="browser-default">
 											<option value="l2" selected>Run as Access Point ( Layer 2 )</option>
 											<option value="l3">Run as Router ( Layer 3 )</option>
 										</select>
 				    				</div>
 									<div class="input-field col s12">
-										<input id="qz-set-serv-dhcp" type="checkbox" class="filled-in" />
+										<input alt="serv" name="dhcp" id="qz-set-serv-dhcp" type="checkbox" class="filled-in" />
 	      								<label for="qz-set-serv-dhcp">Enable DHCP Service on LAN</label>
 									</div>
 									<div class="input-field col s12">
-										<input id="qz-set-serv-firewall" type="checkbox" class="filled-in" disabled />
+										<input alt="serv" name="firewall" id="qz-set-serv-firewall" type="checkbox" class="filled-in" disabled />
 	      								<label for="qz-set-serv-firewall">Firewall</label>
 									</div>
 									<div class="input-field col s12">
-										<input id="qz-set-serv-qos" type="checkbox" class="filled-in" disabled />
+										<input alt="serv" name="qos" id="qz-set-serv-qos" type="checkbox" class="filled-in" disabled />
 	      								<label for="qz-set-serv-qos">QoS</label>
 									</div>
 				    			</div>
@@ -244,11 +244,11 @@
 				    		<div class="col s6 offset-s1">
 				    			<div class="row">
 									<div class="input-field col s12">
-										<input id="qz-set-wan-ip" placeholder="Default is 10.10.1.1" class="validate" type="text" value="-" />
+										<input alt="nw" name="wanip" id="qz-set-wan-ip" placeholder="Default is 10.10.1.1" class="validate" type="text" value="-" />
 										<label for="qz-set-wan-ip">WAN Address</label>
 									</div>
 									<div class="input-field col s12">
-										<input id="qz-set-lan-ip" placeholder="Default is 192.168.66.1" class="validate" type="text" value="192.168.66.1" />
+										<input alt="nw" name="lanip" id="qz-set-lan-ip" placeholder="Default is 192.168.66.1" class="validate" type="text" value="192.168.66.1" />
 										<label for="qz-set-lan-ip">LAN Address</label>
 									</div>
 								</div>
@@ -269,7 +269,7 @@
 								<div class="row">
 									<h6>Date time</h6>
 									<div class="input-field col s12">
-										<input id="qz-set-serv-ntpd" type="checkbox" class="filled-in" disabled />
+										<input alt="serv" name="ntpd" id="qz-set-serv-ntpd" type="checkbox" class="filled-in" disabled />
 	      								<label for="qz-set-serv-ntpd">NTP daemon</label>
 									</div>
 								</div>
@@ -278,11 +278,11 @@
 								<div class="row">
 									<h6>FCC Regulation</h6>
 									<div class="input-field col s12">
-										<input id="qz-set-serv-paws" type="checkbox" class="filled-in" disabled />
+										<input alt="serv" name="paws" id="qz-set-serv-paws" type="checkbox" class="filled-in" disabled />
 	      								<label for="qz-set-serv-paws">PAWS Database</label>
 									</div>
 									<div class="input-field col s12">
-										<select id="qz-set-serv-paws-vendor" class="browser-default">
+										<select alt="serv" name="paws-vendor" id="qz-set-serv-paws-vendor" class="browser-default">
 											<option value="0">Google in UK</option>
 											<option value="1" selected>Microsoft in US</option>
 										</select>

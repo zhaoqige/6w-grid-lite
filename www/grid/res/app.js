@@ -246,6 +246,19 @@
 
 				$.ops.ajax(val, url, null);
 			});
+
+			$(':text').keydown(function(e) {
+				if (e.keyCode == 13) {
+					var obj = $(this);
+					var val = obj.val();
+					var cls = obj.attr('alt');
+					var name = obj.attr('name');
+					if (val && val != '-') {
+						console.log('enter >', val, cls, name);
+						$.ops.ajax('Save', '/cgi-bin/set', { com: cls, item: name, val: val });
+					}
+				}
+			});
 		},
 		ajax: function(ops, url, params) {
 			var prompt = '';
@@ -274,8 +287,8 @@
 				// reset nw: reload
 				// reset sys: close
 				$.ops.ajax_done(ops);
-			}, 'json')
-			.fail(function() {
+			})
+			.fail(function(resp) {
 				switch(ops) {
 				case 'nw':
 					prompt = 'Network has been RESET';
@@ -304,7 +317,7 @@
 				break;
 			case 'sys':
 				$.materialize.toast('Closing this page due to Device is REBOOTING', 5000);
-				setTimeout("$.url.close()", 5000);
+				setTimeout("$.url.goto('/', 'Reboot')", 5000);
 				break;
 			default:
 				break;
