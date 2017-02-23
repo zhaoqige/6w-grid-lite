@@ -4,8 +4,12 @@
 
 gws = {}
 
+gws.conf = {}
+gws.conf.rfinfo = 'rfinfo'
+
+
 gws.ops = {}
-function gws.ops.update()
+function gws.ops.Update()
 	local _gws = {}
 	
 	_gws.rgn = 1
@@ -17,5 +21,9 @@ function gws.ops.update()
 	
 	return _gws
 end
+
+function gws.ops.read()
+end
+
 
 return gws
