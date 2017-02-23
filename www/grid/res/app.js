@@ -120,7 +120,7 @@
 					var thrpt, snr, txmcs, rxmcs;
 					//history.push(Math.random()*1024);
 					thrpt = $.flot.one(local.thrpt, Math.round(Math.random() * 26), 60);
-					snr = $.flot.one(local.snr, 20 + Math.round(Math.random() * 5), 60);
+					snr = $.flot.one(local.snr, 35 + Math.round(Math.random() * 5), 60);
 					txmcs = $.flot.one(local.txmcs, 3+Math.round(Math.random()*2), 60);
 					rxmcs = $.flot.one(local.rxmcs, 2+Math.round(Math.random()*2), 60);
 					//var local = store.query.cache.local;
@@ -198,7 +198,15 @@
 		init: function() {
 			$('#qz-local-reset').click(function() {
 				$.cache.clear.local();
-			})
+			});
+			$('#qz-btn-sys-reset').click(function() {
+				$.get('/cgi-bin/reset?k=sys', function() {
+					console.log("ops> REBOOT now !");
+				})
+				.fail(function() {
+					console.log("ops> REBOOT failed");
+				});
+			});
 		}
 	}
 }) (jQuery); // $.ops
