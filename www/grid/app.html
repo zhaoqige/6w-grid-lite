@@ -15,7 +15,7 @@
 			<li class="tab"><a href="#tab2">Settings</a></li>
 			<li class="tab"><a href="#tab3">Spectrum</a></li>
 			<li class="tab"><a href="#tab4">Tools!</a></li>
-			<li class="tab"><a href="#tab5">Security</a></li>
+			<li class="tab right"><a href="#tab5">Security</a></li>
 		</ul>
 	</div>
 </nav>
@@ -144,54 +144,285 @@
 	</div>
 </div>
 <div id="tab2" class="col s12">
-	<div class="container section">
-		<p>ABB, GWS, System, Network, Advanced Settings in TAB<p>
-		<p>ABB: CAR, EAR, Mesh</p>
-		<p>GWS: Region, Channel, TxPower, RxGain, AGC<p>
-		<p>System: ntp, firewall, QoS<p>
-		<p>Network: Bridged, Router, DHCP, Static/DHCP</p>
-		<p>Advanced: Firmware Upgrade, PAWS, ATF, TDMA, TPC<p>
+	<div class="container">
+		<div class="section">
+			<ul class="collapsible" data-collapsible="accordion">
+				<li>
+					<div class="collapsible-header blue-grey lighten-5">Analog Baseband</div>
+					<div class="collapsible-body">
+						<form class="row">
+							<div class="col s5">
+								<div class="row">
+				    				<div class="input-field col s12">
+				    					<select class="browser-default">
+											<option value="2" selected>Core Adaptive Radio (CAR, WDS)</option>
+											<option value="1">Edge Adaptive Radio (EAR, WDS)</option>
+											<option value="0">Mesh Node (Mesh, WDS)</option>
+										</select>
+				    				</div>
+				    			</div>
+				    		</div>
+				    		<div class="col s6 offset-s1">
+				    			<div class="row">
+									<div class="input-field col s12">
+										<input id="abb-ssid" placeholder="Default is gws2016" class="validate" type="text" value="gws2016" />
+										<label for="abb-ssid">SSID</label>
+									</div>
+									<div class="input-field col s12">
+										<input id="abb-passwd" placeholder="6Harmonics or 12345678" class="validate" type="password" value="" />
+										<label for="abb-passwd">Password</label>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</li>
+				<li>
+					<div class="collapsible-header active blue-grey lighten-4">GWS / UHF</div>
+					<div class="collapsible-body">
+						<form class="row">
+							<div class="col s5">
+								<div class="row">
+									<h6>Tx Chain</h6>
+									<div class="input-field col s5">
+										<input id="gws-tx-tpc" type="checkbox" class="filled-in" checked="checked" />
+	      								<label for="gws-tx-tpc">Tx TPC</label>
+									</div>
+									<div class="input-field col s7">
+										<input id="gws-tx-pwr" placeholder="Unit: dBm" class="validate" type="text" value="33" />
+										<label for="gws-tx-pwr">Tx Power</label>
+									</div>
+									<div class="input-field col s12">
+										<input id="gws-tx-ch" placeholder="Unit: dBm" class="validate" type="text" value="33" />
+										<label for="gws-tx-ch">Channel</label>
+									</div>
+									<div class="input-field col s12">
+										<select id="gws-tx-rgn" class="browser-default">
+											<option value="0">Region 0</option>
+											<option value="1" selected>Region 1</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col s6 offset-s1">
+								<div class="row">
+									<h6>Rx Chain</h6>
+									<div class="input-field col s5">
+										<input id="gws-rx-agc" type="checkbox" class="filled-in" checked="checked" />
+	      								<label for="gws-rx-agc">Rx AGC</label>
+									</div>
+									<div class="input-field col s7">
+										<input id="gws-rx-gain" placeholder="Unit: dBm" class="validate" type="text" value="33" />
+										<label for="gws-rx-gain">Rx Gain</label>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</li>
+				<li>
+					<div class="collapsible-header blue-grey lighten-3">Network</div>
+					<div class="collapsible-body">
+						<form class="row">
+							<div class="col s5">
+								<div class="row">
+				    				<div class="input-field col s12">
+				    					<select id="nw-br" class="browser-default">
+											<option value="l2" selected>Run as Access Point ( Layer 2 )</option>
+											<option value="l3">Run as Router ( Layer 3 )</option>
+										</select>
+				    				</div>
+									<div class="input-field col s12">
+										<input id="nw-serv-dhcp" type="checkbox" class="filled-in" />
+	      								<label for="nw-serv-dhcp">Enable DHCP Service on LAN</label>
+									</div>
+									<div class="input-field col s12">
+										<input id="nw-serv-fw" type="checkbox" class="filled-in" disabled />
+	      								<label for="nw-serv-fw">Firewall</label>
+									</div>
+									<div class="input-field col s12">
+										<input id="nw-serv-qos" type="checkbox" class="filled-in" disabled />
+	      								<label for="nw-tx-tpc">QoS</label>
+									</div>
+				    			</div>
+				    		</div>
+				    		<div class="col s6 offset-s1">
+				    			<div class="row">
+									<div class="input-field col s12">
+										<input id="nw-wan-ip" placeholder="Default is 10.10.1.1" class="validate" type="text" value="-" />
+										<label for="nw-wan-ip">WAN Address</label>
+									</div>
+									<div class="input-field col s12">
+										<input id="nw-lan-ip" placeholder="Default is 192.168.66.1" class="validate" type="text" value="192.168.66.1" />
+										<label for="nw-lan-ip">LAN Address</label>
+									</div>
+								</div>
+							</div>
+				    	</form>
+				    </div>
+				</li>
+				<li>
+					<div class="collapsible-header blue-grey lighten-2">System</div>
+					<div class="collapsible-body">
+						<form class="row">
+							<div class="col s6">
+								<div class="row">
+									<h6>Date time</h6>
+									<div class="input-field col s12">
+										<input id="sys-serv-ntpd" type="checkbox" class="filled-in" disabled />
+	      								<label for="sys-serv-ntpd">NTP daemon</label>
+									</div>
+								</div>
+							</div>
+							<div class="col s6">
+								<div class="row">
+									<h6>FCC Regulation</h6>
+									<div class="input-field col s12">
+										<input id="sys-serv-paws" type="checkbox" class="filled-in" disabled />
+	      								<label for="sys-serv-paws">PAWS Database</label>
+									</div>
+									<div class="input-field col s12">
+										<select id="sys-serv-paws-vendor" class="browser-default">
+											<option value="0">Google in UK</option>
+											<option value="1" selected>Microsoft in US</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</li>
+				<li>
+					<div class="collapsible-header blue-grey lighten-1">Advanced</div>
+					<div class="collapsible-body">
+						<form class="row">
+							<div class="col s6">
+								<div class="row">
+									<h6>Tx / Downlink</h6>
+									<div class="input-field col s12">
+										<input id="adv-serv-atf" type="checkbox" class="filled-in" disabled />
+	      								<label for="adv-serv-atf">ATF</label>
+									</div>
+								</div>
+							</div>
+							<div class="col s6">
+								<div class="row">
+									<h6>Rx / Uplink</h6>
+									<div class="input-field col s12">
+										<input id="adv-serv-tdma" type="checkbox" class="filled-in" disabled />
+	      								<label for="adv-serv-tdma">TDMA</label>
+									</div>
+								</div>
+							</div>
+						</form>
+						<div class="row">
+							<div class="col s12">
+								I don't want to provide FIRMWARE UPGRADE function. Maybe in next release.
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<!-- Modal Structure -->
+	<div id="modal_change_confirm" class="modal">
+		<div class="modal-content">
+			<h4>Are you sure?</h4>
+			<p>If you want to change these item below, click "Confirm"</p>
+			<p>If not, click "Cancel"</p>
+			<p>Thank you</p>
+		</div>
+		<div class="modal-footer">
+			<a id="qz-peer-owner" href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+			<button class="modal-action modal-close waves-effect waves-green btn-flat">Confirm</button>
+		</div>
 	</div>
 </div>
 <div id="tab3" class="col s12">
-	<div class="container section">
-		Channel Scan (Let user confirm that this op. will interrupt the communication with other radios)
+	<div class="container">
+		<div class="section">
+			<h5>Spectrum Scan</h5>
+			<form class="row">
+				<div class="input-field col s6">
+					<button class="btn-flat blue-grey">Start</button>
+				</div>
+			</div>
+		</form>
 	</div>
 </div>
 <div id="tab4" class="col s12">
-	<div class="container section">
-		PING, iPerf, "SCAN", etc.
+	<div class="container">
+		<div class="section">
+			<h5>ICMP / Ping</h5>
+			<form class="row">
+				<div class="input-field col s6">
+					<input placeholder="Copy target ip address or MAC from STATUS" class="validate" type="text" value="192.168.1.2" />
+					<label>Target Address or MAC</label>
+				</div>
+				<div class="input-field col s6">
+					<button class="btn-flat blue-grey">Start</button>
+				</div>
+				<div class="input-field col s12">
+					<textarea id="tool-icmp-result" class="materialize-textarea"></textarea>
+      				<label for="tool-icmp-result">ICMP / Ping Result</label>
+      			</div>
+			</div>
+		</form>
+	</div>
+	<div class="container">
+		<div class="section">
+			<h5>UDP Flooding Tool</h5>
+			<form class="row">
+				<div class="input-field col s6">
+					<input id="tool-udp-counter" placeholder="Unit: Second" type="text" class="validate" value="300" />
+					<label>Seconds of Flooding</label>
+				</div>
+				<div class="input-field col s6">
+					<input id="tool-udp-target" placeholder="Your Target Address / MAC" type="text" class="validate" value="192.168.1.2" />
+					<label>Target</label>
+				</div>
+				<div class="input-field col s6">
+					<input id="adv-serv-atf" type="checkbox" class="filled-in" checked="checked" />
+					<label>Auto Start when Timeout</label>
+				</div>
+				<div class="input-field col s6">
+					<button class="btn-flat blue-grey">Start UDP Flooding</button>
+				</div>
+			</form>
+		</div>
 	</div>
 </div>
 <div id="tab5" class="col s6 offset-s3">
 	<div class="container">
-		<div class="section center">
-			<h5>You want to Sign out?</h5>
-			<a href="/cgi-bin/bye" class="btn-flat">Secure Logout</a>
-		</div>
 		<div class="section">
 			<h5 class="center">Change Your Password</h5>
 			<div class="row">
 	    		<form class="col s8 offset-s2">
 	    			<div class="row">
 	    				<div class="input-field col s12">
-	    					<input placeholder="Your Current Password" type="password" class="validate">
-	    					<label>Current Password</label>
+	    					<input id="adm-passwd-old" placeholder="Your Current Password" type="password" class="validate">
+	    					<label for="adm-passwd-old">Current Password</label>
 	    				</div>
 	        			<div class="input-field col s12">
-	          				<input placeholder="Your New Password" id="first_name" type="password" class="validate">
-	          				<label for="first_name">New Password</label>
+	          				<input id="adm-passwd-new" placeholder="Your New Password" type="password" class="validate">
+	          				<label for="adm-passwd-new">New Password</label>
 	        			</div>
 	        			<div class="input-field col s12">
-	         				<input placeholder="Re-type Your New Password" id="last_name" type="password" class="validate">
-	          				<label for="last_name">Confirm Password</label>
+	         				<input id="adm-passwd-cfm" placeholder="Re-type Your New Password" type="password" class="validate">
+	          				<label for="adm-passwd-cfm">Confirm Password</label>
 	        			</div>
 	        			<div class="input-field col s6">
-	        				<button class="btn">Change</button>
+	        				<button class="btn blue-grey">Change</button>
 	        			</div>
 	      			</div>
 				</form>
 			</div>
+		</div>
+		<div class="section center">
+			<h5>You want to Sign Out?</h5>
+			<a href="/cgi-bin/bye" class="btn lime darken-4">Click to Logout</a>
 		</div>
 	</div>
 </div>
