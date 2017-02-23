@@ -108,7 +108,7 @@ var store = {
 		// init & create a flot chart, return handler
 		chart: {
 			new: function(idx, item) {
-				var flot = $.plot(item, [{ label: 'Thrpt', data: [] }, { label: 'SNR', data: [] }], {
+				var flot = $.plot(item, [{ label: 'Thrpt - Mbps', data: [] }, { label: 'SNR - db', data: [] }], {
 					series: {
 						//stack: true, // stack lines
 						//lines: { show: true },
