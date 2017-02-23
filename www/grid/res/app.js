@@ -172,9 +172,15 @@
 		init: function() {
 			$.materialize.init();
 			$.flot.init();
+			$.ui.forms();
 		},
 		update: function() {
 			$.flot.sync();
+		},
+		forms: function() {
+			$('form').submit(function() {
+				return false;
+			});
 		}
 	}
 }) (jQuery); // $.ui
