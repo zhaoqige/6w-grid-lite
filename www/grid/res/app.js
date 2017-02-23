@@ -235,20 +235,80 @@
 			})
 
 			$('#qz-btn-confirm-change').click(function() {
-				console.log('ops> Reset something ...');
 				var ops = $(this).attr('ops');
 				var val = $(this).attr('val');
+				console.log('ops>', ops, val);
+
 				var url = '/cgi-bin/' + ops;
 				if (val) {
 					url += ('?k=' + val);
 				}
-				$.ops.ajax(url, null);
+
+				$.ops.ajax(val, url, null);
 			});
 		},
-		ajax: function(url, params) {
+		ajax: function(ops, url, params) {
+			var prompt = '';
 			$.get(url, params, function(resp) {
-				return resp;
-			}, 'json');
+				switch(ops) {
+				case 'abb':
+					prompt = 'ABB has been RESET';
+					break;
+				case 'gws':
+					prompt = 'GWS has been RESET';
+					break;
+				case 'nw':
+					prompt = 'Network has been RESET';
+					break;
+				case 'sys':
+					prompt = 'Device is REBOOTING';
+					break;
+				default:
+					prompt = 'Operation completed';
+					break;
+				}
+				console.log(prompt);
+
+				$.materialize.toast(prompt);
+
+				// reset nw: reload
+				// reset sys: close
+				$.ops.ajax_done(ops);
+			}, 'json')
+			.fail(function() {
+				switch(ops) {
+				case 'nw':
+					prompt = 'Network has been RESET';
+					break;
+				case 'sys':
+					prompt = 'Device is REBOOTING';
+					break;
+				default:
+					prompt = 'Operation failed > ' + ops;
+					break;
+				}
+				console.log(prompt);
+				
+				$.materialize.toast(prompt);
+
+				// reset nw: reload
+				// reset sys: close
+				$.ops.ajax_done(ops);
+			});
+		},
+		ajax_done: function(ops) {
+			switch(ops) {
+			case 'nw':
+				$.materialize.toast('Reload this page due to Device Network is RESET');
+				setTimeout("$.url.reload()", 3000);
+				break;
+			case 'sys':
+				$.materialize.toast('Closing this page due to Device is REBOOTING', 5000);
+				setTimeout("$.url.close()", 5000);
+				break;
+			default:
+				break;
+			}
 		}
 	}
 }) (jQuery); // $.ops

@@ -37,7 +37,14 @@ var store = {
 	},
 
 	// history data
-	history: null
+	history: {
+		local: {
+			snr: [],
+			thrpt: [],
+			txmcs: [],
+			rxmcs: []			
+		}
+	}
 }; // store
 
 // window.location.href
@@ -80,6 +87,12 @@ var store = {
 	$.materialize = {
 		init: function() {
 			$('.modal').modal();
+		},
+		toast: function(msg, timeout) {
+			if (msg) {			
+				var $toastContent = $('<span>'+msg+'</span>');
+				Materialize.toast($toastContent, timeout || 3000);
+			}
 		}
 	}
 }) (jQuery); //$.materialize
@@ -109,13 +122,13 @@ var store = {
 		chart: {
 			new: function(idx, item) {
 				var data = [{
-					label: 'Thrpt - Mbps', data: []
-				},{
-					label: 'SNR - db', data: []
-				},{
 					label: 'Tx MCS', data: [], yaxis: 2
 				},{
 					label: 'Rx MCS', data: [], yaxis: 2
+				},{
+					label: 'Thrpt - Mbps', data: []
+				},{
+					label: 'SNR - db', data: []
 				}];
 				var flot = $.plot(item, data, {
 					series: {
@@ -210,13 +223,13 @@ var store = {
 				}
 
 				var cd = [{
-					label: 'Thrpt', data: fd1,
-				},{
-					label: 'SNR', data: fd2, 
-				},{
 					label: 'Tx MCS', data: fd3, yaxis: 2
 				},{
 					label: 'Rx MCS', data: fd4, yaxis: 2
+				},{
+					label: 'Thrpt', data: fd1,
+				},{
+					label: 'SNR', data: fd2, 
 				}];
 
 				$.flot.chart.update(chart, cd);
