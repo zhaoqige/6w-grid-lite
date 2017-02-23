@@ -231,7 +231,7 @@
 			$('#qz-btn-fw-factory').click(function() {
 				$('#qz-modal-chcfm-items').text('Reset to FACTORY SETTINGS');
 				$('#qz-modal-chcfm-affected').text('This Operation Will RESET This Device to FACTORY SETTINGS !');
-				$('#qz-btn-confirm-change').attr('ops', 'brandnew').attr('val', '');
+				$('#qz-btn-confirm-change').attr('ops', 'init').attr('val', 'new');
 			})
 
 			$('#qz-btn-confirm-change').click(function() {
