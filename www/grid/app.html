@@ -148,7 +148,7 @@
 				    			</div>
 				    			<div class="row">
 									<div class="input-field col s12">
-										<button id="qz-btn-abb-reset" class="btn blue-grey">Reset ABB</button>
+										<a href="#modal_change_confirm" id="qz-btn-abb-reset" class="btn blue-grey">Reset ABB</a>
 									</div>
 								</div>
 				    		</div>
@@ -195,7 +195,7 @@
 								</div>
 				    			<div class="row">
 									<div class="input-field col s12">
-										<button id="qz-set-gws-reset" class="btn blue-grey">Reset GWS / UHF</button>
+										<a href="#modal_change_confirm" id="qz-btn-gws-reset" class="btn blue-grey">Reset Radio</a>
 									</div>
 								</div>
 							</div>
@@ -256,7 +256,7 @@
 				    	</form>
 		    			<div class="row">
 							<div class="input-field col s12">
-								<button id="qz-btn-nw-reset" class="btn blue-grey">Reset Network</button>
+								<a href="#modal_change_confirm" id="qz-btn-nw-reset" class="btn blue-grey">Reset Network</a>
 							</div>
 						</div>
 				    </div>
@@ -292,7 +292,7 @@
 						</form>
 		    			<div class="row">
 							<div class="input-field col s12">
-								<button id="qz-btn-sys-reset" class="btn blue-grey">Reboot !</button>
+								<a href="#modal_change_confirm" id="qz-btn-sys-reset" class="btn blue-grey">Reboot !</a>
 							</div>
 						</div>
 					</div>
@@ -302,7 +302,7 @@
 					<div class="collapsible-body">
 		    			<div class="row">
 							<div class="input-field col s12">
-								<button id="qz-btn-fw-factory" class="btn blue-grey">Restore to Factory !</button>
+								<a href="#modal_change_confirm" id="qz-btn-fw-factory" class="btn blue-grey" disabled>Restore to Factory !</a>
 							</div>
 						</div>
 						<form class="row">
@@ -339,7 +339,9 @@
 	<!-- Modal Structure -->
 	<div id="modal_change_confirm" class="modal">
 		<div class="modal-content">
-			<h4>Are you sure?</h4>
+			<h4>Operation Confirm</h4>
+			<p id="qz-modal-chcfm-items">(Nothing yet)</p>
+			<p id="qz-modal-chcfm-affected">(Nothing affected)</p>
 			<p>If you want to change these item below, click "Confirm"</p>
 			<p>If not, click "Cancel"</p>
 			<p>Thank you</p>

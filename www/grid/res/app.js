@@ -12,6 +12,11 @@
 				return Math.round(Math.random() * (range | 10));
 			}
 		},
+		stop: function() {
+			store.flot.intl.each(function() {
+				if ($(this)) clearInterval($(this));
+			});
+		},
 		// clear chart data when click "CLEAR" button
 		clear: {
 			local: function() {
@@ -200,13 +205,50 @@
 				$.cache.clear.local();
 			});
 			$('#qz-btn-sys-reset').click(function() {
-				$.get('/cgi-bin/reset?k=sys', function() {
-					console.log("ops> REBOOT now !");
-				})
-				.fail(function() {
-					console.log("ops> REBOOT failed");
-				});
+				$('#qz-modal-chcfm-items').text('Reset Network');
+				$('#qz-modal-chcfm-affected').text('This Operation Will REBOOT This Device');
+				$('#qz-btn-confirm-change').attr('ops', 'reset').attr('val', 'sys');
 			});
+
+			$('#qz-btn-abb-reset').click(function() {
+				$('#qz-modal-chcfm-items').text('Reset Analog Baseband');
+				$('#qz-modal-chcfm-affected').text('This Operation Will Interrupt Your Current Wireless Communication');
+				$('#qz-btn-confirm-change').attr('ops', 'reset').attr('val', 'abb');
+			});
+
+			$('#qz-btn-gws-reset').click(function() {
+				$('#qz-modal-chcfm-items').text('Reset GWS');
+				$('#qz-modal-chcfm-affected').text('This Operation Will Interrupt Your Current Wireless Communication');
+				$('#qz-btn-confirm-change').attr('ops', 'reset').attr('val', 'gws');
+			});
+
+			$('#qz-btn-nw-reset').click(function() {
+				$('#qz-modal-chcfm-items').text('Reset Network');
+				$('#qz-modal-chcfm-affected').text('This Operation Will Interrupt Your Current Network Communication, including Wireless Communication');
+				$('#qz-btn-confirm-change').attr('ops', 'reset').attr('val', 'nw');
+			});
+
+			$('#qz-btn-fw-factory').click(function() {
+				$('#qz-modal-chcfm-items').text('Reset to FACTORY SETTINGS');
+				$('#qz-modal-chcfm-affected').text('This Operation Will RESET This Device to FACTORY SETTINGS !');
+				$('#qz-btn-confirm-change').attr('ops', 'brandnew').attr('val', '');
+			})
+
+			$('#qz-btn-confirm-change').click(function() {
+				console.log('ops> Reset something ...');
+				var ops = $(this).attr('ops');
+				var val = $(this).attr('val');
+				var url = '/cgi-bin/' + ops;
+				if (val) {
+					url += ('?k=' + val);
+				}
+				$.ops.ajax(url, null);
+			});
+		},
+		ajax: function(url, params) {
+			$.get(url, params, function(resp) {
+				return resp;
+			}, 'json');
 		}
 	}
 }) (jQuery); // $.ops
