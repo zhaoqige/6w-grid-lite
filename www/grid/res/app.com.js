@@ -136,10 +136,10 @@ var store = {
 						show: true, tickDecimals: 0, min: 0, max: 59
 					},
 					yaxes: [{
-						show: true, min: 0, max: 30,
+						show: true, min: 0, max: 56,
 						steps: true
 					},{
-						show: true, min: 0, max: 7, tickDecimals: 0,
+						show: true, tickDecimals: 0, min: 0, max: 8,
 						//alignTicksWithAxis: 1, 
 						steps: true,
 						position: 'right'
@@ -159,17 +159,17 @@ var store = {
 			}
 		},
 		// save value to object with max length
-		one: function(data_obj, val, qty_max) {
+		one: function(array, val, qty_max) {
 			var max = qty_max || store.defaultRecordQty;
-			if (data_obj) {
-				if (data_obj.length >= max) {
-					data_obj.shift();
+			if (array) {
+				if (array.length >= max) {
+					array.shift();
 				}
 			} else {
-				data_obj = [];
+				array = [];
 			}
-			data_obj.push(val);
-			return data_obj;
+			array.push(val);
+			return array;
 		},
 		// get color string from color table
 		color: function(idx) {
