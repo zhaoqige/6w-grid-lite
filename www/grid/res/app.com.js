@@ -108,21 +108,47 @@ var store = {
 		// init & create a flot chart, return handler
 		chart: {
 			new: function(idx, item) {
-				var flot = $.plot(item, [{ label: 'Thrpt - Mbps', data: [] }, { label: 'SNR - db', data: [] }], {
+				var data = [{
+					label: 'Thrpt - Mbps', data: []
+				},{
+					label: 'SNR - db', data: []
+				},{
+					label: 'Tx MCS', data: [], yaxis: 2
+				},{
+					label: 'Rx MCS', data: [], yaxis: 2
+				}];
+				var flot = $.plot(item, data, {
 					series: {
 						//stack: true, // stack lines
-						//lines: { show: true },
 						//points: { show: true },
+						lines: {
+							//show: true,
+							//fill: true,
+							//steps: true,
+						},
 						shadowSize: 0 // remove shadow to draw faster
 					},
 					grid: {
 						//hoverable: true,
 						//clickable: true
 					},
-					xaxis: { show: true, tickDecimals: 0, min: 0, max: 59 },
-					yaxis: { show: true, min: 0, max: 30 },
+					xaxis: {
+						show: true, tickDecimals: 0, min: 0, max: 59
+					},
+					yaxes: [{
+						show: true, min: 0, max: 30,
+						steps: true
+					},{
+						show: true, min: 0, max: 7, tickDecimals: 0,
+						//alignTicksWithAxis: 1, 
+						steps: true,
+						position: 'right'
+					}],
 					// TODO: fix legend size
-					legend: { show: true }
+					legend: {
+						//position: 'sw',
+						show: true
+					}
 				});
 				return flot;
 			},
@@ -156,28 +182,44 @@ var store = {
 		redraw: {
 			local: function() {
 				var i, j;
-				var flot_charts = store.flot.chart;
 
-				var local_chart = flot_charts[0];
+				var fcharts = store.flot.chart;
+				var chart = fcharts[0];
+
 				var snr = store.history.local.snr;
 				var thrpt = store.history.local.thrpt;
-				var flot_d1 = [], flot_d2 = [];
+				var txmcs = store.history.local.txmcs;
+				var rxmcs = store.history.local.rxmcs;
+
+				var fd1 = [], fd2 = [], fd3 = [], fd4 = [];
 
 				for(i = 0, j = snr.length; i < snr.length; i ++) {
-					flot_d1.push([j - i - 1, snr[i]]);
+					fd1.push([j-i-1, snr[i]]);
 				}
 
 				for(i = 0, j = thrpt.length; i < thrpt.length; i ++) {
-					flot_d2.push([j - i - 1, thrpt[i]]);
+					fd2.push([j-i-1, thrpt[i]]);
 				}
 
-				var chart1_combo = [{
-					label: 'Thrpt', data: flot_d1,
+				for(i = 0, j = txmcs.length; i < txmcs.length; i ++) {
+					fd3.push([j-i-1, txmcs[i]]);
+				}
+
+				for(i = 0, j = rxmcs.length; i < rxmcs.length; i ++) {
+					fd4.push([j-i-1, rxmcs[i]]);
+				}
+
+				var cd = [{
+					label: 'Thrpt', data: fd1,
 				},{
-					label: 'SNR', data: flot_d2, //yaxis: 2
+					label: 'SNR', data: fd2, 
+				},{
+					label: 'Tx MCS', data: fd3, yaxis: 2
+				},{
+					label: 'Rx MCS', data: fd4, yaxis: 2
 				}];
 
-				$.flot.chart.update(local_chart, chart1_combo);
+				$.flot.chart.update(chart, cd);
 			},
 			peers: function() {
 

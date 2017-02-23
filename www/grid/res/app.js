@@ -117,10 +117,12 @@
 						local = history.local;
 					}
 
-					var thrpt, snr;
+					var thrpt, snr, txmcs, rxmcs;
 					//history.push(Math.random()*1024);
 					thrpt = $.flot.one(local.thrpt, Math.round(Math.random() * 26), 60);
 					snr = $.flot.one(local.snr, 20 + Math.round(Math.random() * 5), 60);
+					txmcs = $.flot.one(local.txmcs, 3+Math.round(Math.random()*2), 60);
+					rxmcs = $.flot.one(local.rxmcs, 3+Math.round(Math.random()*2), 60);
 					//var local = store.query.cache.local;
 					//var local_last = store.query.cache_last.local;
 
@@ -133,7 +135,9 @@
 					store.history = {
 						local: {
 							snr: snr,
-							thrpt: thrpt
+							thrpt: thrpt,
+							txmcs: txmcs,
+							rxmcs: rxmcs
 						}
 					}
 				}
