@@ -32,8 +32,10 @@
       						</div>
     					</div>
     					<div class="card-content center">
-    						<p id="qz-local-nw" class="card-title activator grey-text text-darken-4">10.10.1.2 / 192.168.1.103</p>
-							<p id="qz-local-sts">00:5E:AC:00:5E:B0 | CAR (router) | "gws2016" | Not encrypted | QoS</p>
+    						<!--<p id="qz-local-nw" class="card-title activator grey-text text-darken-4">10.10.1.2 / 192.168.1.103</p>
+    						<p id="qz-local-sts">00:5E:AC:00:5E:B0 | CAR (router) | "gws2016" | Not encrypted | QoS</p>-->
+    						<p id="qz-local-nw" class="card-title activator grey-text text-darken-4">-</p>
+							<p id="qz-local-sts">-</p>
 						</div>
     					<div class="card-reveal">
     						<span class="card-title grey-text text-darken-4">GWS / UHF<i class="material-icons right">...</i></span>
@@ -175,7 +177,7 @@
 								<div class="row">
 									<h6>Tx Chain</h6>
 									<div class="input-field col s5">
-										<input alt="gws" name="tpc" id="qz-set-gws-tpc" type="checkbox" class="filled-in" checked="checked" />
+										<input alt="gws" name="tpc" id="qz-set-gws-tpc" type="checkbox" class="filled-in" checked />
 	      								<label for="qz-set-gws-tpc">Tx TPC</label>
 									</div>
 									<div class="input-field col s7">
@@ -223,8 +225,8 @@
 								<div class="row">
 				    				<div class="input-field col s12">
 				    					<select alt="nw" name="br" id="qz-set-nw-type" class="browser-default">
-											<option value="l2" selected>Run as Access Point ( Layer 2 )</option>
-											<option value="l3">Run as Router ( Layer 3 )</option>
+											<option value="1" selected>Run as Access Point ( Layer 2 )</option>
+											<option value="0">Run as Router ( Layer 3 )</option>
 										</select>
 				    				</div>
 									<div class="input-field col s12">
@@ -282,9 +284,9 @@
 	      								<label for="qz-set-serv-paws">PAWS Database</label>
 									</div>
 									<div class="input-field col s12">
-										<select alt="serv" name="paws-vendor" id="qz-set-serv-paws-vendor" class="browser-default">
-											<option value="0">Google in UK</option>
-											<option value="1" selected>Microsoft in US</option>
+										<select alt="serv" name="paws" id="qz-set-serv-paws-vendor" class="browser-default">
+											<option value="uk_google">Google in UK</option>
+											<option value="us_microsoft" selected>Microsoft in US</option>
 										</select>
 									</div>
 								</div>
@@ -358,8 +360,8 @@
 			<h5>Spectrum Scan</h5>
 			<form class="row">
 				<div class="input-field col s6">
-					<button id="qz-btn-chscan-start" class="btn blue-grey">Start !</button>
-					<button id="qz-btn-chscan-stop" class="btn blue-grey">Stop !</button>
+					<button id="qz-btn-chscan-start" class="btn blue-grey" disabled>Start !</button>
+					<button id="qz-btn-chscan-stop" class="btn blue-grey" disabled>Stop !</button>
 				</div>
 			</div>
 		</form>
@@ -375,7 +377,7 @@
 					<label>Target Address or MAC</label>
 				</div>
 				<div class="input-field col s6">
-					<button id="qz-btn-icmp-start" class="btn blue-grey">Start</button>
+					<button id="qz-btn-icmp-start" class="btn blue-grey" disabled>Start</button>
 				</div>
 				<div class="input-field col s12">
 					<textarea id="qz-tool-icmp-result" class="materialize-textarea"></textarea>
@@ -397,11 +399,11 @@
 					<label for="qz-tool-udp-target">Target</label>
 				</div>
 				<div class="input-field col s6">
-					<input id="qz-tool-udp-continue" type="checkbox" class="filled-in" checked="checked" />
+					<input id="qz-tool-udp-continue" type="checkbox" class="filled-in" checked="checked" disabled />
 					<label for="qz-tool-udp-continue">Auto Start/Continue when Time-up</label>
 				</div>
 				<div class="input-field col s6">
-					<button id="qz-btn-udp-start" class="btn blue-grey">Start UDP Flooding</button>
+					<button id="qz-btn-udp-start" class="btn blue-grey" disabled>Start UDP Flooding</button>
 				</div>
 			</form>
 		</div>
@@ -427,7 +429,7 @@
 	          				<label for="qz-adm-passwd-confirm">Confirm Password</label>
 	        			</div>
 	        			<div class="input-field col s6">
-	        				<button id="qz-btn-passwd-change" class="btn blue-grey">Change</button>
+	        				<button id="qz-btn-passwd-change" class="btn blue-grey" disabled>Change</button>
 	        			</div>
 	      			</div>
 				</form>

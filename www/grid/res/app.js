@@ -76,11 +76,11 @@
 		sync: {
 			local: function() {
 				// TODO: call & handle ajax fails 
-				$.get('/cgi-bin/cache', function(resp) {
-					//
+				$.get('/cgi-bin/get', { k: 'sync' }, function(resp) {
+					console.log('get?k=sync'); console.dir(resp);
 				}, 'json')
 				.fail(function() {
-					console.log("error> local sync failed");
+					console.log('get?k=sync', "error> local sync failed");
 				});
 			},
 			// proxy query
@@ -158,7 +158,7 @@
 		// "realtime" update
 		update: function() {
 			// main data sync sequences
-			//$.cache.sync.local();
+			$.cache.sync.local();
 			//$.cache.parse.local();
 			//$.cache.sync.peers();
 			//$.cache.parse.peers();
@@ -250,15 +250,56 @@
 			$(':text').keydown(function(e) {
 				if (e.keyCode == 13) {
 					var obj = $(this);
-					var val = obj.val();
-					var cls = obj.attr('alt');
-					var name = obj.attr('name');
-					if (val && val != '-') {
-						console.log('enter >', val, cls, name);
-						$.ops.ajax('Save', '/cgi-bin/set', { com: cls, item: name, val: val });
-					}
+					obj.qz = {
+						_com: obj.attr('alt'),
+						_item: obj.attr('name'),
+						_val: obj.val()
+					};
+					$.ops.change(obj);
 				}
 			});
+			$(':checkbox').click(function() {
+				var obj = $(this);
+				var current = (obj.attr('checked') == 'checked') || false;
+				if (current) {
+					obj.removeAttr('checked');
+				} else {
+					obj.attr('checked', true);
+				}
+
+				obj.qz = {
+					_com: obj.attr('alt'),
+					_item: obj.attr('name'),
+					_val: (obj.attr('checked') == 'checked') ? 'on' : 'off'
+				};
+
+				if (obj.qz._com != 'undefined' && obj.qz._item != 'undefined') {
+					$.ops.change(obj);
+				}
+			});
+			$('select').change(function() {
+				var obj = $(this);
+				obj.qz = {
+					_com: obj.attr('alt'),
+					_item: obj.attr('name'),
+					_val: obj.val()
+				};
+				$.ops.change(obj);
+			})
+		},
+		change: function(obj) {
+			if (obj.qz._val != '' && obj.qz._val != '-') {
+				console.log('enter >', obj.qz._com, obj.qz._item, obj.qz._val);
+				
+				// prevent multi-submit
+				obj.attr('disabled', true);
+
+				$.ops.ajax('Save', '/cgi-bin/set', {
+					com: obj.qz._com, item: obj.qz._item, val: obj.qz._val
+				});
+
+				obj.attr('disabled', false);
+			}
 		},
 		ajax: function(ops, url, params) {
 			var prompt = '';
@@ -360,7 +401,7 @@
 			default:
 				console.log("App Running in DEMO mode.");
 				$.app.DEMO();
-				store.flot.intl.DEMO = setInterval("$.app.DEMO()", 2000);
+				store.flot.intl.DEMO = setInterval("$.app.DEMO()", 800);
 				break;
 			}
 		}
