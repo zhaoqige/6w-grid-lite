@@ -13,6 +13,7 @@ var store = {
 
 	// flot related data
 	flot: {
+		fields: 'all',
 		// setInterval handlers
 		intl: {
 			local: null,
@@ -31,18 +32,17 @@ var store = {
 	},
 
 	// every ajax query result
-	query: {
-		cache: null,
-		cache_last: null
-	},
+	query: null,
+	query_last: null,
 
 	// history data
 	history: {
 		local: {
 			snr: [],
-			thrpt: [],
+			ul_thrpt: [],
+			dl_thrpt: [],
 			txmcs: [],
-			rxmcs: []			
+			rxmcs: []
 		}
 	}
 }; // store
@@ -126,7 +126,9 @@ var store = {
 				},{
 					label: 'Rx MCS', data: [], yaxis: 2
 				},{
-					label: 'Thrpt - Mbps', data: []
+					label: 'DL - Mbps', data: []
+				},{
+					label: 'UL - Mbps', data: []
 				},{
 					label: 'SNR - db', data: []
 				}];
@@ -149,7 +151,7 @@ var store = {
 						show: true, tickDecimals: 0, min: 0, max: 59
 					},
 					yaxes: [{
-						show: true, min: 0, max: 56,
+						show: true, min: 0, max: 32,
 						steps: true
 					},{
 						show: true, tickDecimals: 0, min: 0, max: 8,
@@ -200,37 +202,82 @@ var store = {
 				var chart = fcharts[0];
 
 				var snr = store.history.local.snr;
-				var thrpt = store.history.local.thrpt;
+				var dl_thrpt = store.history.local.dl_thrpt;
+				var ul_thrpt = store.history.local.ul_thrpt;
 				var txmcs = store.history.local.txmcs;
 				var rxmcs = store.history.local.rxmcs;
 
-				var fd1 = [], fd2 = [], fd3 = [], fd4 = [];
+				var fd1 = [], fd2 = [], fd3 = [], fd4 = [], fd5 = [];
 
-				for(i = 0, j = snr.length; i < snr.length; i ++) {
-					fd1.push([j-i-1, snr[i]]);
+				if (snr && snr.length > 0) {
+					for(i = 0, j = snr.length; i < snr.length; i ++) {
+						fd1.push([j-i-1, snr[i]]);
+					}
 				}
 
-				for(i = 0, j = thrpt.length; i < thrpt.length; i ++) {
-					fd2.push([j-i-1, thrpt[i]]);
+				if (dl_thrpt && dl_thrpt.length > 0) {
+					for(i = 0, j = dl_thrpt.length; i < dl_thrpt.length; i ++) {
+						fd2.push([j-i-1, dl_thrpt[i]]);
+					}
 				}
 
-				for(i = 0, j = txmcs.length; i < txmcs.length; i ++) {
-					fd3.push([j-i-1, txmcs[i]]);
+				if (ul_thrpt && ul_thrpt.length > 0) {
+					for(i = 0, j = ul_thrpt.length; i < ul_thrpt.length; i ++) {
+						fd3.push([j-i-1, ul_thrpt[i]]);
+					}
 				}
 
-				for(i = 0, j = rxmcs.length; i < rxmcs.length; i ++) {
-					fd4.push([j-i-1, rxmcs[i]]);
+				if (txmcs && txmcs.length > 0) {
+					for(i = 0, j = txmcs.length; i < txmcs.length; i ++) {
+						fd4.push([j-i-1, txmcs[i]]);
+					}
+				}
+				if (rxmcs && rxmcs.length > 0) {
+					for(i = 0, j = rxmcs.length; i < rxmcs.length; i ++) {
+						fd5.push([j-i-1, rxmcs[i]]);
+					}
 				}
 
-				var cd = [{
-					label: 'Tx MCS', data: fd3, yaxis: 2
-				},{
-					label: 'Rx MCS', data: fd4, yaxis: 2
-				},{
-					label: 'Thrpt', data: fd1,
-				},{
-					label: 'SNR', data: fd2, 
-				}];
+				// custom chart lines
+				var cd;
+				var _fields = store.flot.fields;
+				if (_fields == 'nw') {
+					cd = [{
+						label: 'Tx MCS', data: null, yaxis: 2
+					},{
+						label: 'Rx MCS', data: null, yaxis: 2
+					},{
+						label: 'DL Thrpt', data: fd3,
+					},{
+						label: 'UL Thrpt', data: fd2,
+					},{
+						label: 'SNR', data: null, 
+					}];
+				} else if (_fields == 'abb') {
+					cd = [{
+						label: 'Tx MCS', data: fd5, yaxis: 2
+					},{
+						label: 'Rx MCS', data: fd4, yaxis: 2
+					},{
+						label: 'DL Thrpt', data: null,
+					},{
+						label: 'UL Thrpt', data: null,
+					},{
+						label: 'SNR', data: fd1, 
+					}];
+				} else {
+					cd = [{
+						label: 'Tx MCS', data: fd5, yaxis: 2
+					},{
+						label: 'Rx MCS', data: fd4, yaxis: 2
+					},{
+						label: 'DL Thrpt', data: fd3,
+					},{
+						label: 'UL Thrpt', data: fd2,
+					},{
+						label: 'SNR', data: fd1, 
+					}];
+				}
 
 				$.flot.chart.update(chart, cd);
 			},
