@@ -316,10 +316,14 @@
 // @2017.02.22
 (function($) {
 	$.ui = {
-		init: function() {
+		init: function(mode) {
 			$.materialize.init();
 			$.flot.init();
 			$.ui.forms();
+			if (mode == 'demo') {
+				var text = '<div class="container section center">(DEMO mode, please <a href="/grid/index.html">LOGIN</a> first)</div>'
+				$('#tab2,#tab3,#tab4,#tab5').html(text);
+			}
 		},
 		update: function() {
 			$.flot.sync();
@@ -346,55 +350,88 @@
 // @2017.02.22
 (function($) {
 	$.ops = {
-		init: function() {
-			$('#qz-local-reset').click(function() {
-				$.cache.clear.local();
-			});
-			$('#qz-btn-sys-reset').click(function() {
-				$('#qz-modal-chcfm-items').text('Reset Network');
-				$('#qz-modal-chcfm-affected').text('This Operation Will REBOOT This Device');
-				$('#qz-btn-confirm-change').attr('ops', 'reset').attr('val', 'sys');
-			});
+		init: function(mode) {
+			if (mode == 'demo') {
+				$('#tab2,#tab3,#tab4,#tab5').click(function() {
+					var obj = $(this);
+					console.log('> toast() when click', obj);
+					$.materialize.toast('Not available in "DEMO" mode');
+				});
+			} else {
+				$('#qz-btn-sys-reset').click(function() {
+					$('#qz-modal-chcfm-items').text('Reset Network');
+					$('#qz-modal-chcfm-affected').text('This Operation Will REBOOT This Device');
+					$('#qz-btn-confirm-change').attr('ops', 'reset').attr('val', 'sys');
+				});
 
-			$('#qz-btn-abb-reset').click(function() {
-				$('#qz-modal-chcfm-items').text('Reset Analog Baseband');
-				$('#qz-modal-chcfm-affected').text('This Operation Will Interrupt Your Current Wireless Communication');
-				$('#qz-btn-confirm-change').attr('ops', 'reset').attr('val', 'abb');
-			});
+				$('#qz-btn-abb-reset').click(function() {
+					$('#qz-modal-chcfm-items').text('Reset Analog Baseband');
+					$('#qz-modal-chcfm-affected').text('This Operation Will Interrupt Your Current Wireless Communication');
+					$('#qz-btn-confirm-change').attr('ops', 'reset').attr('val', 'abb');
+				});
 
-			$('#qz-btn-gws-reset').click(function() {
-				$('#qz-modal-chcfm-items').text('Reset GWS');
-				$('#qz-modal-chcfm-affected').text('This Operation Will Interrupt Your Current Wireless Communication');
-				$('#qz-btn-confirm-change').attr('ops', 'reset').attr('val', 'gws');
-			});
+				$('#qz-btn-gws-reset').click(function() {
+					$('#qz-modal-chcfm-items').text('Reset GWS');
+					$('#qz-modal-chcfm-affected').text('This Operation Will Interrupt Your Current Wireless Communication');
+					$('#qz-btn-confirm-change').attr('ops', 'reset').attr('val', 'gws');
+				});
 
-			$('#qz-btn-nw-reset').click(function() {
-				$('#qz-modal-chcfm-items').text('Reset Network');
-				$('#qz-modal-chcfm-affected').text('This Operation Will Interrupt Your Current Network Communication, including Wireless Communication');
-				$('#qz-btn-confirm-change').attr('ops', 'reset').attr('val', 'nw');
-			});
+				$('#qz-btn-nw-reset').click(function() {
+					$('#qz-modal-chcfm-items').text('Reset Network');
+					$('#qz-modal-chcfm-affected').text('This Operation Will Interrupt Your Current Network Communication, including Wireless Communication');
+					$('#qz-btn-confirm-change').attr('ops', 'reset').attr('val', 'nw');
+				});
 
-			$('#qz-btn-fw-factory').click(function() {
-				$('#qz-modal-chcfm-items').text('Reset to FACTORY SETTINGS');
-				$('#qz-modal-chcfm-affected').text('This Operation Will RESET This Device to FACTORY SETTINGS !');
-				$('#qz-btn-confirm-change').attr('ops', 'init').attr('val', 'new');
-			})
+				$('#qz-btn-fw-factory').click(function() {
+					$('#qz-modal-chcfm-items').text('Reset to FACTORY SETTINGS');
+					$('#qz-modal-chcfm-affected').text('This Operation Will RESET This Device to FACTORY SETTINGS !');
+					$('#qz-btn-confirm-change').attr('ops', 'init').attr('val', 'new');
+				})
 
-			$('#qz-btn-confirm-change').click(function() {
-				var ops = $(this).attr('ops');
-				var val = $(this).attr('val');
-				console.log('ops>', ops, val);
+				$('#qz-btn-confirm-change').click(function() {
+					var ops = $(this).attr('ops');
+					var val = $(this).attr('val');
+					console.log('ops>', ops, val);
 
-				var url = '/cgi-bin/' + ops;
-				if (val) {
-					url += ('?k=' + val);
-				}
+					var url = '/cgi-bin/' + ops;
+					if (val) {
+						url += ('?k=' + val);
+					}
 
-				$.ops.ajax(val, url, null);
-			});
+					$.ops.ajax(val, url, null);
+				});
 
-			$(':text').keydown(function(e) {
-				if (e.keyCode == 13) {
+				$(':text').keydown(function(e) {
+					if (e.keyCode == 13) {
+						var obj = $(this);
+						obj.qz = {
+							_com: obj.attr('alt'),
+							_item: obj.attr('name'),
+							_val: obj.val()
+						};
+						$.ops.change(obj);
+					}
+				});
+				$(':checkbox').click(function() {
+					var obj = $(this);
+					var current = (obj.attr('checked') == 'checked') || false;
+					if (current) {
+						obj.removeAttr('checked');
+					} else {
+						obj.attr('checked', true);
+					}
+
+					obj.qz = {
+						_com: obj.attr('alt'),
+						_item: obj.attr('name'),
+						_val: (obj.attr('checked') == 'checked') ? 'on' : 'off'
+					};
+
+					if (obj.qz._com != 'undefined' && obj.qz._item != 'undefined') {
+						$.ops.change(obj);
+					}
+				});
+				$('select').change(function() {
 					var obj = $(this);
 					obj.qz = {
 						_com: obj.attr('alt'),
@@ -402,42 +439,15 @@
 						_val: obj.val()
 					};
 					$.ops.change(obj);
-				}
-			});
-			$(':checkbox').click(function() {
-				var obj = $(this);
-				var current = (obj.attr('checked') == 'checked') || false;
-				if (current) {
-					obj.removeAttr('checked');
-				} else {
-					obj.attr('checked', true);
-				}
+				})
+			}
 
-				obj.qz = {
-					_com: obj.attr('alt'),
-					_item: obj.attr('name'),
-					_val: (obj.attr('checked') == 'checked') ? 'on' : 'off'
-				};
-
-				if (obj.qz._com != 'undefined' && obj.qz._item != 'undefined') {
-					$.ops.change(obj);
-				}
-			});
-			$('select').change(function() {
-				var obj = $(this);
-				obj.qz = {
-					_com: obj.attr('alt'),
-					_item: obj.attr('name'),
-					_val: obj.val()
-				};
-				$.ops.change(obj);
-			})
-
-			$('.qz-btn-local-chart').click(function() {
+			$('.qz-btn-local-chart-fields').click(function() {
 				var type = $(this).attr('alt');
 				store.flot.fields = type;
 			});
-		},
+
+ 		},
 		change: function(obj) {
 			if (obj.qz._val != '' && obj.qz._val != '-') {
 				console.log('enter >', obj.qz._com, obj.qz._item, obj.qz._val);
@@ -533,9 +543,9 @@
 	$.app = {
 		init: function(mode) {
 			store.mode = mode;
-			$.ui.init();
+			$.ui.init(mode);
 			$.cache.init();
-			$.ops.init();
+			$.ops.init(mode);
 		},
 		// update store.query.cache with "ajax"
 		update: function() {

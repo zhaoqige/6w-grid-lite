@@ -137,11 +137,14 @@ var store = {
 						//stack: true, // stack lines
 						//points: { show: true },
 						lines: {
-							//show: true,
+							show: true,
 							//fill: true,
 							//steps: true,
 						},
 						shadowSize: 0 // remove shadow to draw faster
+					},
+					crosshair: {
+						mode: 'xy'
 					},
 					grid: {
 						//hoverable: true,
@@ -207,34 +210,49 @@ var store = {
 				var txmcs = store.history.local.txmcs;
 				var rxmcs = store.history.local.rxmcs;
 
-				var fd1 = [], fd2 = [], fd3 = [], fd4 = [], fd5 = [];
+				var fd_snr = [], fd_dl_thrpt = [], fd_ul_thrpt = [], fd_rxmcs = [], fd_txmcs = [];
 
 				if (snr && snr.length > 0) {
 					for(i = 0, j = snr.length; i < snr.length; i ++) {
-						fd1.push([j-i-1, snr[i]]);
+						var val = snr[i];
+						if (val >= 0) {
+							fd_snr.push([j-i-1, val]);
+						} else {
+							fd_snr.push(null);
+						}
 					}
 				}
 
 				if (dl_thrpt && dl_thrpt.length > 0) {
 					for(i = 0, j = dl_thrpt.length; i < dl_thrpt.length; i ++) {
-						fd2.push([j-i-1, dl_thrpt[i]]);
+						fd_dl_thrpt.push([j-i-1, dl_thrpt[i]]);
 					}
 				}
 
 				if (ul_thrpt && ul_thrpt.length > 0) {
 					for(i = 0, j = ul_thrpt.length; i < ul_thrpt.length; i ++) {
-						fd3.push([j-i-1, ul_thrpt[i]]);
+						fd_ul_thrpt.push([j-i-1, ul_thrpt[i]]);
 					}
 				}
 
 				if (txmcs && txmcs.length > 0) {
 					for(i = 0, j = txmcs.length; i < txmcs.length; i ++) {
-						fd4.push([j-i-1, txmcs[i]]);
+						var val = txmcs[i];
+						if (val >= 0) {
+							fd_txmcs.push([j-i-1, val]);
+						} else {
+							fd_txmcs.push(null);
+						}
 					}
 				}
 				if (rxmcs && rxmcs.length > 0) {
 					for(i = 0, j = rxmcs.length; i < rxmcs.length; i ++) {
-						fd5.push([j-i-1, rxmcs[i]]);
+						var val = rxmcs[i];
+						if (val >= 0) {
+							fd_rxmcs.push([j-i-1, val]);
+						} else {
+							fd_rxmcs.push(null);
+						}
 					}
 				}
 
@@ -242,41 +260,26 @@ var store = {
 				var cd;
 				var _fields = store.flot.fields;
 				if (_fields == 'nw') {
-					cd = [{
-						label: 'Tx MCS', data: null, yaxis: 2
-					},{
-						label: 'Rx MCS', data: null, yaxis: 2
-					},{
-						label: 'DL Thrpt', data: fd3,
-					},{
-						label: 'UL Thrpt', data: fd2,
-					},{
-						label: 'SNR', data: null, 
-					}];
+					cd = [{ label: 'Tx MCS', data: null, yaxis: 2 },
+						{ label: 'Rx MCS', data: null, yaxis: 2 },
+						{ label: 'DL Thrpt', data: fd_dl_thrpt },
+						{ label: 'UL Thrpt', data: fd_ul_thrpt },
+						{ label: 'SNR', data: null }
+					];
 				} else if (_fields == 'abb') {
-					cd = [{
-						label: 'Tx MCS', data: fd5, yaxis: 2
-					},{
-						label: 'Rx MCS', data: fd4, yaxis: 2
-					},{
-						label: 'DL Thrpt', data: null,
-					},{
-						label: 'UL Thrpt', data: null,
-					},{
-						label: 'SNR', data: fd1, 
-					}];
+					cd = [{ label: 'Tx MCS', data: fd_txmcs, yaxis: 2 },
+						{ label: 'Rx MCS', data: fd_rxmcs, yaxis: 2 },
+						{ label: 'DL Thrpt', data: null },
+						{ label: 'UL Thrpt', data: null },
+						{ label: 'SNR', data: fd_snr }
+					];
 				} else {
-					cd = [{
-						label: 'Tx MCS', data: fd5, yaxis: 2
-					},{
-						label: 'Rx MCS', data: fd4, yaxis: 2
-					},{
-						label: 'DL Thrpt', data: fd3,
-					},{
-						label: 'UL Thrpt', data: fd2,
-					},{
-						label: 'SNR', data: fd1, 
-					}];
+					cd = [{ label: 'Tx MCS', data: fd_txmcs, yaxis: 2 },
+						{ label: 'Rx MCS', data: fd_rxmcs, yaxis: 2 },
+						{ label: 'DL Thrpt', data: fd_dl_thrpt },
+						{ label: 'UL Thrpt', data: fd_ul_thrpt },
+						{ label: 'SNR', data: fd_snr }
+					];
 				}
 
 				$.flot.chart.update(chart, cd);
@@ -285,10 +288,9 @@ var store = {
 
 			}
 		},
-		// parse "store.query.cache", save to "store.history"
+		// parse store.history"
 		// redraw flot charts when done
 		sync: function() {
-			console.log("$.Flot.sync()");
 			$.flot.redraw.local();
 			$.flot.redraw.peers();
 		}
