@@ -1,9 +1,9 @@
 
 
-NW = {}
+nw = {}
 
-NW.ops = {}
-function NW.ops.Update()
+nw.ops = {}
+function nw.ops.Update()
 	local _nw = {}
 	
 	_nw.bridge = 0
@@ -17,4 +17,4 @@ function NW.ops.Update()
 	return _nw
 end
 
-return NW
+return nw

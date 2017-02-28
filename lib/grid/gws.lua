@@ -2,14 +2,14 @@
 -- by Qige
 -- 2017.02.23
 
-GWS = {}
+gws = {}
 
-GWS.conf = {}
-GWS.conf.rfinfo = 'rfinfo'
+gws.conf = {}
+gws.conf.rfinfo = 'rfinfo'
 
 
-GWS.ops = {}
-function GWS.ops.Update()
+gws.ops = {}
+function gws.ops.Update()
 	local _gws = {}
 	
 	_gws.rgn = 1
@@ -22,8 +22,8 @@ function GWS.ops.Update()
 	return _gws
 end
 
-function GWS.ops.read()
+function gws.ops.read()
 end
 
 
-return GWS
+return gws

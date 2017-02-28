@@ -31,14 +31,10 @@
 						signal: -199,
 						noise: -198,
 						br: -1,
-<<<<<<< HEAD
 						chbw: -1,
 						mode: '(unknown)',
 						ssid: '(unknown)',
 						encrypt: '(unknown)'
-=======
-						chbw: -1
->>>>>>> master
 					}
 				};
 				return data;
@@ -47,10 +43,6 @@
 			DEMO: function(idx) { // 2017.02.28
 				var data = {
 					abb: {
-<<<<<<< HEAD
-=======
-						bssid: '01:35:11:05:35:56',
->>>>>>> master
 						signal: -107 + 15 + $.cache.RANDOM.int(10),
 						noise: -107 + $.cache.RANDOM.int(10),
 						br: $.cache.RANDOM.int(26),
@@ -143,10 +135,6 @@
 					if (abb) {
 						if (abb.bssid)		abb_text += abb.bssid;
 						if (abb.ssid)		abb_text += ' | '+abb.ssid;
-<<<<<<< HEAD
-=======
-						if (abb.chbw)		abb_text += ' | '+abb.chbw+'M';
->>>>>>> master
 						if (abb.mode)		abb_text += ' | '+abb.mode;
 					}
 					if (gws) {
@@ -236,11 +224,7 @@
 
 						// save uplink
 						if ("nw" in local) {						
-<<<<<<< HEAD
 							var ul_thprt = 0, dl_thrpt = 1, last_lan_txb = 0, last_lan_rxb = 0;
-=======
-							var ul_thprt = 0, dl_thrpt = 0, last_lan_txb = 0, last_lan_rxb = 0;
->>>>>>> master
 							if (("lan_txb" in local.nw) && local_last && ("nw" in local_last)) {
 								if ("lan_txb" in local_last.nw) {
 									ul_thprt = local.nw.lan_txb - local_last.nw.lan_txb;
@@ -342,11 +326,7 @@
 			$.materialize.init();
 			$.flot.init();
 			$.ui.forms();
-<<<<<<< HEAD
 			if (mode == 'demo') {
-=======
-			if (mode != 'realtime' && mode != 'proxy') {
->>>>>>> master
 				var text = '<div class="container section center">(DEMO mode, please <a href="/grid/index.html">LOGIN</a> first)</div>'
 				$('#tab2,#tab3,#tab4,#tab5').html(text);
 			}

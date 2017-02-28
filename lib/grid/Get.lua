@@ -7,15 +7,9 @@ require 'grid.base.fmt'
 require 'grid.Http'
 
 require 'grid.ABB'
-<<<<<<< HEAD
 require 'grid.gws'
 require 'grid.nw'
 require 'grid.sys'
-=======
-require 'grid.GWS'
-require 'grid.NW'
-require 'grid.SYS'
->>>>>>> master
 
 
 Get = {}
@@ -97,21 +91,21 @@ end
 
 function Get.ops.gws()
 	local _fmt = '{"rgn": %d, "ch": %d, "rxg": %d, "txpwr": %d, "tpc": 0, "agc": 1 }'
-	local _gws = GWS.ops.Update()
+	local _gws = gws.ops.Update()
 	_result = string.format(_fmt, _gws.rgn, _gws.ch, _gws.rxg, _gws.txpwr, _gws.tpc, _gws.agc)
 	return _result
 end
 
 function Get.ops.nw()
 	local _fmt = '{"bridge": %d, "wan_ip": "%s", "wan_txb": %d, "wan_rxb": %d, "lan_ip": "%s", "lan_txb": %d, "lan_rxb": %d }'
-	local _nw = NW.ops.Update()
+	local _nw = nw.ops.Update()
 	_result = string.format(_fmt, _nw.bridge, _nw.wan_ip, _nw.wan_rxb, _nw.wan_txb, _nw.lan_ip, _nw.lan_rxb, _nw.lan_txb)
 	return _result
 end
 
 function Get.ops.sys()
 	local _fmt = '{"atf": %d, "tdma": %d, "dhcp": %d, "firewall": %d, "qos": %d }'
-	local _sys = SYS.ops.Update()
+	local _sys = sys.ops.Update()
 	_result = string.format(_fmt, _sys.atf, _sys.tdma, _sys.dhcp, _sys.firewall, _sys.qos)
 	return _result
 end
