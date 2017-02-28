@@ -7,15 +7,9 @@ require 'grid.base.fmt'
 require 'grid.Http'
 
 require 'grid.ABB'
-<<<<<<< HEAD
-require 'grid.gws'
-require 'grid.nw'
-require 'grid.sys'
-=======
 require 'grid.GWS'
 require 'grid.NW'
 require 'grid.SYS'
->>>>>>> master
 
 
 Get = {}
