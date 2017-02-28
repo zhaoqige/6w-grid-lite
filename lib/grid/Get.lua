@@ -6,7 +6,7 @@ require 'grid.base.user'
 require 'grid.base.fmt'
 require 'grid.Http'
 
-require 'grid.abb'
+require 'grid.ABB'
 require 'grid.gws'
 require 'grid.nw'
 require 'grid.sys'
@@ -18,7 +18,7 @@ function Get.Run()
 	cgi.save.init()
 
 	local _result = ''
-	if (user.verify.remote()) then
+	--if (user.verify.remote()) then
 		local _get = cgi.data._get
 		local _k = fmt.http.find('k', _get)
 		_k = 'sync'
@@ -31,9 +31,9 @@ function Get.Run()
 			_result = string.format('unknown (%s)', _k)
 		end
 		Http.job.Reply(_result)
-	else
-		Http.data.Error('nobody');
-	end
+	--else
+		--Http.data.Error('nobody');
+	--end
 end
 
 
@@ -68,7 +68,7 @@ Get.ops = {}
 -- nw.bridge, nw.wan_ip, nw.wan_txb, nw.wan_rxb, nw.lan_ip, nw.lan_txb, nw.lan_rxb
 -- sys.atf, sys.tdma, sys.dhcp, sys.firewall, sys.qos
 function Get.ops.all()
-	local _fmt = '{"abb": [%s], "gws": [%s], "nw": [%s], "sys": [%s], "ts": %d}'
+	local _fmt = '{ "abb": %s, "gws": %s, "nw": %s, "sys": %s, "ts": %d }'
 
 	local _abb = Get.ops.abb()
 	local _gws = Get.ops.gws()
@@ -83,9 +83,9 @@ end
 
 
 function Get.ops.abb()
-	local _fmt = '{"bssid": "%s", "ssid": "%s", "mode": "%s", "key": "%s", "snr": %d, "noise": %d, "txmcs": %d, "rxmcs": %d }'
-	local _abb = abb.ops.Update()
-	_result = string.format(_fmt, _abb.bssid, _abb.ssid, _abb.mode, _abb.key, _abb.snr, _abb.noise, _abb.txmcs, _abb.rxmcs)
+	local _fmt = '{"bssid": "%s", "ssid": "%s", "mode": "%s", "encrypt": "%s", "signal": %d, "noise": %d, "br": %.1f, "peers": %s }'
+	local _abb = ABB.ops.Update()
+	_result = string.format(_fmt, _abb.bssid, _abb.ssid, _abb.mode, _abb.encrypt, _abb.signal, _abb.noise, _abb.br, _abb.peers)
 	return _result
 end
 
