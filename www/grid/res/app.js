@@ -7,8 +7,8 @@
 		init: function() {
 		},
 		// get random value
-		RANDOM: {
-			int: function(range) {
+		RANDOM: { // 2017.02.28
+			int: function(range) { // 2017.02.28
 				return Math.round(Math.random() * (range || 10));
 			}
 		},
@@ -24,15 +24,28 @@
 			}
 		},
 		// ajax query
-		query: {
+		query: { // 2017.02.28
+			failed: function() { // 2017.02.28
+				var data = {
+					local: {
+						signal: -199,
+						noise: -198,
+						br: -1,
+						chbw: -1,
+						mode: '(unknown)',
+						ssid: '(unknown)',
+						encrypt: '(unknown)'
+					}
+				};
+				return data;
+			},
 			// 'demo' mode
-			DEMO: function(idx) {
+			DEMO: function(idx) { // 2017.02.28
 				var data = {
 					abb: {
 						signal: -107 + 15 + $.cache.RANDOM.int(10),
 						noise: -107 + $.cache.RANDOM.int(10),
-						txmcs: 3 + $.cache.RANDOM.int(4),
-						rxmcs: 4 + $.cache.RANDOM.int(3),
+						br: $.cache.RANDOM.int(26),
 						chbw: 8,
 						mode: 'CAR',
 						ssid: 'gws2017',
@@ -40,11 +53,11 @@
 					},
 					nw: {
 						bridge: 1,
-						wmac: '10:00:00:00:00:0'+idx,					
+						wmac: '13:51:10:53:55:6'+idx,					
 						wan_ip: '',
 						wan_txb: $.cache.RANDOM.int(26*1024*1024),
 						wan_rxb: $.cache.RANDOM.int(26*1024*1024),
-						lan_ip: '192.168.1.2'+idx,
+						lan_ip: '192.168.1.21'+idx,
 						lan_txb: $.cache.RANDOM.int(26*1024*1024),
 						lan_rxb: $.cache.RANDOM.int(26*1024*1024)
 					},
@@ -69,14 +82,18 @@
 			}
 		},
 		// start ajax/proxy query
-		sync: {
-			local: function() {
+		sync: { // 2017.02.28
+			local: function() { // 2017.02.28
 				// TODO: call & handle ajax fails 
 				$.get('/cgi-bin/get', { k: 'sync' }, function(resp) {
-					console.log('get?k=sync'); console.dir(resp);
+					//console.log('get?k=sync', resp);
+					store.query = {
+						local: resp
+					};
 				}, 'json')
 				.fail(function() {
 					console.log('get?k=sync', "error> local sync failed");
+					store.query = $.cache.query.failed();
 				});
 			},
 			// proxy query
@@ -89,7 +106,7 @@
 				});
 			},
 			// generate DEMO data
-			DEMO: function() {
+			DEMO: function() { // 2017.02.28
 				var demo = {
 					local: $.cache.query.DEMO(0),
 					peers: [ $.cache.query.DEMO(1), $.cache.query.DEMO(2) ]
@@ -101,10 +118,11 @@
 
 		// parse store.query.cache,
 		// save store.history;
-		parse: {
+		parse: { // 2017.02.28
 			// TODO: parse data with DEMO
-			local: {
-				status: function() {
+			local: { // 2017.02.28
+				status: function() { // 2017.02.28
+					console.log("$.cache.parse.local()", store.query);
 					var query = (store && "query" in store) ? store.query_last : null;
 					var local = (query && "local" in query) ? query.local : null;
 
@@ -115,7 +133,8 @@
 
 					var abb_text = '';
 					if (abb) {
-						if (abb.ssid)		abb_text += abb.ssid;
+						if (abb.bssid)		abb_text += abb.bssid;
+						if (abb.ssid)		abb_text += ' | '+abb.ssid;
 						if (abb.mode)		abb_text += ' | '+abb.mode;
 					}
 					if (gws) {
@@ -139,8 +158,7 @@
 							text += ' (router)';
 						} else {
 							text += ' (bridged)';	
-						}	
-						if (nw.wmac)		text += ' | '+nw.wmac;
+						}
 
 						if (sys) {						
 							if (sys.qos)		text += ' | QoS';
@@ -151,7 +169,7 @@
 						$('#qz-local-sts').text(text);
 					}
 				},
-				chart: function() {
+				chart: function() { // 2017.02.28
 					// set store.history = history;
 					var _local_history;
 
@@ -171,17 +189,14 @@
 
 					// start calculation
 					if (local) {
-						// 
-						var _;
-						
 						// save txmcs, rxmcs
-						var _snr = [], _txmcs = [], _rxmcs = [];
-						// calc & save snr, ul_thrpt, dl_thprt
+						var _snr = [], _br = [];
+						// calc & save snr, bitrate
 						var _ul_thrpt = [], _dl_thrpt = [];
 
 						// calc & save snr
 						if ("abb" in local) {						
-							_ = 0;
+							var _ = 0;
 							if ("signal" in local.abb && "noise" in local.abb) {
 								_ = local.abb.signal - local.abb.noise;
 							} else {
@@ -197,24 +212,13 @@
 
 							// save txmcs
 							_ = 0;
-							if ("txmcs" in local.abb) {
-								_ = local.abb.txmcs;
+							if ("br" in local.abb) {
+								_ = local.abb.br;
 							}
-							if ("txmcs" in local_history) {
-								_txmcs = $.flot.one(local_history.txmcs, _, 60);
+							if ("br" in local_history) {
+								_br = $.flot.one(local_history.br, _, 60);
 							} else {
-								_txmcs.push(_);
-							}
-
-							// save rxmcs
-							_ = 0;
-							if ("rxmcs" in local.abb) {
-								_ = local.abb.rxmcs;
-							}
-							if ("rxmcs" in local_history) {
-								_rxmcs = $.flot.one(local_history.rxmcs, _, 60);
-							} else {
-								_rxmcs.push(_);
+								_br.push(_);
 							}
 						}
 
@@ -252,8 +256,7 @@
 						// save to store.history
 						_local_history = {
 							snr: _snr,
-							txmcs: _txmcs,
-							rxmcs: _rxmcs,
+							br: _br,
 							ul_thrpt: _ul_thrpt,
 							dl_thrpt: _dl_thrpt,
 						};
@@ -261,8 +264,7 @@
 					} else {
 						_local_history = {
 							snr: null,
-							txmcs: null,
-							rxmcs: null,
+							br: null,
 							ul_thprt: null,
 							dl_thrpt: null
 						}
@@ -273,6 +275,7 @@
 					$.cache.save.local();
 				}
 			},
+			// TODO: peers here
 			peers: {
 				chart: function() {
 					//var peers = store.query.peers;
@@ -283,8 +286,8 @@
 			}
 		},
 
-		save: {
-			local: function() {
+		save: { // 2017.02.28
+			local: function() { // 2017.02.28
 				var _ = store.query;
 				store.query_last = _;
 				store.query = null;
@@ -292,21 +295,24 @@
 		},
 
 		// "realtime" update
-		update: function() {
+		// TODO: parse & save "store.cache" into "store.history"
+		update: function() { // 2017.02.28
 			// main data sync sequences
 			$.cache.sync.local();
-			//$.cache.parse.local();
+			$.cache.parse.local.status();
+			$.cache.parse.local.chart();
+
 			//$.cache.sync.peers();
 			//$.cache.parse.peers();
 		},
 		// 'demo' mode entry
 		// TODO: parse & save "store.cache" into "store.history"
-		DEMO: function() {
+		DEMO: function() { // 2017.02.28
 			$.cache.sync.DEMO();
 			$.cache.parse.local.status();
 			$.cache.parse.local.chart();
-			$.cache.parse.peers.status();
-			$.cache.parse.peers.chart();
+			//$.cache.parse.peers.status();
+			//$.cache.parse.peers.chart();
 		},
 	}
 }) (jQuery); // $.cache
@@ -316,7 +322,7 @@
 // @2017.02.22
 (function($) {
 	$.ui = {
-		init: function(mode) {
+		init: function(mode) { // 2017.02.28
 			$.materialize.init();
 			$.flot.init();
 			$.ui.forms();
@@ -325,11 +331,11 @@
 				$('#tab2,#tab3,#tab4,#tab5').html(text);
 			}
 		},
-		update: function() {
+		update: function() { // 2017.02.28
 			$.flot.sync();
 		},
-		forms: function() {
-			$('form').submit(function() {
+		forms: function() { // 2017.02.28
+			$('form').submit(function() { // 2017.02.28
 				return false;
 			});
 		},
@@ -347,48 +353,47 @@
 
 // Bind & handle all "EVENT"
 // TODO: this page not finished yet
-// @2017.02.22
-(function($) {
-	$.ops = {
-		init: function(mode) {
+(function($) { // 2017.02.28
+	$.ops = { // 2017.02.28
+		init: function(mode) { // 2017.02.28
 			if (mode == 'demo') {
-				$('#tab2,#tab3,#tab4,#tab5').click(function() {
+				$('#tab2,#tab3,#tab4,#tab5').click(function() { // 2017.02.28
 					var obj = $(this);
 					console.log('> toast() when click', obj);
 					$.materialize.toast('Not available in "DEMO" mode');
 				});
 			} else {
-				$('#qz-btn-sys-reset').click(function() {
+				$('#qz-btn-sys-reset').click(function() { // 2017.02.28
 					$('#qz-modal-chcfm-items').text('Reset Network');
 					$('#qz-modal-chcfm-affected').text('This Operation Will REBOOT This Device');
 					$('#qz-btn-confirm-change').attr('ops', 'reset').attr('val', 'sys');
 				});
 
-				$('#qz-btn-abb-reset').click(function() {
+				$('#qz-btn-abb-reset').click(function() { // 2017.02.28
 					$('#qz-modal-chcfm-items').text('Reset Analog Baseband');
 					$('#qz-modal-chcfm-affected').text('This Operation Will Interrupt Your Current Wireless Communication');
 					$('#qz-btn-confirm-change').attr('ops', 'reset').attr('val', 'abb');
 				});
 
-				$('#qz-btn-gws-reset').click(function() {
+				$('#qz-btn-gws-reset').click(function() { // 2017.02.28
 					$('#qz-modal-chcfm-items').text('Reset GWS');
 					$('#qz-modal-chcfm-affected').text('This Operation Will Interrupt Your Current Wireless Communication');
 					$('#qz-btn-confirm-change').attr('ops', 'reset').attr('val', 'gws');
 				});
 
-				$('#qz-btn-nw-reset').click(function() {
+				$('#qz-btn-nw-reset').click(function() { // 2017.02.28
 					$('#qz-modal-chcfm-items').text('Reset Network');
 					$('#qz-modal-chcfm-affected').text('This Operation Will Interrupt Your Current Network Communication, including Wireless Communication');
 					$('#qz-btn-confirm-change').attr('ops', 'reset').attr('val', 'nw');
 				});
 
-				$('#qz-btn-fw-factory').click(function() {
+				$('#qz-btn-fw-factory').click(function() { // 2017.02.28
 					$('#qz-modal-chcfm-items').text('Reset to FACTORY SETTINGS');
 					$('#qz-modal-chcfm-affected').text('This Operation Will RESET This Device to FACTORY SETTINGS !');
 					$('#qz-btn-confirm-change').attr('ops', 'init').attr('val', 'new');
 				})
 
-				$('#qz-btn-confirm-change').click(function() {
+				$('#qz-btn-confirm-change').click(function() { // 2017.02.28
 					var ops = $(this).attr('ops');
 					var val = $(this).attr('val');
 					console.log('ops>', ops, val);
@@ -401,7 +406,7 @@
 					$.ops.ajax(val, url, null);
 				});
 
-				$(':text').keydown(function(e) {
+				$(':text').keydown(function(e) { // 2017.02.28
 					if (e.keyCode == 13) {
 						var obj = $(this);
 						obj.qz = {
@@ -412,7 +417,7 @@
 						$.ops.change(obj);
 					}
 				});
-				$(':checkbox').click(function() {
+				$(':checkbox').click(function() { // 2017.02.28
 					var obj = $(this);
 					var current = (obj.attr('checked') == 'checked') || false;
 					if (current) {
@@ -431,7 +436,7 @@
 						$.ops.change(obj);
 					}
 				});
-				$('select').change(function() {
+				$('select').change(function() { // 2017.02.28
 					var obj = $(this);
 					obj.qz = {
 						_com: obj.attr('alt'),
@@ -442,13 +447,13 @@
 				})
 			}
 
-			$('.qz-btn-local-chart-fields').click(function() {
+			$('.qz-btn-local-chart-fields').click(function() { // 2017.02.28
 				var type = $(this).attr('alt');
 				store.flot.fields = type;
 			});
 
  		},
-		change: function(obj) {
+		change: function(obj) { // 2017.02.28
 			if (obj.qz._val != '' && obj.qz._val != '-') {
 				console.log('enter >', obj.qz._com, obj.qz._item, obj.qz._val);
 
@@ -457,7 +462,7 @@
 				}, obj);
 			}
 		},
-		ajax: function(ops, url, params, obj) {
+		ajax: function(ops, url, params, obj) { // 2017.02.28
 			var prompt = '';
 
 			// prevent multi-submit
@@ -466,7 +471,7 @@
 				console.log(' disable:', obj.attr('disabled'));
 			}
 
-			$.get(url, params, function(resp) {
+			$.get(url, params, function(resp) { // 2017.02.28
 				switch(ops) {
 				case 'abb':
 					prompt = 'ABB has been RESET';
@@ -495,7 +500,7 @@
 				// release submit
 				if (obj) $.ui.obj.enable(obj);
 			})
-			.fail(function(resp) {
+			.fail(function(resp) { // 2017.02.28
 				switch(ops) {
 				case 'nw':
 					prompt = 'Network has been RESET';
@@ -520,7 +525,7 @@
 				console.log(' disable:', obj.attr('disabled'));
 			});
 		},
-		ajax_done: function(ops) {
+		ajax_done: function(ops) { // 2017.02.28
 			switch(ops) {
 			case 'nw':
 				$.materialize.toast('Reload this page due to Device Network is RESET');
@@ -537,27 +542,27 @@
 	}
 }) (jQuery); // $.ops
 
+
 // app algorithm
-// @ 2017.02.22
 (function($) {
 	$.app = {
-		init: function(mode) {
+		init: function(mode) { // 2017.02.28
 			store.mode = mode;
 			$.ui.init(mode);
 			$.cache.init();
 			$.ops.init(mode);
 		},
 		// update store.query.cache with "ajax"
-		update: function() {
+		update: function() { // 2017.02.28
 			$.cache.update();
 			$.ui.update();
 		},
 		// update store.query.cache with "DEMO"
-		DEMO: function() {
+		DEMO: function() { // 2017.02.28
 			$.cache.DEMO();
 			$.ui.update();
 		},
-		run: function(mode) {
+		run: function(mode) { // 2017.02.28
 			// init cache/data, ui
 			$.app.init(mode);
 			switch(mode) {
@@ -565,7 +570,7 @@
 				console.log("App Running (realtime).");
 				// main loop
 				$.app.update();
-				store.flot.intl.local = setInterval("$.app.update", 1500);
+				store.flot.intl.local = setInterval("$.app.update()", 1000);
 				break;
 			case 'demo':
 			default:
@@ -580,8 +585,7 @@
 
 
 // app starts here
-// @2017.02.22
-$(function() {
+$(function() { // 2017.02.28
 	var m = $.url.get('k') || 'demo';
 	$.app.run(m);
 });

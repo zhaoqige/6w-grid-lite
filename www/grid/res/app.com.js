@@ -41,8 +41,7 @@ var store = {
 			snr: [],
 			ul_thrpt: [],
 			dl_thrpt: [],
-			txmcs: [],
-			rxmcs: []
+			br: []
 		}
 	}
 }; // store
@@ -122,15 +121,13 @@ var store = {
 		chart: {
 			new: function(idx, item) {
 				var data = [{
-					label: 'Tx MCS', data: [], yaxis: 2
+					label: 'Bitrate - Mbit/s', data: []
 				},{
-					label: 'Rx MCS', data: [], yaxis: 2
+					label: 'SNR - db', data: []
 				},{
 					label: 'DL - Mbps', data: []
 				},{
 					label: 'UL - Mbps', data: []
-				},{
-					label: 'SNR - db', data: []
 				}];
 				var flot = $.plot(item, data, {
 					series: {
@@ -156,12 +153,12 @@ var store = {
 					yaxes: [{
 						show: true, min: 0, max: 32,
 						steps: true
-					},{
+					},/*{
 						show: true, tickDecimals: 0, min: 0, max: 8,
 						//alignTicksWithAxis: 1, 
 						steps: true,
 						position: 'right'
-					}],
+					}*/],
 					// TODO: fix legend size
 					legend: {
 						//position: 'sw',
@@ -207,10 +204,9 @@ var store = {
 				var snr = store.history.local.snr;
 				var dl_thrpt = store.history.local.dl_thrpt;
 				var ul_thrpt = store.history.local.ul_thrpt;
-				var txmcs = store.history.local.txmcs;
-				var rxmcs = store.history.local.rxmcs;
+				var br = store.history.local.br;
 
-				var fd_snr = [], fd_dl_thrpt = [], fd_ul_thrpt = [], fd_rxmcs = [], fd_txmcs = [];
+				var fd_snr = [], fd_dl_thrpt = [], fd_ul_thrpt = [], fd_br = [];
 
 				if (snr && snr.length > 0) {
 					for(i = 0, j = snr.length; i < snr.length; i ++) {
@@ -235,23 +231,13 @@ var store = {
 					}
 				}
 
-				if (txmcs && txmcs.length > 0) {
-					for(i = 0, j = txmcs.length; i < txmcs.length; i ++) {
-						var val = txmcs[i];
+				if (br && br.length > 0) {
+					for(i = 0, j = br.length; i < br.length; i ++) {
+						var val = br[i];
 						if (val >= 0) {
-							fd_txmcs.push([j-i-1, val]);
+							fd_br.push([j-i-1, val]);
 						} else {
-							fd_txmcs.push(null);
-						}
-					}
-				}
-				if (rxmcs && rxmcs.length > 0) {
-					for(i = 0, j = rxmcs.length; i < rxmcs.length; i ++) {
-						var val = rxmcs[i];
-						if (val >= 0) {
-							fd_rxmcs.push([j-i-1, val]);
-						} else {
-							fd_rxmcs.push(null);
+							fd_br.push(null);
 						}
 					}
 				}
@@ -260,25 +246,22 @@ var store = {
 				var cd;
 				var _fields = store.flot.fields;
 				if (_fields == 'nw') {
-					cd = [{ label: 'Tx MCS', data: null, yaxis: 2 },
-						{ label: 'Rx MCS', data: null, yaxis: 2 },
+					cd = [{ label: 'Bitrate', data: null },
+						{ label: 'SNR', data: null },
 						{ label: 'DL Thrpt', data: fd_dl_thrpt },
-						{ label: 'UL Thrpt', data: fd_ul_thrpt },
-						{ label: 'SNR', data: null }
+						{ label: 'UL Thrpt', data: fd_ul_thrpt }
 					];
 				} else if (_fields == 'abb') {
-					cd = [{ label: 'Tx MCS', data: fd_txmcs, yaxis: 2 },
-						{ label: 'Rx MCS', data: fd_rxmcs, yaxis: 2 },
+					cd = [{ label: 'Bitrate', data: fd_br },
+						{ label: 'SNR', data: fd_snr },
 						{ label: 'DL Thrpt', data: null },
-						{ label: 'UL Thrpt', data: null },
-						{ label: 'SNR', data: fd_snr }
+						{ label: 'UL Thrpt', data: null }
 					];
 				} else {
-					cd = [{ label: 'Tx MCS', data: fd_txmcs, yaxis: 2 },
-						{ label: 'Rx MCS', data: fd_rxmcs, yaxis: 2 },
+					cd = [{ label: 'Bitrate', data: fd_br },
+						{ label: 'SNR', data: fd_snr },
 						{ label: 'DL Thrpt', data: fd_dl_thrpt },
-						{ label: 'UL Thrpt', data: fd_ul_thrpt },
-						{ label: 'SNR', data: fd_snr }
+						{ label: 'UL Thrpt', data: fd_ul_thrpt }
 					];
 				}
 
