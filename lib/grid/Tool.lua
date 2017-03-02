@@ -16,7 +16,7 @@ Tool.conf.flood_cmd_fmt = "iperf -u -c %s -t %d -b %dM"
 Tool.conf.dfl_flood_bw = 10
 Tool.conf.dfl_flood_times = 10
 
-Tool.conf.ping_cmd_fmt = "ping %s -t %d"
+Tool.conf.ping_cmd_fmt = "ping %s -w %d"
 Tool.conf.dfl_ping_times = 4
 
 
