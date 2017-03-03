@@ -112,6 +112,11 @@ function ABB.ops.mode(_mode)
 	end
 end
 
+function ABB.ops.peers()
+	local _dev = ABB.conf.dev or 'wlan0'
+	local _iw = ABB.cache.iw
+	
+end
 
 
 ABB.get = {}
