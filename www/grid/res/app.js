@@ -170,8 +170,6 @@
 		parse: { // 2017.02.28
 			// TODO: parse data with DEMO
 			local: { // 2017.02.28
-				delayed: function() {
-				},
 				instant: function() { // 2017.03.03
 					//console.log("$.cache.parse.local()", store.query);
 					var query = (store && "query" in store) ? store.query_last : null;
@@ -363,7 +361,6 @@
 			delayed: function() {
 				console.log('dbg> $.cache.update.delayed()');
 				$.cache.sync.local.delayed();
-				$.cache.parse.local.delayed();
 			}
 		},
 		// 'demo' mode entry
@@ -397,6 +394,70 @@
 			},
 			delayed: function() {
 				console.log('dbg> $.ui.update.delayed()');
+				var delayed = store.delayed;
+				//console.dir(delayed);
+				var gws = (delayed && "gws" in delayed) ? delayed.gws : null;
+				var sys = (delayed && "sys" in delayed) ? delayed.sys : null;
+
+				if (gws) {
+					var text;
+					var rgn = -1, ch = -1, txpwr = -99, tpc = -1, rxgain = -1, agc = -1;
+					var freq = -1, bw = -1;
+
+					rgn = ("rgn" in gws) ? gws.rgn : -1;
+					ch = ("ch" in gws) ? gws.ch : -1;
+
+					text = 'R'+rgn+' - CH'+ch;
+					$('#qz-local-gws1').text(text);
+
+					freq = (rgn > 0) ? 474+(ch-21)*8 : 473+(ch-14)*6;
+					bw = ("bw" in gws) ? gws.bw : -1;
+					if (bw > 0) {
+						text = freq+'MHz - '+bw+'M';
+					} else {
+						text = freq+'MHz - (unknown)';
+					}
+					$('#qz-local-gws2').text(text);
+
+					txpwr = ("txpwr" in gws) ? gws.txpwr : -99;
+					tpc = ("tpc" in gws) ? gws.tpc : -1;
+					if (txpwr >= -15) {
+						text = txpwr+' dBm';
+					} else {
+						text = 'Tx OFF';
+					}
+					text += ' - ';
+					if (tpc > 0) {
+						text += 'TPC ON';
+					} else if (tpc == 0) {
+						text += 'TPC OFF';
+					} else {
+						text += 'TPC DIS';
+					}
+					$('#qz-local-gws3').text(text);
+
+
+					rxgain = ("rxgain" in gws) ? gws.rxgain : -99;
+					agc = ("agc" in gws) ? gws.agc : -1;
+					if (rxgain >= -45) {
+						text = rxgain+' dB';
+					} else {
+						text = 'No RxGain';
+					}
+					text += ' - ';
+					if (agc > 0) {
+						text += 'AGC ON';
+					} else if (agc == 0) {
+						text += 'AGC OFF';
+					} else {
+						text += 'AGC DIS';
+					}
+					$('#qz-local-gws4').text(text);
+
+					
+					console.log("delayed> region/channel/txpwr/tpc/rxgain/agc", 
+						rgn, ch, txpwr, tpc, rxgain, agc);
+				}
 			}
 		},
 		forms: function() { // 2017.02.28

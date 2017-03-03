@@ -21,7 +21,7 @@ function Get.Run()
 	--if (user.verify.remote()) then
 		local _get = cgi.data._get
 		local _k = fmt.http.find('k', _get)
-		--_k = 'instant'
+		--_k = 'delayed'
 
 		if (_k == 'instant') then
 			_result = Get.ops.instant()
@@ -67,7 +67,7 @@ function Get.ops.delayed()
 	local _ts = os.time()
 
 	local _result = string.format(_fmt, _gws, _sys, _ts)
-	_result = '{ "gws": null, "sys": null }'
+	--_result = '{ "gws": null, "sys": null }'
 	return _result
 end
 
