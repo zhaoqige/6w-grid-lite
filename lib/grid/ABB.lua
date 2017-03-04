@@ -83,8 +83,8 @@ function ABB.ops.read()
 	local br = fmt.n(_iw.bitrate(_dev))/1024*(_bw/20) -- Mbit*(8/20)
 
 	-- get & save
-	_abb.ssid = _iw.ssid(_dev) or '(unknown)'
-	_abb.bssid = _iw.bssid(_dev) or '(unknown)'
+	_abb.ssid = _iw.ssid(_dev) or '(unknown ssid)'
+	_abb.bssid = _iw.bssid(_dev) or '(unknown bssid)'
 	_abb.signal = signal or noise or -101
 	_abb.noise = noise or -101
 	_abb.br = br or 0

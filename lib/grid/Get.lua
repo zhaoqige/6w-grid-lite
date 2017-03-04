@@ -18,7 +18,7 @@ function Get.Run()
 	cgi.save.init()
 
 	local _result = ''
-	--if (user.verify.remote()) then
+	if (user.verify.remote()) then
 		local _get = cgi.data._get
 		local _k = fmt.http.find('k', _get)
 		--_k = 'delayed'
@@ -32,9 +32,9 @@ function Get.Run()
 			_result = string.format('unknown (%s)', _k or '[nil]')
 		end
 		Http.job.Reply(_result)
-	--else
-		--Http.data.Error('nobody');
-	--end
+	else
+		Http.data.Error('nobody');
+	end
 end
 
 

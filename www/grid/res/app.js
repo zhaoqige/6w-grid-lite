@@ -434,7 +434,7 @@
 					$('#qz-local-gws3').text(text);
 
 
-					rxgain = ("rxgain" in gws) ? gws.rxgain : -99;
+					rxgain = ("rxg" in gws) ? gws.rxg : -99;
 					agc = ("agc" in gws) ? gws.agc : -1;
 					if (rxgain > -99) {
 						text = rxgain+' dB';
