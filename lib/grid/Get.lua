@@ -22,6 +22,7 @@ function Get.Run()
 		local _get = cgi.data._get
 		local _k = fmt.http.find('k', _get)
 		--_k = 'delayed'
+		--_k = 'instant'
 
 		if (_k == 'instant') then
 			_result = Get.ops.instant()

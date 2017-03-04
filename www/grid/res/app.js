@@ -170,45 +170,6 @@
 		parse: { // 2017.02.28
 			// TODO: parse data with DEMO
 			local: { // 2017.02.28
-				instant: function() { // 2017.03.03
-					//console.log("$.cache.parse.local()", store.query);
-					var query = (store && "query" in store) ? store.query_last : null;
-					var local = (query && "local" in query) ? query.local : null;
-
-					var abb = (local && "abb" in local) ? local.abb : null;
-					var nw = (local && "nw" in local) ? local.nw : null;
-					var sys = (local && "sys" in local) ? local.sys : null;
-
-					var abb_text = '';
-					if (abb) {
-						if (abb.bssid)		abb_text += abb.bssid;
-						if (abb.ssid)		abb_text += ' | '+abb.ssid;
-						if (abb.chbw)		abb_text += ' | '+abb.chbw+'M';
-						if (abb.mode)		abb_text += ' | '+abb.mode;
-					}
-					if (nw) {
-						var text = '';
-						if (nw.lan_ip && nw.lan_ip != '-') text += nw.lan_ip;
-						if (nw.wan_ip && nw.wan_ip != '-') text += ' / '+nw.wan_ip;
-						$('#qz-local-nw').text(text);
-
-						text = abb_text;
-						if (nw.bridge) {
-							text += ' (bridge)';
-						} else {
-							text += ' (router)';	
-						}
-
-						if (sys) {						
-							if (sys.qos > 0)		text += ' | QoS';
-							if (sys.firewall > 0)	text += ' | Firweall'
-							if (sys.tdma > 0)		text += ' | TDMA';
-							if (sys.atf > 0)		text += ' | ATF';
-						}
-						$('#qz-local-sts').text(text);
-					}
-				},
-
 				// parse data from store.query, store.query_last
 				// prepare & save to history, then $.ui.update() can redraw()
 				chart: function() { // 2017.03.01
@@ -241,7 +202,7 @@
 							var snr = 0, signal = -199, noise = -198;
 							if ("signal" in local.abb && "noise" in local.abb) {
 								signal = local.abb.signal || -110;
-								noise = local.abb.noise || -99; // fix gws4k noise=unknown
+								noise = local.abb.noise || -105; // fix gws4k noise=unknown
 								snr = signal - noise;
 							} else {
 								snr = 0;
@@ -352,14 +313,12 @@
 			instant: function() { // 2017.02.28
 				// main data sync sequences
 				$.cache.sync.local.instant();
-				$.cache.parse.local.instant();
 				$.cache.parse.local.chart();
 
 				//$.cache.sync.peers();
 				//$.cache.parse.peers();
 			},
 			delayed: function() {
-				console.log('dbg> $.cache.update.delayed()');
 				$.cache.sync.local.delayed();
 			}
 		},
@@ -389,11 +348,49 @@
 			}
 		},
 		update: {
-			instant: function() { // 2017.02.28
+			instant: function() { // 2017.03.03
+				//console.log("$.cache.parse.local()", store.query);
+				var query = (store && "query" in store) ? store.query_last : null;
+				var local = (query && "local" in query) ? query.local : null;
+
+				var abb = (local && "abb" in local) ? local.abb : null;
+				var nw = (local && "nw" in local) ? local.nw : null;
+				var sys = (local && "sys" in local) ? local.sys : null;
+
+				var abb_text = '';
+				if (abb) {
+					if (abb.bssid)		abb_text += abb.bssid;
+					if (abb.ssid)		abb_text += ' | '+abb.ssid;
+					if (abb.chbw)		abb_text += ' | '+abb.chbw+'M';
+					if (abb.mode)		abb_text += ' | '+abb.mode;
+				}
+				if (nw) {
+					var text = '';
+					if (nw.lan_ip && nw.lan_ip != '-') text += nw.lan_ip;
+					if (nw.wan_ip && nw.wan_ip != '-') text += ' / '+nw.wan_ip;
+					$('#qz-local-nw').text(text);
+
+					text = abb_text;
+					if (nw.bridge) {
+						text += ' (bridge)';
+					} else {
+						text += ' (router)';	
+					}
+
+					if (sys) {						
+						if (sys.qos > 0)		text += ' | QoS';
+						if (sys.firewall > 0)	text += ' | Firweall'
+						if (sys.tdma > 0)		text += ' | TDMA';
+						if (sys.atf > 0)		text += ' | ATF';
+					}
+					$('#qz-local-sts').text(text);
+				}
+
+				// update chart
 				$.flot.sync();
 			},
 			delayed: function() {
-				console.log('dbg> $.ui.update.delayed()');
+				//console.log('dbg> $.ui.update.delayed()');
 				var delayed = store.delayed;
 				//console.dir(delayed);
 				var gws = (delayed && "gws" in delayed) ? delayed.gws : null;
@@ -432,17 +429,17 @@
 					} else if (tpc == 0) {
 						text += 'TPC OFF';
 					} else {
-						text += 'TPC DIS';
+						text += 'No TPC';
 					}
 					$('#qz-local-gws3').text(text);
 
 
 					rxgain = ("rxgain" in gws) ? gws.rxgain : -99;
 					agc = ("agc" in gws) ? gws.agc : -1;
-					if (rxgain >= -45) {
+					if (rxgain > -99) {
 						text = rxgain+' dB';
 					} else {
-						text = 'No RxGain';
+						text = '0';
 					}
 					text += ' - ';
 					if (agc > 0) {
@@ -450,10 +447,12 @@
 					} else if (agc == 0) {
 						text += 'AGC OFF';
 					} else {
-						text += 'AGC DIS';
+						text += 'No AGC';
 					}
 					$('#qz-local-gws4').text(text);
 
+					text = ("note" in gws) ? gws.note : '...';
+					$('#qz-local-gws5').text(text);
 					
 					console.log("delayed> region/channel/txpwr/tpc/rxgain/agc", 
 						rgn, ch, txpwr, tpc, rxgain, agc);
@@ -727,6 +726,7 @@
 			}
 		},
 		// some job that may need after $.get() operated
+		// eg. "Tools!" > "Ping"
 		ajax_set: function(text) {
 			if (typeof(obj) == 'object') {
 				console.log('dbg>', text);
