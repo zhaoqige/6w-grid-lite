@@ -481,6 +481,8 @@
 
 					text = 'R'+rgn+' - CH'+ch;
 					$('#qz-local-gws1').text(text);
+					$('#qz-set-gws-rgn').val(rgn);
+					$('#qz-set-gws-ch').val(ch);
 
 					freq = (rgn > 0) ? 474+(ch-21)*8 : 473+(ch-14)*6;
 					bw = ("bw" in gws) ? gws.bw : -1;
@@ -507,6 +509,7 @@
 						text += 'No TPC';
 					}
 					$('#qz-local-gws3').text(text);
+					$('#qz-set-gws-txpwr').val(txpwr);
 
 
 					rxgain = ("rxg" in gws) ? gws.rxg : -99;
@@ -525,6 +528,7 @@
 						text += 'No AGC';
 					}
 					$('#qz-local-gws4').text(text);
+					$('#qz-set-gws-rxg').val(rxgain > -99 ? rxgain : '-');
 
 					text = ("note" in gws) ? gws.note : '...';
 					$('#qz-local-gws5').text(text);
@@ -878,3 +882,4 @@ $(function() { // 2017.02.28
 	$.app.run(m);
 });
 
+                                                                                                                  
