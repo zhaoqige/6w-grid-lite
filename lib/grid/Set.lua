@@ -6,6 +6,7 @@ require 'grid.base.cgi'
 require 'grid.base.user'
 require 'grid.base.fmt'
 require 'grid.Http'
+require 'grid.GWS'
 
 Set = {}
 
@@ -18,6 +19,10 @@ function Set.Run()
 		local _com = fmt.http.find('com', _get)
 		local _item = fmt.http.find('item', _get)
 		local _val = fmt.http.find('val', _get)
+
+		--_com = 'gws'
+		--_item = 'txpwr'
+		--_val = '17'
 
 		if (_val and _val ~= '-') then
 			if (_com == 'gws') then
