@@ -60,7 +60,10 @@ var store = {
 			eth_tx_thrpt: [], eth_rx_thrpt: [],
 			wls_tx_thrpt: [], wls_rx_thrpt: []
 		}
-	}
+	},
+
+	// peers proxy data
+	proxy: null
 }; // store
 
 // window.location.href
@@ -307,7 +310,20 @@ var store = {
 				$.flot.chart.update(chart, cd);
 			},
 			peers: function() {
+				var peers = (store.history && "peers" in store.history) ? store.history.peers : null;
+				var peers_qty = (peers) ? peers.length : 0;
 
+				var fcharts = store.flot.chart;
+				var fcharts_qty = fcharts.length;
+
+
+				//console.log('dbg> peers qty/flot charts/charts to add =', peers_qty, fcharts_qty, peers_qty-(fcharts_qty-1));
+				
+				if (fcharts_qty > 1) {
+					$.each(fcharts, function(idx, fchart) {
+						console.log('fcharts', idx, fchart);
+					})
+				}
 			}
 		},
 		// parse store.history"
