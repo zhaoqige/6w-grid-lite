@@ -62,8 +62,10 @@ function ABB.ops.Update()
 	end
 
 
-	local _fmt = '{"bssid": "%s", "ssid": "%s", "mode": "%s", "encrypt": "%s", "signal": %d, "noise": %d, "br": %.1f, "peers": %s }'
-	_result = string.format(_fmt, _data.bssid, _data.ssid, _data.mode, _data.encrypt, _data.signal, _data.noise, _data.br, _data.peers)
+	local _fmt = '{"bssid": "%s", "ssid": "%s", "mode": "%s", "encrypt": "%s", '
+		.. '"signal": %d, "noise": %d, "peers": %s }'
+	_result = string.format(_fmt, _data.bssid, _data.ssid, _data.mode, _data.encrypt, 
+		_data.signal, _data.noise, _data.peers)
 
 	return _result
 end
@@ -76,23 +78,28 @@ function ABB.ops.read()
 	local _iw = ABB.cache.iw
 	local _bw = ABB.conf.chbw
 
+	local _mode = ABB.ops.mode(_iw.mode(_dev))
+
 	local enc = _iw.encryption(_dev)
 
 	local bssid = _iw.bssid(_dev)
 	local ssid = _iw.ssid(_dev)
 	local mode = _iw.mode(_dev)
 	local noise = fmt.n(_iw.noise(_dev))
+	if (noise == 0) then
+		noise = -101
+	end
+
 	local signal = fmt.n(_iw.signal(_dev))
 	local br = fmt.n(_iw.bitrate(_dev))/1024*(_bw/20) -- Mbit*(8/20)
 
 	-- get & save
-	_abb.ssid = _iw.ssid(_dev) or '(unknown ssid)'
-	_abb.bssid = _iw.bssid(_dev) or '(unknown bssid)'
-	_abb.signal = signal or noise or -101
-	_abb.noise = noise or -101
-	_abb.br = br or 0
+	_abb.ssid = ssid or '(unknown ssid)'
+	_abb.bssid = bssid or '(unknown bssid)'
+	_abb.signal = signal or noise
+	_abb.noise = noise
 	_abb.chbw = _bw
-	_abb.mode =  ABB.ops.mode(_iw.mode(_dev))
+	_abb.mode =  _mode
 	_abb.encrypt = enc and enc.description or ''
 	_abb.peers = ABB.ops.peers() or '{}'
 
