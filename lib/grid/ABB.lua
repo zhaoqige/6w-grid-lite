@@ -92,6 +92,10 @@ function ABB.ops.read()
 	end
 
 	local signal = fmt.n(_iw.signal(_dev))
+	-- fix issue#6
+	if (signal == 0) then
+		signal = noise
+	end
 	local br = fmt.n(_iw.bitrate(_dev))/1024*(_bw/20) -- Mbit*(8/20)
 
 	-- get & save
