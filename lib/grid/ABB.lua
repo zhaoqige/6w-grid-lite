@@ -27,6 +27,7 @@ ABB.conf = {}
 ABB.conf.chbw = 8
 ABB.conf.dev = 'wlan0'
 ABB.conf.api = 'nl80211'
+ABB.conf.bar_inactive = 3000
 
 -- limit min time interval
 -- with 2s, return last cache
@@ -87,7 +88,7 @@ function ABB.ops.read()
 	local mode = _iw.mode(_dev)
 	local noise = fmt.n(_iw.noise(_dev))
 	if (noise == 0) then
-		noise = -101
+		noise = -101 -- gws4k noise=0
 	end
 
 	local signal = fmt.n(_iw.signal(_dev))
@@ -119,10 +120,63 @@ function ABB.ops.mode(_mode)
 	end
 end
 
+-- foreach peer(s), save
 function ABB.ops.peers()
+	local _result = '['
+	local _fmt = '{"mac": "%s", "ip": "%s", "signal": %d, "noise": %d, '
+		.. '"txmcs": %d, "txbr": %.1f, "short_gi": %d, '
+		.. '"rxmcs": %d, "rxbr": %.1f, "short_gi": %d, '
+		.. '"inactive": %d }'
+
 	local _dev = ABB.conf.dev or 'wlan0'
 	local _iw = ABB.cache.iw
 
+
+	-- 2017.03.06
+	local al = _iw.assoclist(_dev)
+	local noise = fmt.n(_iw.noise(_dev))
+	if (noise == 0) then
+		noise = -101 -- gws4k noise=0
+	end
+
+
+	local ai, ae
+	if al and next(al) then
+		for ai, ae in pairs(al) do
+			local _peer = {}
+			_peer.bssid = ae.bssid or 'unknown bssid'
+			_peer.peer = fmt.s(ai) or 'unknown ssid'
+			_peer.ip = ''
+			
+			_peer.signal = fmt.n(ae.signal)
+			_peer.noise = noise
+			
+			_peer.txmcs = fmt.n(ae.tx_mcs) or -1
+			_peer.txbr = fmt.n(ae.tx_rate)/1024*(8/20) or 0
+			_peer.tx_short_gi = fmt.n(ae.tx_short_gi) or -1
+
+			_peer.rxmcs = fmt.n(ae.rx_mcs) or -1
+			_peer.rxbr = fmt.n(ae.rx_rate)/1024*(8/20) or 0
+			_peer.rx_short_gi = fmt.n(ae.rx_short_gi) or -1
+
+			_peer.inactive = fmt.n(ae.inactive) or -1
+
+			if (_peer.inactive < ABB.conf.bar_inactive) then
+				local _r = string.format(_fmt, _peer.peer, _peer.ip, _peer.signal, _peer.noise,
+					_peer.txmcs, _peer.txbr, _peer.tx_short_gi,
+					_peer.rxmcs, _peer.rxbr, _peer.rx_short_gi, 
+					_peer.inactive)
+
+				if (_result ~= '[') then
+					_result = _result .. ','
+				end
+				_result = _result .. _r
+			end
+		end
+	end
+
+	_result = _result .. ']'
+	return _result
 end
 
 ABB.get = {}
