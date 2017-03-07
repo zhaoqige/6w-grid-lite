@@ -513,6 +513,9 @@ var store = {
 					var _h2 = $('#qz-peers').html();
 					$('#qz-peers').html(_h2+_h1);
 
+					// bind click()
+					$.ops.bind.peer_btn();
+
 					// remove "offline" tips
 					$('#qz-peers-none').remove();
 				},
@@ -548,12 +551,11 @@ var store = {
 				<li class="collection-item"><span class="badge qz-peer-atf">...</span>ATF</li>
 				<li class="collection-item"><span class="badge qz-peer-tdma">...</span>TDMA</li>
 			</ul>
-			</div>
-			<div class="card-action">
-				<a href="#model_proxy_leagal" alt="">Monitor</a>
-				<a href="#" class="qz-peer-reset" alt="">Reset</a>
 		</div>
+		<div class="card-action">
+			<a href="#model_proxy_leagal" class="qz-btn-peer-proxy" alt="">Manage</a>
 		</div>
+	</div>
 </div>
 					`;
 				},

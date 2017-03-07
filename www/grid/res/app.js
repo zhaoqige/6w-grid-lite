@@ -513,6 +513,7 @@ if (store.debug)
 					}
 					_p.find('.qz-peer-name').text(text1);
 					_p.find('.qz-peer-desc').text(text2);
+					_p.find('.qz-btn-peer-proxy').attr('alt', mac);
 				}
 			},
 			instant: function() { // 2017.03.03
@@ -779,6 +780,15 @@ if (store.debug)
 				store.flot.fields = type;
 			});
 
+ 		},
+ 		bind: {
+ 			peer_btn: function() {
+				$('.qz-btn-peer-proxy').click(function() {
+					var mac = $(this).attr('alt');
+					console.log('> prepare proxy dialog/modal. dev=', mac);
+					$('.qz-btn-proxy-agree').attr('href', '/cgi-bin/proxy?target='+mac);
+				});
+ 			}
  		},
  		tool: {
  			flood: function(obj) { // 2017.03.02
