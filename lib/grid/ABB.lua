@@ -79,13 +79,19 @@ function ABB.ops.read()
 	local _iw = ABB.cache.iw
 	local _bw = ABB.conf.chbw
 
-	local _mode = ABB.ops.mode(_iw.mode(_dev))
-
 	local enc = _iw.encryption(_dev)
 
-	local bssid = _iw.bssid(_dev)
-	local ssid = _iw.ssid(_dev)
-	local mode = _iw.mode(_dev)
+	local _mode = ABB.ops.mode(_iw.mode(_dev))
+
+	local bssid, ssid
+	if (_mode == 'Mesh Point') then
+		-- fix issue#22
+		bssid = cmd.exec('ifconfig wlan0 | grep wlan0 -m1 | awk \'{print $5}\' | tr -d "\n"')
+		ssid = cmd.exec('uci get wireless.@wifi-iface[0].mesh_id > /tmp/.grid_meshid; cat /tmp/.grid_meshid | tr -d "\n"')
+	else
+		bssid = _iw.bssid(_dev)
+		ssid = _iw.ssid(_dev)
+	end
 	local noise = fmt.n(_iw.noise(_dev))
 	if (noise == 0) then
 		noise = -101 -- gws4k noise=0
