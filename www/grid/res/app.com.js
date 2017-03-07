@@ -15,6 +15,8 @@ var store = {
 
 	invalid: -999,
 
+	invalid: -999,
+
 	// ajax failes when gws reboot
 	offlineCounter: 0,
 	offlineCounterBar: 6,

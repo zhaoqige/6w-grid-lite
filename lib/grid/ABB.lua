@@ -79,6 +79,8 @@ function ABB.ops.read()
 	local _iw = ABB.cache.iw
 	local _bw = ABB.conf.chbw
 
+	local _mode = ABB.ops.mode(_iw.mode(_dev))
+
 	local enc = _iw.encryption(_dev)
 
 	local _mode = ABB.ops.mode(_iw.mode(_dev))

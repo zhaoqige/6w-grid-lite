@@ -55,8 +55,25 @@
 					var data = { local: null, nw: null };
 					return data;
 				},
-				delayed: function() { // return structured object, don't update
-					var data = { gws: null, sys: null };
+				delayed: function() {
+					var data = {
+						gws: {
+							rgn: 1,
+							ch: 43,
+							freq: 650,
+							agc: 0,
+							rxg: -10 + $.cache.RANDOM.int(30),
+							txpwr: 21,
+							tpc: $.cache.RANDOM.int(1),
+							chbw: 8
+						},
+						sys: {
+							qos: 1,
+							firewall: 0,
+							atf: -1,
+							tdma: 1
+						}
+					};
 					return data;
 				}
 			},
@@ -314,7 +331,15 @@ if (store.debug)
 						} else {
 							_wls_rx_thrpt.push(wls_rx_thrpt);
 						}
+						if ("wls_rx_thrpt" in local_history) {
+							_wls_rx_thrpt = $.flot.one(local_history.wls_rx_thrpt, wls_rx_thrpt, 60);
+						} else {
+							_wls_rx_thrpt.push(wls_rx_thrpt);
+						}
 
+
+						// TODO: should not put null to history right away,
+						// we should push a null value instead of whole null value
 
 						// TODO: should not put null to history right away,
 						// we should push a null value instead of whole null value
