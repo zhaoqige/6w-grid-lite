@@ -128,8 +128,8 @@ end
 function ABB.ops.peers()
 	local _result = '['
 	local _fmt = '{"mac": "%s", "ip": "%s", "signal": %d, "noise": %d, '
-		.. '"txmcs": %d, "txbr": %.1f, "short_gi": %d, '
-		.. '"rxmcs": %d, "rxbr": %.1f, "short_gi": %d, '
+		.. '"tx_mcs": %d, "tx_br": %.1f, "tx_short_gi": %d, '
+		.. '"rx_mcs": %d, "rx_br": %.1f, "rx_short_gi": %d, '
 		.. '"inactive": %d }'
 
 	local _dev = ABB.conf.dev or 'wlan0'
