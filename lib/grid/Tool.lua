@@ -44,10 +44,10 @@ function Tool.Run()
 			local _bw = fmt.http.find('bw', _get)
 			_result = Tool.ops.flood(_to, _times, _bw)
 		elseif (_k == 'scan') then
-			local _ffrom = fmt.http.find('b', _get) or 21
-			local _fto = fmt.http.find('e', _get) or 51
+			local _b = fmt.http.find('b', _get) or 21
+			local _e = fmt.http.find('e', _get) or 51
 			local _rgn = fmt.http.find('r', _get) or 1
-			_result = Tool.ops.scan(_ffrom, _fto, rgn)
+			_result = Tool.ops.scan(_rgn, _b, _e)
 		elseif (_k == 'scan_abord') then
 			_result = Tool.ops.scan_abord()
 		elseif (_k == 'scan_read') then
@@ -100,10 +100,10 @@ function Tool.ops.ping(_to, _times)
 	return _result
 end
 
-function Tool.ops.scan(_from, _to, _rgn)
+function Tool.ops.scan(_rgn, _b, _e)
 	local _f = Tool.conf.chscan_file
 	local _fmt = Tool.conf.chscan_cmd_fmt
-	local _cmd = string.format(_fmt, _f, _rgn, _from, _to)
+	local _cmd = string.format(_fmt, _rgn, _b, _e, _f)
 	cmd.exec(_cmd)
 
 	local _result = '{"error": null, "result": "on"}'
@@ -123,9 +123,9 @@ end
 function Tool.ops.scan_read(_ch)
 	local _f = Tool.conf.chscan_file
 	local _fmt = Tool.conf.chscan_read_cmd_fmt
-	local _ch_ = _ch or 45
+	local _ch_ = fmt.n(_ch) or 45
 	local _cmd = string.format(_fmt, _f, _ch_)
-	local _noise = cmd.exec(_cmd) or -111
+	local _noise = fmt.n(cmd.exec(_cmd)) or -111
 
 	local _result_fmt = '{"error": null, "result": "ok", "data": { "ch": %d, "noise": %d }}'
 	local _result = string.format(_result_fmt, _ch_, _noise)
