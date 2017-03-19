@@ -369,7 +369,7 @@ var store = {
 				//console.log('DEBUG> peers qty/flot charts qty=', peers_qty, fcharts_qty);
 				//console.log('DEBUG> Flot charts qty adjust=', fcharts_to_gap);
 				if (fcharts_to_gap > 0) {
-					$.flot.peers.add(fcharts_to_gap);
+					$.flot.peers.add(fcharts_to_gap, fcharts_qty);
 				} else if (fcharts_to_gap < 0) {
 					$.flot.peers.del(fcharts_to_gap);
 				}
@@ -394,11 +394,12 @@ var store = {
 			}
 		},
 		peers: { // add html/flot charts to "#qz-peers"
-			add: function(fcharts_to_gap) {
-				var i;
+			add: function(fcharts_to_gap, fcharts_qty) {
+				var i, fchart_color_idx = fcharts_qty - 1;
 				for(i = 1; i <= fcharts_to_gap; i ++) {
+					var color = store.flot.color[fchart_color_idx + i];
 					$.html.abb.peer.add();
-					var flot_box = $('.qz-chart-holder').last();
+					var flot_box = $('.qz-chart-holder').last().addClass(color);
 					var flot = $.flot.chart.peer(flot_box);
 					store.flot.chart.push(flot);
 				}
