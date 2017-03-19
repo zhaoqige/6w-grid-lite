@@ -45,6 +45,8 @@ var store = {
 		],
 		// chart handlers
 		chart: [],
+		// chart for channel scan
+		chart_chscan: null
 	},
 
 	// every ajax query result
@@ -131,6 +133,10 @@ var store = {
 			store.flot.chart.length = 0;
 			store.flot.chart.push(local_chart);
 			$.flot.bg(0, local);
+
+			var chscan_flot = $('.qz-chart-chscan-holder');
+			var chscan_chart = $.flot.chart.scan(chscan_flot);
+			store.flot.chart_chscan = chscan_chart;
 		},
 		// add flot chart background color
 		bg: function(idx, item) {
@@ -227,6 +233,31 @@ var store = {
 						show: true, tickDecimals: 0, min: 0, max: 8,
 						position: 'left'
 					}],
+					legend: {
+						show: true
+					}
+				});
+				return flot;
+			},
+			scan: function(item) {
+				var data = [{
+					label: 'Noise (dBm)', data: [], color: 'red'
+				}];
+				var flot = $.plot(item, data, {
+					series: {
+						lines: {
+							show: true
+						}
+					},
+					crosshair: {
+						mode: 'y'
+					},
+					xaxis: {
+						show: true, tickDecimals: 0, min: 100, max: 1000
+					},
+					yaxis: {
+						show: true, min: -110, max: -50
+					},
 					legend: {
 						show: true
 					}

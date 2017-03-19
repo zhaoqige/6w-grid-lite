@@ -61,20 +61,6 @@
 			</div>
 		</div>
 	</div>
-
-	<!-- Modal Structure -->
-	<div id="model_proxy_leagal" class="modal">
-		<div class="modal-content">
-			<h4>Leagal Statement</h4>
-			<p>If you are the owner of this device, or with propper authentication(s), then go ahead.</p>
-			<p>If not, this means you are breaking into others' property, in the meanwhile, breaking a "Federal Law". Please click "LEAVE" button and close this page.</p>
-			<p>Thank you</p>
-		</div>
-		<div class="modal-footer">
-			<button class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</button>
-			<a href="#" target="_blank" class="modal-action modal-close waves-effect waves-green btn-flat qz-btn-proxy-agree">Agree</a>
-		</div>
-	</div>
 </div>
 <div id="tab2" class="col s12">
 	<div class="container">
@@ -292,34 +278,33 @@
 			</ul>
 		</div>
 	</div>
-
-	<!-- Modal Structure -->
-	<div id="modal_change_confirm" class="modal">
-		<div class="modal-content">
-			<h4>Operation Confirm</h4>
-			<p id="qz-modal-chcfm-items">(Nothing yet)</p>
-			<p id="qz-modal-chcfm-affected">(Nothing affected)</p>
-			<p>If you want to change these item below, click "Confirm"</p>
-			<p>If not, click "Cancel"</p>
-			<p>Thank you</p>
-		</div>
-		<div class="modal-footer">
-			<a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
-			<button id="qz-btn-confirm-change" class="modal-action modal-close waves-effect waves-green btn-flat">Confirm</button>
-		</div>
-	</div>
 </div>
 <div id="tab3" class="col s12">
 	<div class="container">
 		<div class="section">
 			<h5>Spectrum Scan</h5>
-			<form class="row">
+			<div class="row">
 				<div class="input-field col s6">
-					<button id="qz-btn-chscan-start" class="btn blue-grey" disabled>Start !</button>
+					<a href="#modal_change_confirm" id="qz-btn-chscan-start" class="btn blue-grey">Start !</a>
 					<button id="qz-btn-chscan-stop" class="btn blue-grey" disabled>Stop !</button>
 				</div>
 			</div>
-		</form>
+			<div class="row">
+				<div class="col s12">
+					<div class="card">
+						<div class="card-image waves-effect waves-block waves-light">
+      						<div class="qz-space">
+      							<div id="qz-chart-local-chscan" class="qz-chart-chscan-holder lime lighten-5"></div>
+      						</div>
+    					</div>
+    					<div class="card-content center">
+    						<p id="qz-local-chscan-title" class="card-title grey-text text-darken-4">Region 1, Channel 21 to 51</p>
+							<p id="qz-local-chscan-sts">Frequency from 470 to 700 MHz</p>
+						</div>
+  					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 <div id="tab4" class="col s12">
@@ -395,9 +380,39 @@
 			</div>
 		</div>
 		<div class="section center">
-			<h5>You want to Sign Out?</h5>
+			<h5>You want to Secure Logout?</h5>
 			<a href="/cgi-bin/bye" class="btn lime darken-4">Click to Logout</a>
 		</div>
+	</div>
+</div>
+
+<!-- Modal Structure -->
+<div id="model_proxy_leagal" class="modal">
+	<div class="modal-content">
+		<h4>Leagal Statement</h4>
+		<p>If you are the owner of this device, or with propper authentication(s), then go ahead.</p>
+		<p>If not, this means you are breaking into others' property, in the meanwhile, breaking a "Federal Law". Please click "LEAVE" button and close this page.</p>
+		<p>Thank you</p>
+	</div>
+	<div class="modal-footer">
+		<button class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</button>
+		<a href="#" target="_blank" class="modal-action modal-close waves-effect waves-green btn-flat qz-btn-proxy-agree">Agree</a>
+	</div>
+</div>
+
+<!-- Modal Structure -->
+<div id="modal_change_confirm" class="modal">
+	<div class="modal-content">
+		<h4>Operation Confirm</h4>
+		<p id="qz-modal-chcfm-items">(Nothing yet)</p>
+		<p id="qz-modal-chcfm-affected">(Nothing affected)</p>
+		<p>If you want to change these item below, click "Confirm"</p>
+		<p>If not, click "Cancel"</p>
+		<p>Thank you</p>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+		<button id="qz-btn-confirm-change" class="modal-action modal-close waves-effect waves-green btn-flat">Confirm</button>
 	</div>
 </div>
 
