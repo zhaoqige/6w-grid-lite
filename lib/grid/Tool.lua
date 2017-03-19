@@ -22,8 +22,8 @@ Tool.conf.dfl_ping_times = 4
 -- for spectrum/channel scan, quiet mode
 Tool.conf.chscan_file = '/tmp/.grid_lite_chscan'
 Tool.conf.chscan_cmd_fmt = 'gws_cs -q -r%d -b%d -e%d > %s'
-Tool.conf.chscan_abord_cmd = 'killall gws_cs; sleep 1; rm -f %s'
-Tool.conf.chscan_read_cmd_fmt = "cat %s | grep %d | awk -F ',' '{print $4}'"
+Tool.conf.chscan_abord_cmd = 'killall gws_cs; sleep 1; echo > %s'
+Tool.conf.chscan_read_cmd_fmt = "cat %s | grep ,%d, | awk -F ',' '{print $4}'"
 
 function Tool.Run()
 	cgi.save.init()
@@ -32,10 +32,11 @@ function Tool.Run()
 	--if (user.verify.remote()) then
 		local _get = cgi.data._get
 		local _k = fmt.http.find('k', _get)
+		--_k = 'scan_read'
 
 		if (_k == 'ping') then
 			local _to = fmt.http.find('to', _get)
-			local _times = fmt.http.find('times', _get) or 0
+			local _times = fmt.http.find('times', _get) or 4
 			_result = Tool.ops.ping(_to, _times)
 		elseif (_k == 'flood') then
 			local _to = fmt.http.find('to', _get) or ''
@@ -43,9 +44,9 @@ function Tool.Run()
 			local _bw = fmt.http.find('bw', _get)
 			_result = Tool.ops.flood(_to, _times, _bw)
 		elseif (_k == 'scan') then
-			local _ffrom = 470
-			local _fto = 700
-			local _rgn = 1
+			local _ffrom = fmt.http.find('b', _get) or 21
+			local _fto = fmt.http.find('e', _get) or 51
+			local _rgn = fmt.http.find('r', _get) or 1
 			_result = Tool.ops.scan(_ffrom, _fto, rgn)
 		elseif (_k == 'scan_abord') then
 			_result = Tool.ops.scan_abord()
@@ -122,11 +123,13 @@ end
 function Tool.ops.scan_read(_ch)
 	local _f = Tool.conf.chscan_file
 	local _fmt = Tool.conf.chscan_read_cmd_fmt
-	local _cmd = string.format(_fmt, _f, _ch)
-	local _noise = cmd.exec(_cmd)
+	local _ch_ = _ch or 45
+	local _cmd = string.format(_fmt, _f, _ch_)
+	local _noise = cmd.exec(_cmd) or -111
 
 	local _result_fmt = '{"error": null, "result": "ok", "data": { "ch": %d, "noise": %d }}'
-	local _result = string.format(_result_fmt, _ch, _noise or -110)
+	local _result = string.format(_result_fmt, _ch_, _noise)
+	--local _result = string.format('f=%s;cmd=%s;ch=%d;noise=%d', _f, _cmd, _ch_, _noise)
 	return _result
 end
 
