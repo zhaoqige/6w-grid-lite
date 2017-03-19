@@ -790,6 +790,12 @@ if (store.debug)
 					$('#qz-btn-confirm-change').attr('ops', 'tool').attr('val', 'scan');
 				});
 
+				$('#qz-btn-chscan-stop').click(function() { // 2017.03.19
+					$('#qz-modal-chcfm-items').text('Spectrum Scan Warning');
+					$('#qz-modal-chcfm-affected').text('This Operation Will STOP spectrum scanning, and RESTORE your wireless communication');
+					$('#qz-btn-confirm-change').attr('ops', 'tool').attr('val', 'scan_abord');
+				});
+
 				$('#qz-btn-flood-start').click(function() {
 					var obj = $(this);
 					$.ops.tool.flood(obj);
