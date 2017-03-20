@@ -92,7 +92,7 @@ function Tool.ops.ping(_to, _times)
 		local _cmd = string.format(_fmt, _to, _times)
 		local _prompt = cmd.exec(_cmd)
 
-		_result = string.format('{"error": null, "result": "ok", "prompt": "%s"}', _prompt)
+		_result = string.format('%s', _prompt)
 	else
 		_result = '{"error": "unknown target"}'
 	end
