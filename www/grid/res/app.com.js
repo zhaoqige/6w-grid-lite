@@ -286,7 +286,7 @@ var store = {
 		one: function(array, val, qty_max) { // 2017.02.01
 			var max = qty_max || store.defaultRecordQty;
 			if (array) {
-				if (array.length >= max) {
+				while(array.length >= max) {
 					array.shift();
 				}
 			} else {
