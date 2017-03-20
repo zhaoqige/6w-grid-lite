@@ -578,7 +578,7 @@ if (store.debug)
 					text = 'R'+rgn+' - CH'+ch;
 					$('#qz-local-gws1').text(text);
 					$('#qz-set-gws-rgn').val(rgn);
-					$('#qz-set-gws-ch').val(ch);
+					$.ui.obj.set($('#qz-set-gws-ch'), ch);
 
 					freq = (rgn > 0) ? 474+(ch-21)*8 : 473+(ch-14)*6;
 					bw = ("bw" in gws) ? gws.bw : -1;
@@ -605,7 +605,7 @@ if (store.debug)
 						text += 'No TPC';
 					}
 					$('#qz-local-gws3').text(text);
-					$('#qz-set-gws-txpwr').val(txpwr);
+					$.ui.obj.set($('#qz-set-gws-txpwr'), txpwr);
 
 
 					rxgain = ("rxg" in gws) ? gws.rxg : -99;
@@ -624,7 +624,7 @@ if (store.debug)
 						text += 'No AGC';
 					}
 					$('#qz-local-gws4').text(text);
-					$('#qz-set-gws-rxg').val(rxgain > -99 ? rxgain : '-');
+					$.ui.obj.set($('#qz-set-gws-rxg'), rxgain > -99 ? rxgain : '-');
 
 					text = ("note" in gws) ? gws.note : '...';
 					$('#qz-local-gws5').text(text);
@@ -657,6 +657,30 @@ if (store.debug)
 			DEMO: function() {
 				var text = '<div class="container section center">(DEMO mode, please <a href="/grid/index.html">LOGIN</a> first)</div>'
 				$('#tab2,#tab3,#tab4,#tab5').html(text);
+			},
+			lock: function(obj) {
+				if (typeof(obj) == 'object') {
+					var id = obj.attr('id');
+					store.typing_id = id;
+				}
+			},
+			unlock: function(obj) {
+				if (typeof(obj) == 'object') {
+					var id = obj.attr('id');
+					var tid = store.typing_id;
+					if (tid != id) {
+						store.typing_id = null;
+					}
+				}
+			},
+			set: function(obj, val) {
+				if (typeof(obj) == 'object') {
+					var id = obj.attr('id');
+					var tid = store.typing_id;
+					if (tid != id) {
+						obj.val(val);
+					} 
+				}
 			}
 		}
 	}
@@ -721,7 +745,7 @@ if (store.debug)
 					$.ops.ajax(val, url, null);
 				});
 
-				$(':text').keydown(function(e) { // 2017.02.28
+				$('.qz-input-submit').keydown(function(e) { // 2017.02.28
 					if (e.keyCode == 13) {
 						var obj = $(this);
 						obj.qz = {
@@ -731,6 +755,14 @@ if (store.debug)
 						};
 						$.ops.change(obj);
 					}
+				}).focus(function() {
+					console.log('focus of', $(this));
+					var obj = $(this);
+					$.ui.obj.lock(obj);
+				}).blur(function() {
+					console.log('blur of', $(this));
+					var obj = $(this);
+					$.ui.obj.unlock(obj);
 				});
 				$(':checkbox').click(function() { // 2017.02.28
 					var obj = $(this);
