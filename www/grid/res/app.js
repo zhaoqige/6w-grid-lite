@@ -82,7 +82,7 @@
 				instant: function(idx) { // 2017.02.28
 					var x = $.cache.RANDOM.int(100);
 					var peers;
-					if (x > -1) {
+					if (x > 10) {
 						peers = [{
 							mac: '01:53:01:09:19:15',
 							ip: '192.168.1.211',
@@ -260,30 +260,27 @@ if (store.debug)
 					// start calculation
 					// if local=null, 1st time calculation;
 					// if not, start caculatte thrpt of eth/wls
-					if (local) {
-						var _noise = [];
-						var _eth_tx_thrpt = [], _eth_rx_thrpt = [];
-						var _wls_tx_thrpt = [], _wls_rx_thrpt = [];
+					var noise = $.cache._invalid;
+					var eth_rx_thrpt = eth_tx_thrpt = 0;
+					var wls_rx_thrpt = wls_tx_thrpt = 0;
+					var _noise = ("noise" in local_history) ? local_history.noise : [];
+					var _eth_tx_thrpt = ("eth_tx_thrpt" in local_history) ? local_history.eth_tx_thrpt : [];
+					var _eth_rx_thrpt = ("eth_rx_thrpt" in local_history) ? local_history.eth_rx_thrpt : [];
+					var _wls_tx_thrpt = ("wls_tx_thrpt" in local_history) ? local_history.wls_tx_thrpt : [];
+					var _wls_rx_thrpt = ("wls_rx_thrpt" in local_history) ? local_history.wls_rx_thrpt : [];
 
+					if (local) {
 						// calc & save snr
 						if ("abb" in local) {						
-							var noise = $.cache._invalid;
 							if ("noise" in local.abb) {
 								noise = local.abb.noise || $.cache._invalid; // fix gws4k noise=unknown
 							}
 
-							// push
-							if ("noise" in local_history) {
-								_noise = $.flot.one(local_history.noise, noise, 60);
-							} else {
-								_noise.push(noise);
-							}
 							//console.log('realtime> Noise:',noise);
 						}
 
 						// save uplink
 						//console.log('dbg> local.nw', local.nw);
-						var eth_tx_thrpt = 0, eth_rx_thrpt = 0, wls_tx_thrpt = 0, wls_rx_thrpt = 0;
 						if ("nw" in local && local_last && "nw" in local_last) {
 							var nw = local.nw;
 							var nw_last = local_last.nw;
@@ -317,54 +314,27 @@ if (store.debug)
 if (store.debug)
 							console.log('realtime> eth/wls tx/rx Thrpt:', eth_tx_thrpt, eth_rx_thrpt, wls_tx_thrpt, wls_rx_thrpt);
 						}
-
-						if ("eth_tx_thrpt" in local_history) {
-							_eth_tx_thrpt = $.flot.one(local_history.eth_tx_thrpt, eth_tx_thrpt, 60);
-						} else {
-							_eth_tx_thrpt.push(eth_tx_thrpt);
-						}
-						if ("eth_rx_thrpt" in local_history) {
-							_eth_rx_thrpt = $.flot.one(local_history.eth_rx_thrpt, eth_rx_thrpt, 60);
-						} else {
-							_eth_rx_thrpt.push(eth_rx_thrpt);
-						}
-						if ("wls_tx_thrpt" in local_history) {
-							_wls_tx_thrpt = $.flot.one(local_history.wls_tx_thrpt, wls_tx_thrpt, 60);
-						} else {
-							_wls_tx_thrpt.push(wls_tx_thrpt);
-						}
-						if ("wls_rx_thrpt" in local_history) {
-							_wls_rx_thrpt = $.flot.one(local_history.wls_rx_thrpt, wls_rx_thrpt, 60);
-						} else {
-							_wls_rx_thrpt.push(wls_rx_thrpt);
-						}
-
-
-						// TODO: should not put null to history right away,
-						// we should push a null value instead of whole null value
-
-						// TODO: should not put null to history right away,
-						// we should push a null value instead of whole null value
-
-						// save to store.history
-						_local_history = {
-							noise: _noise,
-							eth_tx_thrpt: _eth_tx_thrpt,
-							eth_rx_thrpt: _eth_rx_thrpt,
-							wls_tx_thrpt: _wls_tx_thrpt,
-							wls_rx_thrpt: _wls_rx_thrpt,
-						};
-
 					} else {
-						// if local=null, it's 1st time calculating
-						_local_history = {
-							noise: null,
-							eth_tx_thprt: null,
-							eth_rx_thprt: null,
-							wls_tx_thrpt: null,
-							wls_rx_thrpt: null
-						}
+						noise = $.cache._invalid;
+						eth_rx_thrpt = eth_tx_thrpt = 0;
+						wls_rx_thrpt = wls_tx_thrpt = 0;
 					}
+
+					// push
+					_noise = $.flot.one(local_history.noise, noise, 60);
+					_eth_tx_thrpt = $.flot.one(local_history.eth_tx_thrpt, eth_tx_thrpt, 60);
+					_eth_rx_thrpt = $.flot.one(local_history.eth_rx_thrpt, eth_rx_thrpt, 60);
+					_wls_tx_thrpt = $.flot.one(local_history.wls_tx_thrpt, wls_tx_thrpt, 60);
+					_wls_rx_thrpt = $.flot.one(local_history.wls_rx_thrpt, wls_rx_thrpt, 60);
+					
+					// save to store.history
+					_local_history = {
+						noise: _noise,
+						eth_tx_thrpt: _eth_tx_thrpt,
+						eth_rx_thrpt: _eth_rx_thrpt,
+						wls_tx_thrpt: _wls_tx_thrpt,
+						wls_rx_thrpt: _wls_rx_thrpt,
+					};
 
 					// save result to "store.history.local"
 					store.history.local = _local_history;
