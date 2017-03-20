@@ -106,7 +106,7 @@ function Tool.ops.scan(_rgn, _b, _e)
 	local _cmd = string.format(_fmt, _rgn, _b, _e, _f)
 	cmd.exec(_cmd)
 
-	local _result = '{"error": null, "result": "on"}'
+	local _result = '{"error": null, "result": "ok"}'
 	return _result
 end
 

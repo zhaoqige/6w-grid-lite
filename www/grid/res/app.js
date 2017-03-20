@@ -230,6 +230,12 @@ if (store.debug)
 		// parse store.query.cache,
 		// save store.history;
 		parse: { // 2017.02.28
+			chscan: function(freq, noise) {
+				var cs = (store && "chscan" in store) ? store.chscan : [];
+				console.log('chscan data', cs, freq, noise);
+				cs.push([freq, noise]);
+				store.chscan = cs;
+			},
 			instant: {
 				// TODO: parse data with DEMO
 				local: function() { // 2017.02.28
@@ -845,6 +851,31 @@ if (store.debug)
 				$.ops.ajax('ping', '/cgi-bin/tool', {
 					k: 'ping', to: target, times: times
 				}, obj);
+			},
+			scan: function() {
+				var _rgn = 1, _b = 19, _e = 51;
+				$.ops.tool.scan_read(_rgn, _b, _e);
+			},
+			scan_read: function(_rgn, _b, _e) {
+				if (_b <= _e) {
+					$.get('/cgi-bin/tool', { k: 'scan_read', rgn: _rgn, ch: _b }, 
+						function(resp) {
+							var freq = _rgn > 0 ? 474+8*(_b-21) : 473+6*(_b-14);
+							var noise = resp.data.noise;
+if (store.debug)
+							console.log('scan >', freq, noise);
+
+							$.cache.parse.chscan(_b, noise);
+							$.flot.sync.chscan();
+						},
+					'json')
+					.fail(function() {
+						console.log('unknown noise of ch', _b);
+					});
+
+					var next = _b+1;
+					setTimeout("$.ops.tool.scan_read("+_rgn+","+next+","+_e+")", 3500);
+				}
 			}
  		},
 		change: function(obj) { // 2017.02.28
@@ -864,6 +895,10 @@ if (store.debug)
 			// disable the button or input that been changed
 			if (obj) {
 				$.ui.obj.disable(obj);
+			}
+
+			if (ops == 'scan') {
+				$.ops.tool.scan();				
 			}
 
 			$.get(url, params, function(resp) { // 2017.02.28
@@ -888,6 +923,9 @@ if (store.debug)
 					// TODO: set result to "textarea"
 					prompt = 'PING target done';
 					$('#qz-tool-ping-result').val(resp);
+					break;
+				case 'scan':
+					prompt = 'Spectrum Scan Started';
 					break;
 				default:
 					prompt = 'Operation completed';

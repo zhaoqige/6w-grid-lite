@@ -67,6 +67,9 @@ var store = {
 		}
 	},
 
+	// spectrum scan result
+	chscan: [],
+
 	// peers proxy data
 	proxy: null
 }; // store
@@ -246,17 +249,26 @@ var store = {
 				var flot = $.plot(item, data, {
 					series: {
 						lines: {
+							show: true, //steps: true
+						},
+						points: {
 							show: true
-						}
+						},
+						shadowSize: 0
 					},
 					crosshair: {
-						mode: 'y'
+						mode: 'xy'
 					},
-					xaxis: {
-						show: true, tickDecimals: 0, min: 100, max: 1000
-					},
+					xaxes: [{
+						show: true, tickDecimals: 0, min: 20, max: 52,
+						position: 'bottom'
+					},{
+						show: true, tickDecimals: 0, min: 470, max: 720,
+						position: 'bottom'
+					}],
 					yaxis: {
-						show: true, min: -110, max: -50
+						show: true, min: -110, max: -70,
+						position: 'left'
 					},
 					legend: {
 						show: true
@@ -288,6 +300,14 @@ var store = {
 			return store.flot.color[idx];
 		},
 		sync: {
+			chscan: function() { // 2017.03.20
+				var fchart = store.flot.chart_chscan;
+				var chscan = store.chscan;
+				var fd_chscan = [{
+					label: 'Noise (dBm)', data: chscan, color: 'red', xaxis: 1
+				}]
+				$.flot.chart.update(fchart, fd_chscan);
+			},
 			local: function() { // 2017.03.01
 				var i, j;
 
