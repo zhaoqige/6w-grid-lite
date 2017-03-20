@@ -231,7 +231,8 @@ if (store.debug)
 		// save store.history;
 		parse: { // 2017.02.28
 			chscan: function(freq, noise) {
-				var cs = (store && "chscan" in store) ? store.chscan : [];
+				var cs = (store && "chscan" in store) ? store.chscan : null;
+				if (cs == null) cs = [];
 				console.log('chscan data', cs, freq, noise);
 				cs.push([freq, noise]);
 				store.chscan = cs;
@@ -854,6 +855,7 @@ if (store.debug)
 			},
 			scan: function() {
 				var _rgn = 1, _b = 19, _e = 51;
+				store.chscan = null;
 				$.ops.tool.scan_read(_rgn, _b, _e);
 			},
 			scan_read: function(_rgn, _b, _e) {
