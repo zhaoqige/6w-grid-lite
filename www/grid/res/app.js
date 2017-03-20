@@ -318,8 +318,8 @@ if (store.debug)
 						}
 					} else {
 						noise = $.cache._invalid;
-						eth_rx_thrpt = eth_tx_thrpt = 0;
-						wls_rx_thrpt = wls_tx_thrpt = 0;
+						eth_rx_thrpt = eth_tx_thrpt = -1;
+						wls_rx_thrpt = wls_tx_thrpt = -1;
 					}
 
 					// push
