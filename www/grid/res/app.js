@@ -230,11 +230,13 @@ if (store.debug)
 		// parse store.query.cache,
 		// save store.history;
 		parse: { // 2017.02.28
-			chscan: function(freq, noise) {
+			chscan: function(idx, noise) {
 				var cs = (store && "chscan" in store) ? store.chscan : null;
 				if (cs == null) cs = [];
-				console.log('chscan data', cs, freq, noise);
-				cs.push([freq, noise]);
+				if (idx >= 21) {
+					console.log('scan > ', idx, noise, cs.length);
+					cs.push([idx, noise]);
+				}
 				store.chscan = cs;
 			},
 			instant: {
@@ -756,11 +758,9 @@ if (store.debug)
 						$.ops.change(obj);
 					}
 				}).focus(function() {
-					console.log('focus of', $(this));
 					var obj = $(this);
 					$.ui.obj.lock(obj);
 				}).blur(function() {
-					console.log('blur of', $(this));
 					var obj = $(this);
 					$.ui.obj.unlock(obj);
 				});
