@@ -705,31 +705,31 @@ if (store.debug)
 				// bind these buttons click() 
 				$('#qz-btn-sys-reset').click(function() { // 2017.02.28
 					$('#qz-modal-chcfm-items').text('重启设备');
-					$('#qz-modal-chcfm-affected').text('此操作将设备重新启动，所有服务都将受到影响');
+					$('#qz-modal-chcfm-affected').text('此操作将设备重新启动，所有服务都将受到影响！');
 					$('#qz-btn-confirm-change').attr('ops', 'reset').attr('val', 'sys');
 				});
 
 				$('#qz-btn-abb-reset').click(function() { // 2017.02.28
 					$('#qz-modal-chcfm-items').text('模拟基带重置');
-					$('#qz-modal-chcfm-affected').text('此操作将重置设备的模拟基带，无线通信将受到影响');
+					$('#qz-modal-chcfm-affected').text('此操作将重置设备的模拟基带，无线通信将受到影响！');
 					$('#qz-btn-confirm-change').attr('ops', 'reset').attr('val', 'abb');
 				});
 
 				$('#qz-btn-gws-reset').click(function() { // 2017.02.28
 					$('#qz-modal-chcfm-items').text('射频重置');
-					$('#qz-modal-chcfm-affected').text('此操作将重置设备的射频链路，无线通信将受到影响');
+					$('#qz-modal-chcfm-affected').text('此操作将重置设备的射频链路，无线通信将受到影响！');
 					$('#qz-btn-confirm-change').attr('ops', 'reset').attr('val', 'gws');
 				});
 
 				$('#qz-btn-nw-reset').click(function() { // 2017.02.28
 					$('#qz-modal-chcfm-items').text('网络重置');
-					$('#qz-modal-chcfm-affected').text('此操作将重置设备的网络配置，网络部分将受到影响，包括无线通信');
+					$('#qz-modal-chcfm-affected').text('此操作将重置设备的网络配置，网络部分将受到影响，包括无线通信！');
 					$('#qz-btn-confirm-change').attr('ops', 'reset').attr('val', 'nw');
 				});
 
 				$('#qz-btn-fw-factory').click(function() { // 2017.02.28
 					$('#qz-modal-chcfm-items').text('恢复出厂设置');
-					$('#qz-modal-chcfm-affected').text('此操作将重置设备到出厂状态，所有当前的配置都有可能丢失');
+					$('#qz-modal-chcfm-affected').text('此操作将重置设备到出厂状态，所有当前的配置都有可能丢失！');
 					$('#qz-btn-confirm-change').attr('ops', 'init').attr('val', 'new');
 				})
 
@@ -794,14 +794,14 @@ if (store.debug)
 				});
 
 				$('#qz-btn-chscan-start').click(function() { // 2017.03.19
-					$('#qz-modal-chcfm-items').text('Spectrum Scan Warning');
-					$('#qz-modal-chcfm-affected').text('This Operation Will Interrupt Your Current Wireless Communication');
+					$('#qz-modal-chcfm-items').text('频率扫描警告');
+					$('#qz-modal-chcfm-affected').text('此操作将频繁设置设备的射频链路，无线通信将受到影响！');
 					$('#qz-btn-confirm-change').attr('ops', 'tool').attr('val', 'scan');
 				});
 
 				$('#qz-btn-chscan-stop').click(function() { // 2017.03.19
-					$('#qz-modal-chcfm-items').text('Spectrum Scan Warning');
-					$('#qz-modal-chcfm-affected').text('This Operation Will STOP spectrum scanning, and RESTORE your wireless communication');
+					$('#qz-modal-chcfm-items').text('频率扫描警告');
+					$('#qz-modal-chcfm-affected').text('此操作将重置设备的射频链路，无线通信将会恢复。');
 					$('#qz-btn-confirm-change').attr('ops', 'tool').attr('val', 'scan_abord');
 				});
 
