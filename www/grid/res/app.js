@@ -235,7 +235,11 @@ if (store.debug)
 				if (cs == null) cs = [];
 				if (idx >= 21) {
 					console.log('scan > ', idx, noise, cs.length);
-					cs.push([idx, noise]);
+					if (noise > -999) {
+						cs.push([idx, noise]);
+					} else {
+						cs.push(null);
+					}
 				}
 				store.chscan = cs;
 			},
@@ -905,7 +909,12 @@ if (store.debug)
 				$.ops.tool.scan();				
 			}
 
-			$.get(url, params, function(resp) { // 2017.02.28
+			$.ajax({
+				url: url, 
+				method: 'get',
+				data: params,
+				timeout: 120000
+			}).done(function(resp) { // 2017.02.28
 				//console.dir('dbg> $.get with resp', resp);
 				switch(ops) {
 				case 'abb':
@@ -962,6 +971,8 @@ if (store.debug)
 					// TODO: set result to "textarea"
 					prompt = 'PING target FAILED';
 					$('#qz-tool-ping-result').val(resp);
+					break;
+				case 'scan':
 					break;
 				default:
 					prompt = 'Operation FAILED > ' + ops;
