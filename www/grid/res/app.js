@@ -235,7 +235,11 @@ if (store.debug)
 				if (cs == null) cs = [];
 				if (idx >= 21) {
 					console.log('scan > ', idx, noise, cs.length);
-					cs.push([idx, noise]);
+					if (noise > -999) {
+						cs.push([idx, noise]);
+					} else {
+						cs.push(null);
+					}
 				}
 				store.chscan = cs;
 			},
@@ -879,7 +883,7 @@ if (store.debug)
 					});
 
 					var next = _b+1;
-					setTimeout("$.ops.tool.scan_read("+_rgn+","+next+","+_e+")", 3500);
+					setTimeout("$.ops.tool.scan_read("+_rgn+","+next+","+_e+")", 2250);
 				}
 			}
  		},
@@ -906,7 +910,12 @@ if (store.debug)
 				$.ops.tool.scan();				
 			}
 
-			$.get(url, params, function(resp) { // 2017.02.28
+			$.ajax({
+				url: url, 
+				method: 'get',
+				data: params,
+				timeout: 120000
+			}).done(function(resp) { // 2017.02.28
 				//console.dir('dbg> $.get with resp', resp);
 				switch(ops) {
 				case 'abb':
@@ -930,7 +939,7 @@ if (store.debug)
 					$('#qz-tool-ping-result').val(resp);
 					break;
 				case 'scan':
-					prompt = 'Spectrum Scan Started';
+					//prompt = 'Spectrum Scan Started';
 					break;
 				default:
 					prompt = '操作已完成';
@@ -963,6 +972,8 @@ if (store.debug)
 					// TODO: set result to "textarea"
 					prompt = 'Ping诊断失败 ！';
 					$('#qz-tool-ping-result').val(resp);
+					break;
+				case 'scan':
 					break;
 				default:
 					prompt = '操作失败 ！ ';

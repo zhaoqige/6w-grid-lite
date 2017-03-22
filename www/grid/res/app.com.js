@@ -116,7 +116,7 @@ var store = {
 			$('.modal').modal();
 		},
 		toast: function(msg, timeout) {
-			if (msg) {			
+			if (msg && msg.length > 0) {	
 				var $toastContent = $('<span>'+msg+'</span>');
 				Materialize.toast($toastContent, timeout || 3000);
 			}
@@ -188,7 +188,7 @@ var store = {
 						show: true, min: 0, max: 32,
 						steps: true
 					},{
-						show: true, tickDecimals: 0, min: -110, max: -78,
+						show: true, tickDecimals: 0, min: -110, max: -56,
 						//alignTicksWithAxis: 1, 
 						//steps: true,
 						position: 'right'
@@ -267,7 +267,7 @@ var store = {
 						position: 'bottom'
 					}],
 					yaxis: {
-						show: true, min: -110, max: -70,
+						show: true, min: -110, max: -56,
 						position: 'left'
 					},
 					legend: {

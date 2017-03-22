@@ -5,6 +5,7 @@ require 'grid.base.cgi'
 require 'grid.base.user'
 require 'grid.base.fmt'
 require 'grid.Http'
+require 'grid.Scan'
 
 
 Tool = {}
@@ -21,7 +22,7 @@ Tool.conf.dfl_ping_times = 4
 
 -- for spectrum/channel scan, quiet mode
 Tool.conf.chscan_file = '/tmp/.grid_lite_chscan'
-Tool.conf.chscan_cmd_fmt = 'gws_cs -q -r%d -b%d -e%d > %s'
+--Tool.conf.chscan_cmd_fmt = 'gws_cs -q -r%d -b%d -e%d > %s'
 Tool.conf.chscan_abord_cmd = 'killall gws_cs; sleep 1; echo > %s'
 Tool.conf.chscan_read_cmd_fmt = "cat %s | grep ,%d, | awk -F ',' '{print $4}'"
 
@@ -51,7 +52,7 @@ function Tool.Run()
 		elseif (_k == 'scan_abord') then
 			_result = Tool.ops.scan_abord()
 		elseif (_k == 'scan_read') then
-			local _ch = fmt.http.find('ch', _get)
+			local _ch = fmt.http.find('ch', _get) or 45
 			_result = Tool.ops.scan_read(_ch)
 		else
 			_result = string.format('unknown (%s)', _k or '[nil]')
@@ -101,11 +102,7 @@ function Tool.ops.ping(_to, _times)
 end
 
 function Tool.ops.scan(_rgn, _b, _e)
-	local _f = Tool.conf.chscan_file
-	local _fmt = Tool.conf.chscan_cmd_fmt
-	local _cmd = string.format(_fmt, _rgn, _b, _e, _f)
-	cmd.exec(_cmd)
-
+	SScan.Run(_rgn, _b, _e)
 	local _result = '{"error": null, "result": "ok"}'
 	return _result
 end
@@ -125,7 +122,7 @@ function Tool.ops.scan_read(_ch)
 	local _fmt = Tool.conf.chscan_read_cmd_fmt
 	local _ch_ = fmt.n(_ch) or 45
 	local _cmd = string.format(_fmt, _f, _ch_)
-	local _noise = fmt.n(cmd.exec(_cmd)) or -111
+	local _noise = fmt.n(cmd.exec(_cmd)) or -88
 
 	local _result_fmt = '{"error": null, "result": "ok", "data": { "ch": %d, "noise": %d }}'
 	local _result = string.format(_result_fmt, _ch_, _noise)
