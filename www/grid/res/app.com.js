@@ -45,6 +45,8 @@ var store = {
 		],
 		// chart handlers
 		chart: [],
+		// chart for channel scan
+		chart_chscan: null
 	},
 
 	// every ajax query result
@@ -64,6 +66,9 @@ var store = {
 			wls_tx_thrpt: [], wls_rx_thrpt: []
 		}
 	},
+
+	// spectrum scan result
+	chscan: [],
 
 	// peers proxy data
 	proxy: null
@@ -111,7 +116,7 @@ var store = {
 			$('.modal').modal();
 		},
 		toast: function(msg, timeout) {
-			if (msg) {			
+			if (msg && msg.length > 0) {	
 				var $toastContent = $('<span>'+msg+'</span>');
 				Materialize.toast($toastContent, timeout || 3000);
 			}
@@ -131,6 +136,10 @@ var store = {
 			store.flot.chart.length = 0;
 			store.flot.chart.push(local_chart);
 			$.flot.bg(0, local);
+
+			var chscan_flot = $('.qz-chart-chscan-holder');
+			var chscan_chart = $.flot.chart.scan(chscan_flot);
+			store.flot.chart_chscan = chscan_chart;
 		},
 		// add flot chart background color
 		bg: function(idx, item) {
@@ -233,6 +242,40 @@ var store = {
 				});
 				return flot;
 			},
+			scan: function(item) {
+				var data = [{
+					label: 'Noise (dBm)', data: [], color: 'red'
+				}];
+				var flot = $.plot(item, data, {
+					series: {
+						lines: {
+							show: true, //steps: true
+						},
+						points: {
+							show: true
+						},
+						shadowSize: 0
+					},
+					crosshair: {
+						mode: 'xy'
+					},
+					xaxes: [{
+						show: true, tickDecimals: 0, min: 20, max: 52,
+						position: 'bottom'
+					},{
+						show: true, tickDecimals: 0, min: 470, max: 720,
+						position: 'bottom'
+					}],
+					yaxis: {
+						show: true, min: -110, max: -56,
+						position: 'left'
+					},
+					legend: {
+						show: true
+					}
+				});
+				return flot;
+			},
 			// update & redraw chart
 			update: function(flot, data) { // 2017.02.28
 				flot.setData(data);
@@ -243,7 +286,7 @@ var store = {
 		one: function(array, val, qty_max) { // 2017.02.01
 			var max = qty_max || store.defaultRecordQty;
 			if (array) {
-				if (array.length >= max) {
+				while(array.length >= max) {
 					array.shift();
 				}
 			} else {
@@ -257,6 +300,14 @@ var store = {
 			return store.flot.color[idx];
 		},
 		sync: {
+			chscan: function() { // 2017.03.20
+				var fchart = store.flot.chart_chscan;
+				var chscan = store.chscan;
+				var fd_chscan = [{
+					label: 'Noise (dBm)', data: chscan, color: 'red', xaxis: 1
+				}]
+				$.flot.chart.update(fchart, fd_chscan);
+			},
 			local: function() { // 2017.03.01
 				var i, j;
 
