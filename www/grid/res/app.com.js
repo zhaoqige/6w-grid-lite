@@ -291,23 +291,15 @@ var store = {
 				var _wls_tx = { label: '< 无线发送速率', data: fd_wls_tx_thrpt, color: 'deeppink' };
 				var _wls_rx = { label: '< 无线接收速率', data: fd_wls_rx_thrpt, color: 'magenta' };
 				if (_fields == 'eth') {
-					cd.push(_eth_rx);
-					cd.push(_eth_tx);
+					cd.push(_eth_rx, _eth_tx);
 				} else if (_fields == 'wls') {
-					cd.push(_wls_rx);
-					cd.push(_wls_tx);
+					cd.push(_wls_rx, _wls_tx);
 				} else if (_fields == 'abb') {
 					cd.push(_noise);
 				} else if (_fields == 'dfl') {
-					cd.push(_noise);
-					cd.push(_wls_rx);
-					cd.push(_wls_tx);
+					cd.push(_noise, _wls_rx, _wls_tx);
 				} else {
-					cd.push(_noise);
-					cd.push(_wls_rx);
-					cd.push(_wls_tx);
-					cd.push(_eth_rx);
-					cd.push(_eth_tx);
+					cd.push(_noise, _wls_rx, _wls_tx, _eth_rx, _eth_tx);
 				}
 
 				$.flot.chart.update(chart, cd);
