@@ -188,11 +188,21 @@ var store = {
 					//label: 'Noise (dBm)', data: [], color: 'red'
 				}];
 				var flot = $.plot(item, data, {
-					series: { lines: { show: true }, points: { show: true }, shadowSize: 0 },
+					series: { 
+						bars: { show: true, barWidth: 0.8 }, 
+						//lines: { show: true }, points: { show: true }, 
+						shadowSize: 0
+					},
 					crosshair: { mode: 'xy' },
-					xaxes: [{ show: true, tickDecimals: 0, min: 20, max: 52, position: 'bottom' },
-					{ show: true, tickDecimals: 0, min: 470, max: 720, position: 'bottom' }],
-					yaxis: { show: true, min: -110, max: -56, position: 'left' },
+					xaxes: [
+						{ show: true, tickDecimals: 0, min: 20, max: 52, position: 'bottom' },
+						{ show: true, tickDecimals: 0, min: 470, max: 720, position: 'bottom' }
+					],
+					//yaxis: { show: true, min: -110, max: -56, position: 'left' },
+					yaxes: [
+						{ show: true, min: -110, max: -56, position: 'left' },
+						{ show: false, min: 0, max: 64, position: 'left' }
+					],
 					legend: { show: true }
 				});
 				return flot;
@@ -225,7 +235,7 @@ var store = {
 				var fchart = store.flot.chart_chscan;
 				var chscan = store.chscan;
 				var fd_chscan = [{
-					label: 'Noise (dBm)', data: chscan, color: 'red', xaxis: 1
+					label: 'Noise (dBm)', data: chscan, color: 'navy', xaxis: 1, yaxis: 2
 				}]
 				$.flot.chart.update(fchart, fd_chscan);
 			},

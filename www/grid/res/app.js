@@ -884,7 +884,7 @@ if (store.debug)
 if (store.debug)
 							console.log('scan >', freq, noise);
 
-							$.cache.parse.chscan(_b, noise);
+							$.cache.parse.chscan(_b, noise+110);
 							$.flot.sync.chscan();
 						},
 					'json')

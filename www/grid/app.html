@@ -282,26 +282,12 @@
 		<div class="section">
 			<h5>频谱扫描</h5>
 			<div class="row">
-				<div class="input-field col s2">
-					<select alt="gws" name="rgn" id="qz-tool-chscan-rgn" class="browser-default" disabled>
-						<option value="0">Region 0</option>
-						<option value="1" selected>Region 1</option>
-					</select>
-				</div>
-				<div class="input-field col s2">
-					<input id="qz-tool-chscan-start" placeholder="Channel Number to Begin" class="validate" type="text" value="21" readonly />
-					<label for="qz-tool-ping-target">Begin Channel</label>
-				</div>
-				<div class="input-field col s2">
-					<input id="qz-tool-chscan-stop" placeholder="Channel Number to Stop" class="validate" type="text" value="51" readonly />
-					<label for="qz-tool-ping-target">End Channel</label>
-				</div>
 				<div class="input-field col s6">
-					<a href="#modal_change_confirm" id="qz-btn-chscan-start" class="btn blue-grey">开始扫描 ！</a>
-					<button id="qz-btn-chscan-stop" class="btn blue-grey">停止扫描 ！</button>
+					<a href="#modal_change_confirm" id="qz-btn-chscan-start" class="btn blue-grey">开始扫描</a>
+					<a href="#modal_change_confirm" id="qz-btn-chscan-stop" class="btn blue-grey">停止扫描</a>
 				</div>
 			</div>
-			<div class="row">
+			<div class="row qz-row">
 				<div class="col s12">
 					<div class="card">
 						<div class="card-image waves-effect waves-block waves-light">
@@ -309,8 +295,8 @@
       							<div id="qz-chart-local-chscan" class="qz-chart-chscan-holder blue lighten-5"></div>
       						</div>
     					</div>
-    					<div class="card-content center">
-    						<p id="qz-local-chscan-title" class="card-title grey-text text-darken-4">21到51频道（474 - 714MHz）</p>
+    					<div class="card-action center">
+    						<span id="qz-local-chscan-title" class="grey-text text-darken-4">21到51频道（470 - 718MHz）</span>
 						</div>
   					</div>
 				</div>
