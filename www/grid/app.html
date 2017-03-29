@@ -353,7 +353,7 @@
 							<p>此操作有一定的危险性，使用不当可能会导致设备无法使用。（暂时仅供内部测试使用）</p>
 						</div>
 						<div class="card-action grey lighten-5">
-							<a href="#">打开命令行</a>
+							<a href="#modal_tool_cmd">打开命令行</a>
 						</div>
 					</div>
 				</div>
@@ -452,17 +452,17 @@
 		<div class="row qz-row">
 			<div class="input-field col s6">
 				<input id="qz-tool-ping-target" placeholder="Copy target ip address or MAC from STATUS" class="validate" type="text" value="uptime" />
-				<label for="qz-tool-ping-target">命令</label>
+				<label for="qz-tool-cmd-command">命令</label>
 			</div>
 			<div class="input-field col s12">
-				<textarea id="qz-tool-ping-result" class="materialize-textarea qz-textarea">-</textarea>
-  				<label for="qz-tool-ping-result">执行结果</label>
+				<textarea id="qz-tool-cmd-result" class="materialize-textarea qz-textarea">-</textarea>
+  				<label for="qz-tool-cmd-result">执行结果</label>
   			</div>
 		</div>
 	</div>
 	<div class="modal-footer">
 		<a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
-		<button id="qz-btn-ping-start" class="waves-effect waves-green btn-flat">开始诊断</button>
+		<button id="qz-btn-cmd-start" class="waves-effect waves-green btn-flat">开始诊断</button>
 	</div>
 </div>
 

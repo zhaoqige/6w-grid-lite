@@ -813,6 +813,11 @@ if (store.debug)
 					var obj = $(this);
 					$.ops.tool.ping(obj);
 				});
+
+				$('#qz-btn-cmd-start').click(function() {
+					var obj = $(this);
+					$.ops.tool.cmd(obj);
+				});
 			}
 
 			$('.qz-btn-local-chart-fields').click(function() { // 2017.02.28
@@ -853,6 +858,16 @@ if (store.debug)
 				console.log('工具> ping now ...', target, times);
 				$.ops.ajax('ping', '/cgi-bin/tool', {
 					k: 'ping', to: target, times: times
+				}, obj);
+			},
+			cmd: function(obj) { // 2017.03.29
+				var cmd = $('#qz-tool-cmd-command').val();
+				//var times = $('#qz-tool-ping-times').val();
+
+if (store.debug)
+				console.log('工具> cmd now ...', cmd);
+				$.ops.ajax('cmd', '/cgi-bin/tool', {
+					k: 'cmd', to: cmd
 				}, obj);
 			},
 			scan: function() {
@@ -914,30 +929,33 @@ if (store.debug)
 				//console.dir('dbg> $.get with resp', resp);
 				switch(ops) {
 				case 'abb':
-					prompt = '模拟基带部分已重置';
+					prompt = '模拟基带部分已重置。';
 					break;
 				case 'gws':
-					prompt = '射频部分已重置';
+					prompt = '射频部分已重置。';
 					break;
 				case 'nw':
-					prompt = '网络部分已重置';
+					prompt = '网络部分已重置。';
 					break;
 				case 'sys':
-					prompt = '设备正在重启，请稍候';
+					prompt = '设备正在重启，请稍候……';
 					break;
 				case 'flood':
-					prompt = 'Flooding目标已完成';
+					prompt = '带宽测试已完成。';
 					break;
 				case 'ping':
 					// TODO: set result to "textarea"
-					prompt = 'Ping诊断已完成';
+					prompt = '网络诊断已完成。';
 					$('#qz-tool-ping-result').val(resp);
+					break;
+				case 'cmd':
+					prompt = '命令已执行。';
 					break;
 				case 'scan':
 					//prompt = 'Spectrum Scan Started';
 					break;
 				default:
-					prompt = '操作已完成';
+					prompt = '操作已完成。';
 					break;
 				}
 				//console.log('ajax (ok) result:', prompt);
@@ -955,18 +973,21 @@ if (store.debug)
 				//console.dir('dbg> $.get failed with resp', resp);
 				switch(ops) {
 				case 'nw':
-					prompt = '网络部分已重置';
+					prompt = '网络部分已重置。';
 					break;
 				case 'sys':
-					prompt = '设备正在重启，请稍候';
+					prompt = '设备正在重启，请稍候……';
 					break;
 				case 'flood':
-					prompt = 'Flooding目标失败 ！';
+					prompt = '带宽测试失败 ！';
 					break;
 				case 'ping':
-					// TODO: set result to "textarea"
-					prompt = 'Ping诊断失败 ！';
+					prompt = '网络诊断失败 ！';
 					$('#qz-tool-ping-result').val(prompt);
+					break;
+				case 'cmd':
+					prompt = '命令执行失败！';
+					$('#qz-tool-cmd-result').val(prompt);
 					break;
 				case 'scan':
 					break;
