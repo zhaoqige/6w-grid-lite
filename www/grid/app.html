@@ -7,7 +7,7 @@
 	<link href="res/google/icon.css" rel="stylesheet">
 	<link type="text/css" rel="stylesheet" href="res/materialize/css/materialize.min.css"  media="screen,projection" />
 	<link type="text/css" rel="stylesheet" href="res/app.css" media="screen,projection" />
-	<title>系统控制接入（第一版 alpha 2017.03.22）</title>
+	<title>系统控制接入（v1.1-2 2017.03.29）</title>
 </head>
 <body class="blue-grey lighten-5">
 <nav class="nav-extended blue-grey">
@@ -24,21 +24,11 @@
 <div id="tab1" class="col s12">
 	<div class="container">
 		<div class="section">
-			<h5>本地设备</h5>
-			<div class="row">
+			<div class="row qz-row">
 				<div class="col s12">
 					<div class="card">
-						<div class="card-image waves-effect waves-block waves-light">
-      						<div class="qz-space">
-      							<div id="qz-chart-local" class="qz-chart-holder lighten-5"></div>
-      						</div>
-    					</div>
-    					<div class="card-content center">
-    						<p id="qz-local-nw" class="card-title activator grey-text text-darken-4">...</p>
-							<p id="qz-local-sts">...</p>
-						</div>
-    					<div class="card-reveal">
-    						<span class="card-title grey-text text-darken-4">甚高频UHF<i class="material-icons right">...</i></span>
+    					<div class="card-reveal qz-card-reveal">
+    						<span class="card-title grey-text text-darken-4">设备状态<i class="material-icons right">...</i></span>
       						<ul class="collection">
 								<li class="collection-item"><span class="badge" id="qz-local-gws1">...</span>区域码 - 频道号</li>
 								<li class="collection-item"><span class="badge" id="qz-local-gws2">...</span>频率 - 带宽</li>
@@ -47,17 +37,23 @@
 								<li class="collection-item"><span class="badge" id="qz-local-gws5">...</span>其它信息</li>
 							</ul>
       					</div>
+						<div class="card-image waves-effect waves-block waves-light">
+      						<div class="qz-space">
+      							<div id="qz-chart-local" class="qz-chart-holder lighten-5"></div>
+      						</div>
+    					</div>
       					<div class="card-action">
-              				<a href="#" class="qz-btn-local-chart-fields" alt="all">所有</a>
-              				<a href="#" class="qz-btn-local-chart-fields" alt="eth">以太网</a>
-              				<a href="#" class="qz-btn-local-chart-fields" alt="wls">无线网</a>
+      						<span id="qz-local-nw" class="activator qz-site">设备</span>
+              				<a href="#" class="qz-btn-local-chart-fields" alt="dfl">默认</a>
               				<a href="#" class="qz-btn-local-chart-fields" alt="abb">模拟基带</a>
+              				<a href="#" class="qz-btn-local-chart-fields" alt="wls">无线网</a>
+              				<a href="#" class="qz-btn-local-chart-fields" alt="eth">有线网</a>
+              				<a href="#" class="qz-btn-local-chart-fields" alt="all">所有</a>
               				<a href="/cgi-bin/bye" id="qz-btn-logout" class="right">退出</a>
             			</div>
   					</div>
 				</div>
 			</div>
-			<h5>已连接设备</h5>
 			<div id="qz-peers" class="row">
 				<div id="qz-peers-none" class="col s12 section">（请升级到专业版）</div>
 			</div>
@@ -300,8 +296,7 @@
       						</div>
     					</div>
     					<div class="card-content center">
-    						<p id="qz-local-chscan-title" class="card-title grey-text text-darken-4">区域1，频道21至51</p>
-							<p id="qz-local-chscan-sts">频率扫描范围470至700 MHz</p>
+    						<p id="qz-local-chscan-title" class="card-title grey-text text-darken-4">21到51频道（474 - 714MHz）</p>
 						</div>
   					</div>
 				</div>

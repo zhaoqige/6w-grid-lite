@@ -418,7 +418,7 @@ if (store.debug)
 								_snr.push(snr);
 							}
 
-              _peer.rx_br = _rx_br;
+              				_peer.rx_br = _rx_br;
 							_peer.rx_mcs = _rx_mcs;
 							_peer.tx_br = _tx_br;
 							_peer.tx_mcs = _tx_mcs;
@@ -502,20 +502,16 @@ if (store.debug)
 			peer: function(idx, peer_cache) {
 				var _p = $('.qz-peer-chart-n').eq(idx);
 				if (_p) {
-					var text1 = '', text2 = '';
+					var text1 = (idx+1) + '#远端站：';
 					var mac = (peer_cache && "mac" in peer_cache) ? peer_cache.mac : '';
 					var ip = (peer_cache && "ip" in peer_cache) ? peer_cache.ip : '';
 
 					if (ip) {
-						text1 = ip;
-						text2 = mac;
+						text1 += ip;
 					} else {
-						text1 = mac;
-						text = '';
+						text1 += mac;
 					}
 					_p.find('.qz-peer-name').text(text1);
-					_p.find('.qz-peer-desc').text(text2);
-					_p.find('.qz-btn-peer-proxy').attr('alt', mac);
 				}
 			},
 			instant: function() { // 2017.03.03
@@ -538,7 +534,6 @@ if (store.debug)
 					$.ui.settings.mode(abb.mode);
 				}
 				if (nw) {
-					var text = '';
 					if (nw.lan_ip && nw.lan_ip != '-') {
 						text += nw.lan_ip;
 						$('#qz-set-lan-ip').val(nw.lan_ip);

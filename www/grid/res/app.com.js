@@ -1,4 +1,4 @@
-// by 6Harmonics Qige @ 2017.02.18
+// by 6Harmonics Qige @ 2017.02.18 - 2017.03.29
 
 //TODO:
 // 1. handle too much ajax failed: if device offline, then close
@@ -6,35 +6,27 @@
 // 3. manage peers, and test if peers left, redraw charts
 
 
-
 // public data object
 var store = {
-	// default is 'DEMO' ('realtime', 'proxy')
-	mode: 'demo',
-	debug: 0,
-
-	invalid: -999,
-
+	// default is 'DEMO' ['realtime', 'proxy', 'demo']
+	mode: 'demo', debug: 0,
 	invalid: -999,
 
 	// ajax failes when gws reboot
-	offlineCounter: 0,
-	offlineCounterBar: 6,
+	offlineCounter: 0, offlineCounterBar: 6,
 
 	// 200 records for each chart
 	defaultRecordQty: 200, 
 
 	// flot related data
 	flot: {
-		fields: 'all',
+		fields: 'dfl',
 		// setInterval handlers
-		intl: {
-			local: {
-				instant: null,
-				delayed: null
-			},
-			peers: [],
-			DEMO: null
+		intl: { 
+			local: { 
+				instant: null, delayed: null
+			}, 
+			peers: [], DEMO: null
 		},
 		// color index for Flot charts
 		color: [
@@ -50,8 +42,7 @@ var store = {
 	},
 
 	// every ajax query result
-	query: null,
-	query_last: null,
+	query: null, query_last: null,
 
 	// save these parameters not frequently updated
 	// and not calculate gap between each time
@@ -59,11 +50,8 @@ var store = {
 
 	// history data
 	history: {
-		local: {
-			snr: [],
-			br: [],
-			eth_tx_thrpt: [], eth_rx_thrpt: [],
-			wls_tx_thrpt: [], wls_rx_thrpt: []
+		local: { 
+			snr: [], br: [], eth_tx_thrpt: [], eth_rx_thrpt: [], wls_tx_thrpt: [], wls_rx_thrpt: []
 		}
 	},
 
@@ -82,12 +70,14 @@ var store = {
 		get: function(key) {
 			var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
 			var r = window.location.search.substr(1).match(reg);
-			if (r != null) return unescape(r[2]); return null;
+			if (r != null) 
+				return unescape(r[2]);
+			return null;
 		},
 		// redirect
 		goto: function(url, reason) {
 			if (confirm('Will leave current page due to ' + reason)) {
-					$(window.location).attr('href', url);
+				$(window.location).attr('href', url);
 			}
 		},
 		// wrapper when ajax fail
@@ -145,134 +135,65 @@ var store = {
 		bg: function(idx, item) {
 				var color = $.flot.color(idx) || 'cyan';
 				if (typeof(item) == 'object') {
-					item.addClass(color)
-					.resize(function() { if (store.debug) console.log('Flot Chart(s) resized.'); });
+					item.addClass(color).resize(function() {
+						if (store.debug) console.log('Flot Chart(s) resized.');
+					});
 				}
 		},
 		// init & create a flot chart, return handler
 		chart: {
 			new: function(idx, item) { // 2017.03.01
-				var data = [{
-					label: '> 噪声 (dBm)', data: []
-				},{
-					label: '< 有线发送(Mbps)', data: []
-				},{
-					label: '< 有线接收(Mbps)', data: []
-				},{
-					label: '< 无线发送(Mbps)', data: []
-				},{
-					label: '< 无线接收(Mbps)', data: []
-				}];
+				var data = [
+					{ label: '< 噪声 (dBm)', data: [], color: 'navy' },
+					{ label: '> 无线发送(Mbps)', data: [], color: 'deeppink' },
+					{ label: '> 无线接收(Mbps)', data: [], color: 'magenta' },
+					{ label: '> 有线发送(Mbps)', data: [], color: 'forestgreen' },
+					{ label: '> 有线接收(Mbps)', data: [], color: 'gold' }
+				];
 				var flot = $.plot(item, data, {
-					series: {
-						//stack: true, // stack lines
-						//points: { show: true },
-						lines: {
-							show: true,
-							//fill: true,
-							//steps: true,
-						},
-						shadowSize: 0 // remove shadow to draw faster
-					},
-					crosshair: {
-						mode: 'y'
-					},
-					grid: {
-						//hoverable: true,
-						//clickable: true
-					},
-					xaxis: {
-						show: true, tickDecimals: 0, min: 0, max: 59
-					},
-					yaxes: [{
-						show: true, min: 0, max: 32,
-						steps: true
-					},{
-						show: true, tickDecimals: 0, min: -110, max: -56,
-						//alignTicksWithAxis: 1, 
-						//steps: true,
-						position: 'right'
-					}],
+					series: { lines: { show: true }, shadowSize: 0 },
+					crosshair: { mode: 'y' },
+					//grid: { hoverable: true, clickable: true },
+					xaxis: { show: true, tickDecimals: 0, min: -59, max: 0 },
+					yaxes: [{ show: true, min: 0, max: 32, steps: true, position:'right' },
+					{ show: true, tickDecimals: 0, min: -110, max: -56 }],
 					// TODO: fix legend size
-					legend: {
-						//position: 'sw',
-						show: true
-					}
+					legend: { position: 'nw', show: true }
 				});
 				return flot;
 			},
 			peer: function(item) {
-				var data = [{
-					label: '< 接收比特率(Mbit/s)', data: []
-				},{
-					label: '< 发送比特率(Mbit/s)', data: []
-				},{
-					label: '<< 接收MCS', data: []
-				},{
-					label: '<< 发送MCS', data: []
-				},{
-					label: '> 信噪比 (db)', data: []
-				}];
+				var data = [
+					{ label: '< 信噪比 (db)', data: [], color: 'navy' },
+					{ label: '> 接收比特率(Mbit/s)', data: [], color: 'deeppink' },
+					{ label: '> 发送比特率(Mbit/s)', data: [], color: 'forestgreen' },
+					//{ label: '>> 接收MCS', data: [], color: 'forestgreen' },
+					//{ label: '>> 发送MCS', data: [], color: 'forestgreen' },
+				];
 				var flot = $.plot(item, data, {
-					series: {
-						lines: {
-							show: true
-						},
-						shadowSize: 0
-					},
-					crosshair: {
-						mode: 'y'
-					},
-					xaxis: {
-						show: true, tickDecimals: 0, min: 0, max: 59
-					},
-					yaxes: [{
-						show: true, min: 0, max: 32,
-						steps: true
-					},{
-						show: true, tickDecimals: 0, min: 0, max: 64,
-						position: 'right'
-					},{
-						show: true, tickDecimals: 0, min: 0, max: 8,
-						position: 'left'
-					}],
-					legend: {
-						show: true
-					}
+					series: { lines: { show: true }, shadowSize: 0 },
+					crosshair: { mode: 'y' },
+					xaxis: { show: true, tickDecimals: 0, min: -59, max: 0 },
+					yaxes: [
+						{ show: true, min: 0, max: 32, steps: true, position: 'right' },
+						{ show: true, tickDecimals: 0, min: 0, max: 64 },
+						{ show: false, tickDecimals: 0, min: 0, max: 8, position: 'right' }
+					],
+					legend: { show: true, position: 'nw' }
 				});
 				return flot;
 			},
 			scan: function(item) {
 				var data = [{
-					label: 'Noise (dBm)', data: [], color: 'red'
+					//label: 'Noise (dBm)', data: [], color: 'red'
 				}];
 				var flot = $.plot(item, data, {
-					series: {
-						lines: {
-							show: true, //steps: true
-						},
-						points: {
-							show: true
-						},
-						shadowSize: 0
-					},
-					crosshair: {
-						mode: 'xy'
-					},
-					xaxes: [{
-						show: true, tickDecimals: 0, min: 20, max: 52,
-						position: 'bottom'
-					},{
-						show: true, tickDecimals: 0, min: 470, max: 720,
-						position: 'bottom'
-					}],
-					yaxis: {
-						show: true, min: -110, max: -56,
-						position: 'left'
-					},
-					legend: {
-						show: true
-					}
+					series: { lines: { show: true }, points: { show: true }, shadowSize: 0 },
+					crosshair: { mode: 'xy' },
+					xaxes: [{ show: true, tickDecimals: 0, min: 20, max: 52, position: 'bottom' },
+					{ show: true, tickDecimals: 0, min: 470, max: 720, position: 'bottom' }],
+					yaxis: { show: true, min: -110, max: -56, position: 'left' },
+					legend: { show: true }
 				});
 				return flot;
 			},
@@ -329,7 +250,7 @@ var store = {
 					for(i = 0, j = noise.length; i < noise.length; i ++) {
 						var val = noise[i];
 						if (val > invalid) {
-							fd_noise.push([j-i-1, val]);
+							fd_noise.push([i+1-j, val]);
 						} else {
 							fd_noise.push(null);
 						}
@@ -338,25 +259,25 @@ var store = {
 
 				if (eth_tx_thrpt && eth_tx_thrpt.length > 0) {
 					for(i = 0, j = eth_tx_thrpt.length; i < eth_tx_thrpt.length; i ++) {
-						fd_eth_tx_thrpt.push([j-i-1, eth_tx_thrpt[i]]);
+						fd_eth_tx_thrpt.push([i+1-j, eth_tx_thrpt[i]]);
 					}
 				}
 
 				if (eth_rx_thrpt && eth_rx_thrpt.length > 0) {
 					for(i = 0, j = eth_rx_thrpt.length; i < eth_rx_thrpt.length; i ++) {
-						fd_eth_rx_thrpt.push([j-i-1, eth_rx_thrpt[i]]);
+						fd_eth_rx_thrpt.push([i+1-j, eth_rx_thrpt[i]]);
 					}
 				}
 
 				if (wls_tx_thrpt && wls_tx_thrpt.length > 0) {
 					for(i = 0, j = wls_tx_thrpt.length; i < wls_tx_thrpt.length; i ++) {
-						fd_wls_tx_thrpt.push([j-i-1, wls_tx_thrpt[i]]);
+						fd_wls_tx_thrpt.push([i+1-j, wls_tx_thrpt[i]]);
 					}
 				}
 
 				if (wls_rx_thrpt && wls_rx_thrpt.length > 0) {
 					for(i = 0, j = wls_rx_thrpt.length; i < wls_rx_thrpt.length; i ++) {
-						fd_wls_rx_thrpt.push([j-i-1, wls_rx_thrpt[i]]);
+						fd_wls_rx_thrpt.push([i+1-j, wls_rx_thrpt[i]]);
 					}
 				}
 
@@ -365,35 +286,43 @@ var store = {
 				var _fields = store.flot.fields;
 				if (_fields == 'eth') {
 					cd = [
-						{ label: '> 噪声', data: null, yaxis: 2 },
-						{ label: '< 有线发送速率', data: fd_eth_tx_thrpt },
-						{ label: '< 有线接收速率', data: fd_eth_rx_thrpt },
+						{ label: '> 噪声', data: null },
 						{ label: '< 无线发送速率', data: null },
-						{ label: '< 无线接收速率', data: null }
+						{ label: '< 无线接收速率', data: null },
+						{ label: '< 有线发送速率', data: fd_eth_tx_thrpt, color: 'forestgreen' },
+						{ label: '< 有线接收速率', data: fd_eth_rx_thrpt, color: 'gold' }
 					];
 				} else if (_fields == 'wls') {
 					cd = [
-						{ label: '> 噪声', data: null, yaxis: 2 },
+						{ label: '> 噪声', data: null, yaxis: 2, color: 'navy' },
+						{ label: '< 无线发送速率', data: fd_wls_tx_thrpt, color: 'deeppink' },
+						{ label: '< 无线接收速率', data: fd_wls_rx_thrpt, color: 'magenta' },
 						{ label: '< 有线发送速率', data: null },
-						{ label: '< 有线接收速率', data: null },
-						{ label: '< 无线发送速率', data: fd_wls_tx_thrpt },
-						{ label: '< 无线接收速率', data: fd_wls_rx_thrpt }
+						{ label: '< 有线接收速率', data: null }
 					];
 				} else if (_fields == 'abb') {
 					cd = [
-						{ label: '> 噪声', data: fd_noise, yaxis: 2 },
-						{ label: '< 有线发送速率', data: null },
-						{ label: '< 有线接收速率', data: null },
+						{ label: '> 噪声', data: fd_noise, yaxis: 2, color: 'navy' },
 						{ label: '< 无线发送速率', data: null },
-						{ label: '< 无线接收速率', data: null }
+						{ label: '< 无线接收速率', data: null },
+						{ label: '< 有线发送速率', data: null },
+						{ label: '< 有线接收速率', data: null }
+					];
+				} else if (_fields == 'dfl') {
+					cd = [
+						{ label: '> 噪声', data: fd_noise, yaxis: 2, color: 'navy' },
+						{ label: '< 无线发送速率', data: fd_wls_tx_thrpt, color: 'deeppink' },
+						{ label: '< 无线接收速率', data: fd_wls_rx_thrpt, color: 'magenta' },
+						{ label: '< 有线发送速率', data: null },
+						{ label: '< 有线接收速率', data: null }
 					];
 				} else {
 					cd = [
-						{ label: '> 噪声', data: fd_noise, yaxis: 2 },
-						{ label: '< 有线发送速率', data: fd_eth_tx_thrpt },
-						{ label: '< 有线接收速率', data: fd_eth_rx_thrpt },
-						{ label: '< 无线发送速率', data: fd_wls_tx_thrpt },
-						{ label: '< 无线接收速率', data: fd_wls_rx_thrpt }
+						{ label: '> 噪声', data: fd_noise, yaxis: 2, color: 'navy' },
+						{ label: '< 无线发送速率', data: fd_wls_tx_thrpt, color: 'deeppink' },
+						{ label: '< 无线接收速率', data: fd_wls_rx_thrpt, color: 'magenta' },
+						{ label: '< 有线发送速率', data: fd_eth_tx_thrpt, color: 'forestgreen' },
+						{ label: '< 有线接收速率', data: fd_eth_rx_thrpt, color: 'gold' }
 					];
 				}
 
@@ -481,7 +410,7 @@ var store = {
 					for(i = 0, j = rx_br.length; i < rx_br.length; i ++) {
 						var val = rx_br[i];
 						if (val > invalid) {
-							_rx_br.push([j-i-1, val]);
+							_rx_br.push([i+1-j, val]);
 						} else {
 							_rx_br.push(null);
 						}
@@ -492,7 +421,7 @@ var store = {
 					for(i = 0, j = rx_mcs.length; i < rx_mcs.length; i ++) {
 						var val = rx_mcs[i];
 						if (val > invalid) {
-							_rx_mcs.push([j-i-1, val]);
+							_rx_mcs.push([i+1-j, val]);
 						} else {
 							_rx_mcs.push(null);
 						}
@@ -503,7 +432,7 @@ var store = {
 					for(i = 0, j = tx_br.length; i < tx_br.length; i ++) {
 						var val = tx_br[i];
 						if (val > invalid) {
-							_tx_br.push([j-i-1, val]);
+							_tx_br.push([i+1-j, val]);
 						} else {
 							_tx_br.push(null);
 						}
@@ -514,7 +443,7 @@ var store = {
 					for(i = 0, j = tx_mcs.length; i < tx_mcs.length; i ++) {
 						var val = tx_mcs[i];
 						if (val > invalid) {
-							_tx_mcs.push([j-i-1, val]);
+							_tx_mcs.push([i+1-j, val]);
 						} else {
 							_tx_mcs.push(null);
 						}
@@ -525,20 +454,18 @@ var store = {
 					for(i = 0, j = snr.length; i < snr.length; i ++) {
 						var val = snr[i];
 						if (val > invalid) {
-							_snr_fd.push([j-i-1, val]);
+							_snr_fd.push([i+1-j, val]);
 						} else {
 							_snr_fd.push(null);
 						}
 					}
 				}
 
-				_peer_cd = [
-					{ label: '< 接收比特率(Mbit/s)', data: _rx_br },
-					{ label: '< 发送比特率(Mbit/s)', data: _tx_br },
-					{ label: '<< 接收MCS', data: _rx_mcs, yaxis: 3 },
-					{ label: '<< 发送MCS', data: _tx_mcs, yaxis: 3 },
-					{ label: '> 信噪比(db)', data: _snr_fd, yaxis: 2 }
-				];
+				_peer_cd = [{ label: '< 接收比特率(Mbit/s)', data: _rx_br, color: 'deeppink' },
+				{ label: '< 发送比特率(Mbit/s)', data: _tx_br, color: 'forestgreen' },
+				//{ label: '<< 接收MCS', data: _rx_mcs, yaxis: 3 },
+				//{ label: '<< 发送MCS', data: _tx_mcs, yaxis: 3 },
+				{ label: '> 信噪比(db)', data: _snr_fd, yaxis: 2, color: 'navy' }];
 
 				$.flot.chart.update(peer_chart, _peer_cd);
 			}
@@ -590,11 +517,7 @@ var store = {
 				<div class="qz-chart-holder qz-chart-peer lighten-5"></div>
 			</div>
 		</div>
-		<div class="card-content center">
-			<p class="card-title grey-text text-darken-4 qz-peer-name">...</p>
-			<p class="qz-peer-desc">...</p>
-		</div>
-		<div class="card-reveal">
+		<!--<div class="card-reveal">
 			<span class="card-title grey-text text-darken-4">射频参数<i class="material-icons right">.</i></span>
 				<ul class="collection">
 				<li class="collection-item"><span class="badge qz-peer-txpwr">...</span>发射功率</li>
@@ -604,10 +527,12 @@ var store = {
 				<li class="collection-item"><span class="badge qz-peer-atf">...</span>ATF</li>
 				<li class="collection-item"><span class="badge qz-peer-tdma">...</span>TDMA</li>
 			</ul>
-		</div>
-		<!--<div class="card-action">
-			<a href="#model_proxy_leagal" class="qz-btn-peer-proxy" alt="">管理</a>
 		</div>-->
+		<div class="card-action">
+			<span class="qz-peer-name">...</span>
+			<!--<p class="qz-peer-desc">...</p>
+			<a href="#model_proxy_leagal" class="qz-btn-peer-proxy" alt="">管理</a>-->
+		</div>
 	</div>
 </div>
 					`;
