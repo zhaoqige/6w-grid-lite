@@ -282,6 +282,20 @@
 		<div class="section">
 			<h5>频谱扫描</h5>
 			<div class="row">
+				<div class="input-field col s2">
+					<select alt="gws" name="rgn" id="qz-tool-chscan-rgn" class="browser-default" disabled>
+						<option value="0">Region 0</option>
+						<option value="1" selected>Region 1</option>
+					</select>
+				</div>
+				<div class="input-field col s2">
+					<input id="qz-tool-chscan-start" placeholder="Channel Number to Begin" class="validate" type="text" value="21" readonly />
+					<label for="qz-tool-ping-target">Begin Channel</label>
+				</div>
+				<div class="input-field col s2">
+					<input id="qz-tool-chscan-stop" placeholder="Channel Number to Stop" class="validate" type="text" value="51" readonly />
+					<label for="qz-tool-ping-target">End Channel</label>
+				</div>
 				<div class="input-field col s6">
 					<a href="#modal_change_confirm" id="qz-btn-chscan-start" class="btn blue-grey">开始扫描 ！</a>
 					<button id="qz-btn-chscan-stop" class="btn blue-grey">停止扫描 ！</button>
@@ -292,7 +306,7 @@
 					<div class="card">
 						<div class="card-image waves-effect waves-block waves-light">
       						<div class="qz-space">
-      							<div id="qz-chart-local-chscan" class="qz-chart-chscan-holder lime lighten-5"></div>
+      							<div id="qz-chart-local-chscan" class="qz-chart-chscan-holder blue lighten-5"></div>
       						</div>
     					</div>
     					<div class="card-content center">
@@ -307,44 +321,41 @@
 <div id="tab4" class="col s12">
 	<div class="container">
 		<div class="section">
-			<h5>ICMP / Ping诊断</h5>
 			<div class="row">
-				<div class="input-field col s6">
-					<input id="qz-tool-ping-target" placeholder="Copy target ip address or MAC from STATUS" class="validate" type="text" value="192.168.1.2" />
-					<label for="qz-tool-ping-target">目标IP地址</label>
+				<div class="col s6">
+					<div class="card">
+						<div class="card-content">
+							<span class="card-title">网络诊断工具</span>
+							<p>此工具可以帮助您诊断当前网络的连通性。</p>
+							<p>默认使用Ping作为网络诊断工具。</p>
+						</div>
+						<div class="card-action grey lighten-5">
+							<a href="#modal_tool_icmp">开始诊断</a>
+						</div>
+					</div>
 				</div>
-				<div class="input-field col s6">
-					<button id="qz-btn-ping-start" class="btn blue-grey">开始</button>
+				<div class="col s6">
+					<div class="card">
+						<div class="card-content">
+							<span class="card-title">网络带宽测试工具</span>
+							<p>此工具可以帮助您了解当前无线网络的上下行最大带宽。</p>
+							<p>默认使用UDP协议来网络带宽测试工具。</p>
+						</div>
+						<div class="card-action grey lighten-5">
+							<a href="#modal_tool_flooding">开始测试</a>
+						</div>
+					</div>
 				</div>
-				<div class="input-field col s12">
-					<textarea id="qz-tool-ping-result" class="materialize-textarea qz-textarea">-</textarea>
-      				<label for="qz-tool-ping-result">ICMP / Ping诊断结果</label>
-      			</div>
-			</div>
-		</div>
-	</div>
-	<div class="container">
-		<div class="section">
-			<h5>UDP Flooding工具</h5>
-			<div class="row">
-				<div class="input-field col s6">
-					<input id="qz-tool-flood-target" placeholder="Your Target Address / MAC" type="text" class="validate" value="192.168.1.2" />
-					<label for="qz-tool-flood-target">目标</label>
-				</div>
-				<div class="input-field col s6">
-					<input id="qz-tool-flood-bw" placeholder="Unit: Second" type="text" class="validate" value="20" />
-					<label for="qz-tool-flood-bw">总发起带宽</label>
-				</div>
-				<div class="input-field col s6">
-					<input id="qz-tool-flood-as" type="checkbox" class="filled-in" />
-					<label for="qz-tool-flood-as">当结果后自动开始</label>
-				</div>
-				<div class="input-field col s6">
-					<input id="qz-tool-flood-times" placeholder="Unit: Second" type="text" class="validate" value="30" />
-					<label for="qz-tool-flood-times">发起时长</label>
-				</div>
-				<div class="input-field col s12 center">
-					<button id="qz-btn-flood-start" class="btn blue-grey">开始UDP Flooding</button>
+				<div class="col s6">
+					<div class="card">
+						<div class="card-content">
+							<span class="card-title">命令行工具</span>
+							<p>此操作有一定的危险性，使用不当可能会导致设备无法使用。（暂时仅供内部测试使用）</p>
+						</div>
+						<div class="card-action grey lighten-5">
+							<a href="#">打开命令行</a>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -353,32 +364,31 @@
 <div id="tab5" class="col s6 offset-s3">
 	<div class="container">
 		<div class="section">
-			<h5 class="center">修改您的密码</h5>
 			<div class="row">
-	    		<div class="col s8 offset-s2">
-	    			<div class="row">
-	    				<div class="input-field col s12">
-	    					<input id="qz-adm-passwd-old" placeholder="点击输入当前密码" type="password" class="validate">
-	    					<label for="qz-adm-passwd-old">当前密码</label>
-	    				</div>
-	        			<div class="input-field col s12">
-	          				<input id="qz-adm-passwd-new" placeholder="点击输入新密码" type="password" class="validate">
-	          				<label for="qz-adm-passwd-new">新密码</label>
-	        			</div>
-	        			<div class="input-field col s12">
-	         				<input id="qz-adm-passwd-confirm" placeholder="点击再次输入新密码" type="password" class="validate">
-	          				<label for="qz-adm-passwd-confirm">确认密码</label>
-	        			</div>
-	        			<div class="input-field col s6">
-	        				<button id="qz-btn-passwd-change" class="btn blue-grey" disabled>修改</button>
-	        			</div>
-	      			</div>
+				<div class="col s6">
+					<div class="card">
+						<div class="card-content">
+							<span class="card-title">修改密码</span>
+							<p>修改您登录此系统的密码。</p>
+							<p>建议您在拿到设备后，立即修改默认密码。</p>
+						</div>
+						<div class="card-action grey lighten-5">
+							<a href="#modal_cmd_passwd">开始修改</a>
+						</div>
+					</div>
+				</div>
+				<div class="col s6">
+					<div class="card">
+						<div class="card-content">
+							<span class="card-title">安全退出</span>
+							<p>如果您刚刚改过密码，请务必使用安全退出后验证您新密码的有效性。</p>
+						</div>
+						<div class="card-action grey lighten-5">
+							<a href="/cgi-bin/bye">点击退出</a>
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="section center">
-			<h5>您想要安全退出吗？</h5>
-			<a href="/cgi-bin/bye" class="btn lime darken-4">点击退出</a>
 		</div>
 	</div>
 </div>
@@ -387,8 +397,7 @@
 <div id="model_proxy_leagal" class="modal">
 	<div class="modal-content">
 		<h4>全法性声明</h4>
-		<p>如果您是设备的所有者，或者经过了所有者适当的授权，请点击“同意”继续；</p>
-		<p>其它情况请点击“离开”，并关闭此页面。</p>
+		<p>如果您是设备的所有者，或者经过了所有者适当的授权，请点击“同意”继续；其它情况请点击“离开”，并关闭此页面。</p>
 		<p>感谢您的配合。</p>
 	</div>
 	<div class="modal-footer">
@@ -402,15 +411,111 @@
 <div id="modal_change_confirm" class="modal">
 	<div class="modal-content">
 		<h4>操作确认</h4>
-		<p id="qz-modal-chcfm-items">（未知操作）</p>
-		<p id="qz-modal-chcfm-affected">（未知影响）</p>
-		<p>如果确认以上操作及其影响，请点击“确定”</p>
-		<p>其它请点击“取消”</p>
+		<p id="qz-modal-chcfm-items" class="red-text">（未知操作）</p>
+		<p id="qz-modal-chcfm-affected" class="orange-text">（未知影响）</p>
+		<p>如果确认以上操作及其影响，请点击“确定”；其它情况请点击“取消”。</p>
 		<p>感谢您的配合。</p>
 	</div>
 	<div class="modal-footer">
 		<a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">取消</a>
 		<button id="qz-btn-confirm-change" class="modal-action modal-close waves-effect waves-green btn-flat">确定</button>
+	</div>
+</div>
+
+
+<!-- Modal Structure -->
+<div id="modal_tool_icmp" class="modal">
+	<div class="modal-content qz-modal-content">
+		<h4>网络诊断工具</h4>
+		<div class="row qz-row">
+			<div class="input-field col s6">
+				<input id="qz-tool-ping-target" placeholder="Copy target ip address or MAC from STATUS" class="validate" type="text" value="192.168.1.2" />
+				<label for="qz-tool-ping-target">目标设备IP地址</label>
+			</div>
+			<div class="input-field col s12">
+				<textarea id="qz-tool-ping-result" class="materialize-textarea qz-textarea">-</textarea>
+  				<label for="qz-tool-ping-result">网络连通性诊断结果</label>
+  			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
+		<button id="qz-btn-ping-start" class="waves-effect waves-green btn-flat">开始诊断</button>
+	</div>
+</div>
+
+
+<!-- Modal Structure -->
+<div id="modal_tool_cmd" class="modal">
+	<div class="modal-content qz-modal-content">
+		<h4>设备命令行工具</h4>
+		<div class="row qz-row">
+			<div class="input-field col s6">
+				<input id="qz-tool-ping-target" placeholder="Copy target ip address or MAC from STATUS" class="validate" type="text" value="uptime" />
+				<label for="qz-tool-ping-target">命令</label>
+			</div>
+			<div class="input-field col s12">
+				<textarea id="qz-tool-ping-result" class="materialize-textarea qz-textarea">-</textarea>
+  				<label for="qz-tool-ping-result">执行结果</label>
+  			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
+		<button id="qz-btn-ping-start" class="waves-effect waves-green btn-flat">开始诊断</button>
+	</div>
+</div>
+
+
+<!-- Modal Structure -->
+<div id="modal_tool_flooding" class="modal">
+	<div class="modal-content qz-modal-content">
+		<h4>网络带宽测试工具</h4>
+		<div class="row qz-row">
+			<div class="input-field col s6">
+				<input id="qz-tool-flood-target" placeholder="Your Target Address / MAC" type="text" class="validate" value="192.168.1.2" />
+				<label for="qz-tool-flood-target">目标设备IP地址</label>
+			</div>
+			<div class="input-field col s6">
+				<input id="qz-tool-flood-bw" placeholder="Unit: Second" type="text" class="validate" value="20" />
+				<label for="qz-tool-flood-bw">向目标发送数据带宽（单位：Mbps）</label>
+			</div>
+			<div class="input-field col s6">
+				<input id="qz-tool-flood-as" type="checkbox" class="filled-in" disabled />
+				<label for="qz-tool-flood-as">当结束后自动开始</label>
+			</div>
+			<div class="input-field col s6">
+				<input id="qz-tool-flood-times" placeholder="Unit: Second" type="text" class="validate" value="30" />
+				<label for="qz-tool-flood-times">带宽测试时长（单位：秒）</label>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">关闭</a>
+		<button id="qz-btn-flood-start" class="waves-effect waves-green btn-flat">开始测试</button>
+	</div>
+</div>
+
+
+
+<!-- Modal Structure -->
+<div id="modal_cmd_passwd" class="modal">
+	<div class="modal-content qz-modal-content">
+		<h4>修改登录密码</h4>
+		<div class="row qz-row">
+			<div class="input-field col s12">
+  				<input id="qz-adm-passwd-new" placeholder="点击输入新密码" type="password" class="validate">
+  				<label for="qz-adm-passwd-new">新密码</label>
+			</div>
+			<div class="input-field col s12">
+ 				<input id="qz-adm-passwd-confirm" placeholder="点击再次输入新密码" type="password" class="validate">
+  				<label for="qz-adm-passwd-confirm">确认新密码</label>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">取消</a>
+		<button id="qz-btn-confirm-change" class="modal-action modal-close waves-effect waves-green btn-flat" disabled>确定</button>
 	</div>
 </div>
 

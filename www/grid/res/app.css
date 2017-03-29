@@ -49,6 +49,9 @@ main {
 	margin-bottom: 0;
 }
 
+.qz-modal-content {
+	padding-bottom: 0 !important;
+}
 .qz-card-reveal {
 	padding-top: 15px !important;
 }

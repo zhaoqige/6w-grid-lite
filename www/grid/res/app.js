@@ -82,7 +82,7 @@
 				instant: function(idx) { // 2017.02.28
 					var x = $.cache.RANDOM.int(100);
 					var peers;
-					if (x > 10) {
+					if (x > 5) {
 						peers = [{
 							mac: '01:53:01:09:19:15',
 							ip: '192.168.1.211',
@@ -534,6 +534,7 @@ if (store.debug)
 					$.ui.settings.mode(abb.mode);
 				}
 				if (nw) {
+					var text = '设备 ';
 					if (nw.lan_ip && nw.lan_ip != '-') {
 						text += nw.lan_ip;
 						$('#qz-set-lan-ip').val(nw.lan_ip);
@@ -965,7 +966,7 @@ if (store.debug)
 				case 'ping':
 					// TODO: set result to "textarea"
 					prompt = 'Ping诊断失败 ！';
-					$('#qz-tool-ping-result').val(resp);
+					$('#qz-tool-ping-result').val(prompt);
 					break;
 				case 'scan':
 					break;
