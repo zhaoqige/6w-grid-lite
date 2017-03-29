@@ -30,7 +30,7 @@ var store = {
 		},
 		// color index for Flot charts
 		color: [
-			'lime', 'red', 'blue', 'purple', 'deep-purple', 
+			'blue', 'lime', 'red', 'purple', 'deep-purple', 
 			'indigo', 'pink', 'light-blue', 'cyan', 'teal', 
 			'green', 'light-green', 'yellow', 'amber', 'orange', 
 			'deep-orange', 'brown', 'grey', 'blue-grey'
