@@ -1,4 +1,4 @@
-// by 6Harmonics Qige @ 2017.02.22
+// by 6Harmonics Qige @ 2017.02.22 - 2017.03.30
 
 // data controller
 (function($) {

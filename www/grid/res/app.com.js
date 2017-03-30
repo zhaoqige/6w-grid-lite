@@ -1,6 +1,6 @@
 // by 6Harmonics Qige @ 2017.02.18 - 2017.03.29
 
-//TODO:
+//FIXME:
 // 1. handle too much ajax failed: if device offline, then close
 // 2. calc ajax interval in ms, re-calibrate thrpt
 // 3. manage peers, and test if peers left, redraw charts
