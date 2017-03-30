@@ -122,7 +122,7 @@
 						},
 						nw: {
 							bridge: 1,
-							wmac: '13:51:10:53:55:6'+idx,					
+							wmac: '13:51:10:53:55:6'+idx,
 							wan_ip: '',
 							lan_ip: '192.168.1.21'+idx,
 							eth_txb: $.cache.RANDOM.int(4*1024*1024),
@@ -161,8 +161,8 @@
 			local: {
 				instant: function() { // 2017.02.28
 					$.ajax({
-						url: '/cgi-bin/get', 
-						data: { k: 'instant' }, 
+						url: '/cgi-bin/get',
+						data: { k: 'instant' },
 						success: function(resp) {
 							//console.log('get?k=instant', resp);
 							store.query = {
@@ -180,12 +180,12 @@ if (store.debug)
 				},
 				delayed: function() {
 					$.ajax({
-						url: '/cgi-bin/get', 
-						data: { k: 'delayed' }, 
+						url: '/cgi-bin/get',
+						data: { k: 'delayed' },
 						success: function(resp) {
 							//console.log('get?k=delayed', resp);
 							store.delayed = resp;
-						}, 
+						},
 						error: function(xhr, status, error) {
 if (store.debug)
 							console.log('get?k=delayed', "error> local (delayed) failed", error);
@@ -200,8 +200,8 @@ if (store.debug)
 			proxy: function() {
 				// TODO: call & handle ajax fails
 				$.ajax({
-					url: '/cgi-bin/proxy', 
-					data: { mac: '', ip: '' }, 
+					url: '/cgi-bin/proxy',
+					data: { mac: '', ip: '' },
 					success: function(resp) {
 					},
 					error: function() {
@@ -251,15 +251,15 @@ if (store.debug)
 
 					// check history, query first
 					var query = (store && "query" in store) ? store.query : null;
-					var query_last = (store && "query_last" in store) ? 
+					var query_last = (store && "query_last" in store) ?
 							store.query_last : null;
 
 					var local = (query && "local" in query) ? query.local : null;
-					var local_last = (query_last && "local" in query_last) ? 
+					var local_last = (query_last && "local" in query_last) ?
 							query_last.local : null;
 
 					var history = (store && "history" in store) ? store.history : null;
-					var local_history = (history && "local" in history) ? 
+					var local_history = (history && "local" in history) ?
 							history.local : null;
 
 
@@ -277,7 +277,7 @@ if (store.debug)
 
 					if (local) {
 						// calc & save snr
-						if ("abb" in local) {						
+						if ("abb" in local) {
 							if ("noise" in local.abb) {
 								noise = local.abb.noise || $.cache._invalid; // fix gws4k noise=unknown
 							}
@@ -313,10 +313,10 @@ if (store.debug)
 								}
 							}
 
-							eth_tx_thrpt = $.cache.fmt.float(eth_tx_thrpt); 
-							eth_rx_thrpt = $.cache.fmt.float(eth_rx_thrpt); 
-							wls_tx_thrpt = $.cache.fmt.float(wls_tx_thrpt); 
-							wls_rx_thrpt = $.cache.fmt.float(wls_rx_thrpt); 
+							eth_tx_thrpt = $.cache.fmt.float(eth_tx_thrpt);
+							eth_rx_thrpt = $.cache.fmt.float(eth_rx_thrpt);
+							wls_tx_thrpt = $.cache.fmt.float(wls_tx_thrpt);
+							wls_rx_thrpt = $.cache.fmt.float(wls_rx_thrpt);
 if (store.debug)
 							console.log('实时> eth/wls tx/rx Thrpt:', eth_tx_thrpt, eth_rx_thrpt, wls_tx_thrpt, wls_rx_thrpt);
 						}
@@ -332,7 +332,7 @@ if (store.debug)
 					_eth_rx_thrpt = $.flot.one(local_history.eth_rx_thrpt, eth_rx_thrpt, 60);
 					_wls_tx_thrpt = $.flot.one(local_history.wls_tx_thrpt, wls_tx_thrpt, 60);
 					_wls_rx_thrpt = $.flot.one(local_history.wls_rx_thrpt, wls_rx_thrpt, 60);
-					
+
 					// save to store.history
 					_local_history = {
 						noise: _noise,
@@ -367,9 +367,9 @@ if (store.debug)
 
 							var _peer = {};
 							var history = (store && "history" in store) ? store.history : null;
-							var peers_history = (history && "peers" in history) ? 
+							var peers_history = (history && "peers" in history) ?
 									history.peers : null;
-							var peer_history = (peers_history && peers_history.length > idx) ? 
+							var peer_history = (peers_history && peers_history.length > idx) ?
 									peers_history[idx] : null;
 							//console.log("dbg 0307> this peer_history", history, peers_history, peer_history);
 
@@ -388,7 +388,7 @@ if (store.debug)
 							} else {
 								snr = 0;
 							}
-							
+
 							if (snr < 0) {
 								snr = 0;
 							}
@@ -402,7 +402,7 @@ if (store.debug)
 							}
 
 if (store.debug)
-							console.log('实时> peer'+idx+' rxbr/rxmcs/txbr/txmcs/snr=', 
+							console.log('实时> peer'+idx+' rxbr/rxmcs/txbr/txmcs/snr=',
 								rx_br, rx_mcs, tx_br, tx_mcs, snr);
 							if (peer_history) {
 								_rx_br = $.flot.one(peer_history.rx_br, rx_br, 60);
@@ -550,10 +550,10 @@ if (store.debug)
 					if (nw.bridge) {
 						text += ' (桥接)';
 					} else {
-						text += ' (路由器)';	
+						text += ' (路由器)';
 					}
 
-					if (sys) {						
+					if (sys) {
 						if (sys.qos > 0)		text += ' | QoS';
 						if (sys.firewall > 0)	text += ' | 防火墙'
 						if (sys.tdma > 0)		text += ' | TDMA';
@@ -630,7 +630,7 @@ if (store.debug)
 
 					text = ("note" in gws) ? gws.note : '...';
 					$('#qz-local-gws5').text(text);
-					
+
 if (store.debug)
 					console.log("射频> region/channel/txpwr/tpc/rxgain/agc", rgn, ch, txpwr, tpc, rxgain, agc);
 				}
@@ -681,7 +681,7 @@ if (store.debug)
 					var tid = store.typing_id;
 					if (tid != id) {
 						obj.val(val);
-					} 
+					}
 				}
 			}
 		}
@@ -702,7 +702,7 @@ if (store.debug)
 					$.materialize.toast('演示模式下不可用');
 				});
 			} else {
-				// bind these buttons click() 
+				// bind these buttons click()
 				$('#qz-btn-sys-reset').click(function() { // 2017.02.28
 					$('#qz-modal-chcfm-items').text('重启设备');
 					$('#qz-modal-chcfm-affected').text('此操作将设备重新启动，所有服务都将受到影响');
@@ -868,7 +868,7 @@ if (store.debug)
 if (store.debug)
 				console.log('工具> cmd now ...', cmd);
 				$.ops.ajax('cmd', '/cgi-bin/tool', {
-					k: 'cmd', to: cmd
+					k: 'cmd', cmd: cmd
 				}, obj);
 			},
 			scan: function() {
@@ -878,7 +878,7 @@ if (store.debug)
 			},
 			scan_read: function(_rgn, _b, _e) {
 				if (_b <= _e) {
-					$.get('/cgi-bin/tool', { k: 'scan_read', rgn: _rgn, ch: _b }, 
+					$.get('/cgi-bin/tool', { k: 'scan_read', rgn: _rgn, ch: _b },
 						function(resp) {
 							var freq = _rgn > 0 ? 474+8*(_b-21) : 473+6*(_b-14);
 							var noise = resp.data.noise;
@@ -918,11 +918,11 @@ if (store.debug)
 			}
 
 			if (ops == 'scan') {
-				$.ops.tool.scan();				
+				$.ops.tool.scan();
 			}
 
 			$.ajax({
-				url: url, 
+				url: url,
 				method: 'get',
 				data: params,
 				timeout: 120000
@@ -997,7 +997,7 @@ if (store.debug)
 					break;
 				}
 				//console.log('ajax (fail) result:', prompt);
-				
+
 				$.materialize.toast(prompt);
 
 				// reset nw: reload
@@ -1046,7 +1046,7 @@ if (store.debug)
 		},
 		// update store.query.cache with "ajax"
 		// there 2 types of ajax query
-		// 1. these return immediately, 
+		// 1. these return immediately,
 		// like query abb via "libiwinfo-lua", "cat /proc/net/dev"
 		// so use "$.app.update.instant()";
 		// 2. those will take few seconds, like "rfinfo"
@@ -1103,4 +1103,3 @@ $(function() { // 2017.02.28
 	var m = $.url.get('k') || 'demo';
 	$.app.run(m);
 });
-
