@@ -534,7 +534,7 @@ if (store.debug)
 					$.ui.settings.mode(abb.mode);
 				}
 				if (nw) {
-					var text = '设备 ';
+					var text = '';
 					if (nw.lan_ip && nw.lan_ip != '-') {
 						text += nw.lan_ip;
 						$('#qz-set-lan-ip').val(nw.lan_ip);
@@ -543,6 +543,7 @@ if (store.debug)
 						text += ' / '+nw.wan_ip;
 						$('#qz-set-wan-ip').val(nw.lan_ip);
 					}
+					text += ' 详情'
 					$('#qz-local-nw').text(text);
 
 					text = abb_text;
