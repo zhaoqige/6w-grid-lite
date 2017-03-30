@@ -16,23 +16,23 @@ var store = {
 	offlineCounter: 0, offlineCounterBar: 6,
 
 	// 200 records for each chart
-	defaultRecordQty: 200, 
+	defaultRecordQty: 200,
 
 	// flot related data
 	flot: {
 		fields: 'dfl',
 		// setInterval handlers
-		intl: { 
-			local: { 
+		intl: {
+			local: {
 				instant: null, delayed: null
-			}, 
+			},
 			peers: [], DEMO: null
 		},
 		// color index for Flot charts
 		color: [
-			'blue', 'lime', 'red', 'purple', 'deep-purple', 
-			'indigo', 'pink', 'light-blue', 'cyan', 'teal', 
-			'green', 'light-green', 'yellow', 'amber', 'orange', 
+			'blue', 'lime', 'red', 'purple', 'deep-purple',
+			'indigo', 'pink', 'light-blue', 'cyan', 'teal',
+			'green', 'light-green', 'yellow', 'amber', 'orange',
 			'deep-orange', 'brown', 'grey', 'blue-grey'
 		],
 		// chart handlers
@@ -46,11 +46,11 @@ var store = {
 
 	// save these parameters not frequently updated
 	// and not calculate gap between each time
-	delayed: null, 
+	delayed: null,
 
 	// history data
 	history: {
-		local: { 
+		local: {
 			snr: [], br: [], eth_tx_thrpt: [], eth_rx_thrpt: [], wls_tx_thrpt: [], wls_rx_thrpt: []
 		}
 	},
@@ -70,7 +70,7 @@ var store = {
 		get: function(key) {
 			var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
 			var r = window.location.search.substr(1).match(reg);
-			if (r != null) 
+			if (r != null)
 				return unescape(r[2]);
 			return null;
 		},
@@ -106,7 +106,7 @@ var store = {
 			$('.modal').modal();
 		},
 		toast: function(msg, timeout) {
-			if (msg && msg.length > 0) {	
+			if (msg && msg.length > 0) {
 				var $toastContent = $('<span>'+msg+'</span>');
 				Materialize.toast($toastContent, timeout || 3000);
 			}
@@ -188,9 +188,9 @@ var store = {
 					//label: 'Noise (dBm)', data: [], color: 'red'
 				}];
 				var flot = $.plot(item, data, {
-					series: { 
-						bars: { show: true, barWidth: 0.8 }, 
-						//lines: { show: true }, points: { show: true }, 
+					series: {
+						bars: { show: true, barWidth: 0.8 },
+						//lines: { show: true }, points: { show: true },
 						shadowSize: 0
 					},
 					crosshair: { mode: 'xy' },
@@ -210,7 +210,7 @@ var store = {
 			// update & redraw chart
 			update: function(flot, data) { // 2017.02.28
 				flot.setData(data);
-				flot.draw();		
+				flot.draw();
 			}
 		},
 		// save value to object with max length
@@ -378,7 +378,7 @@ var store = {
 					// delete last chart html
 					$.html.abb.peer.del();
 				}
-			}, 
+			},
 			update: function(idx, peer_cache, peer_chart) {
 				//console.log("dbg 0307> $.flot.peers.calc()", peer_cache, peer_chart);
 				var invalid = store.invalid;
@@ -491,37 +491,36 @@ var store = {
 				offline: function() {
 					var _h = $.html.abb.peer_html.empty();
 					$('#qz-peers').html(_h);
-				}				
+				}
 			},
 			peer_html: {
 				new: function() {
-					return `
-<div class="col s12 qz-peer-chart-n">
-	<div class="card">
-		<div class="card-image waves-effect waves-block waves-light">
-			<div class="qz-space">
-				<div class="qz-chart-holder qz-chart-peer lighten-5"></div>
-			</div>
-		</div>
-		<!--<div class="card-reveal">
-			<span class="card-title grey-text text-darken-4">射频参数<i class="material-icons right">.</i></span>
-				<ul class="collection">
-				<li class="collection-item"><span class="badge qz-peer-txpwr">...</span>发射功率</li>
-				<li class="collection-item"><span class="badge qz-peer-rxg">...</span>接收增益</li>
-				<li class="collection-item"><span class="badge qz-peer-rxagc">...</span>自动增益控制AGC</li>
-				<li class="collection-item"><span class="badge qz-peer-tpc">...</span>发射功率控制TPC</li>
-				<li class="collection-item"><span class="badge qz-peer-atf">...</span>ATF</li>
-				<li class="collection-item"><span class="badge qz-peer-tdma">...</span>TDMA</li>
-			</ul>
-		</div>-->
-		<div class="card-action">
-			<span class="qz-peer-name">...</span>
-			<!--<p class="qz-peer-desc">...</p>
-			<a href="#model_proxy_leagal" class="qz-btn-peer-proxy" alt="">管理</a>-->
-		</div>
-	</div>
-</div>
-					`;
+					return '\
+<div class="col s12 qz-peer-chart-n"> \
+	<div class="card"> \
+		<div class="card-image waves-effect waves-block waves-light"> \
+			<div class="qz-space"> \
+				<div class="qz-chart-holder qz-chart-peer lighten-5"></div> \
+			</div> \
+		</div> \
+		<!--<div class="card-reveal"> \
+			<span class="card-title grey-text text-darken-4">射频参数<i class="material-icons right">.</i></span> \
+				<ul class="collection"> \
+					<li class="collection-item"><span class="badge qz-peer-txpwr">...</span>发射功率</li> \
+					<li class="collection-item"><span class="badge qz-peer-rxg">...</span>接收增益</li> \
+					<li class="collection-item"><span class="badge qz-peer-rxagc">...</span>自动增益控制AGC</li> \
+					<li class="collection-item"><span class="badge qz-peer-tpc">...</span>发射功率控制TPC</li> \
+					<li class="collection-item"><span class="badge qz-peer-atf">...</span>ATF</li> \
+					<li class="collection-item"><span class="badge qz-peer-tdma">...</span>TDMA</li> \
+				</ul> \
+		</div>--> \
+		<div class="card-action"> \
+			<span class="qz-peer-name">...</span> \
+			<!--<p class="qz-peer-desc">...</p> \
+			<a href="#model_proxy_leagal" class="qz-btn-peer-proxy" alt="">管理</a>--> \
+		</div> \
+	</div> \
+</div>';
 				},
 				empty: function() {
 					return '<div id="qz-peers-none" class="col s12 section">( 暂未连接 )</div>';
