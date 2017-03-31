@@ -951,6 +951,8 @@ if (store.debug)
 					break;
 				case 'cmd':
 					prompt = '命令已执行。';
+					console.log(resp);
+					$('#qz-tool-cmd-result').val(resp);
 					break;
 				case 'scan':
 					//prompt = 'Spectrum Scan Started';
