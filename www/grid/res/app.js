@@ -418,7 +418,7 @@ if (store.debug)
 								_snr.push(snr);
 							}
 
-              				_peer.rx_br = _rx_br;
+							_peer.rx_br = _rx_br;
 							_peer.rx_mcs = _rx_mcs;
 							_peer.tx_br = _tx_br;
 							_peer.tx_mcs = _tx_mcs;
@@ -826,19 +826,19 @@ if (store.debug)
 				store.flot.fields = type;
 			});
 
- 		},
- 		bind: {
- 			peer_btn: function() {
+		},
+		bind: {
+			peer_btn: function() {
 				$('.qz-btn-peer-proxy').click(function() {
 					var mac = $(this).attr('alt');
 					console.log('> prepare proxy dialog/modal. dev=', mac);
 					//$('.qz-btn-proxy-agree').attr('href', '/cgi-bin/proxy?target='+mac);
 					$.materialize.toast('高级功能，请升级至专业版。');
 				});
- 			}
- 		},
- 		tool: {
- 			flood: function(obj) { // 2017.03.02
+			}
+		},
+		tool: {
+			flood: function(obj) { // 2017.03.02
 				var target = $('#qz-tool-flood-target').val();
 				var times = $('#qz-tool-flood-times').val();
 				var bw = $('#qz-tool-flood-bw').val();
@@ -897,7 +897,7 @@ if (store.debug)
 					setTimeout("$.ops.tool.scan_read("+_rgn+","+next+","+_e+")", 2250);
 				}
 			}
- 		},
+		},
 		change: function(obj) { // 2017.02.28
 			if (obj.qz._val != '' && obj.qz._val != '-') {
 if (store.debug)
