@@ -1,3 +1,4 @@
+// by 6Harmonics Qige @ 2017.02.22 - 2017.04.20
 
 $(document).ready(function(){
 	$('.modal').modal();
@@ -11,7 +12,7 @@ $(document).ready(function(){
 
 		if (user.length < 5 || pass.length < 5) {
 			$('.qz-doing').hide();
-			var $toastContent = $('<span>Please check your USERNAME & PASSWORD</span>');
+			var $toastContent = $('<span>请您使用正确的用户名和密码。</span>');
 			Materialize.toast($toastContent, 3000);
 			return false;
 		}
