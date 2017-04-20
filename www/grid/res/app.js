@@ -899,6 +899,8 @@ if (store.debug)
 
 							$.cache.parse.chscan(_b, noise+110);
 							$.flot.sync.chscan();
+
+							$('#qz-local-chscan-stat').show().text('当前频道：'+_b+'，中心频率：'+freq+' MHz，噪声值：'+noise+' dBm');
 						},
 					'json')
 					.fail(function() {

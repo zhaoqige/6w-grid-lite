@@ -18,6 +18,11 @@ main {
 	padding: 10px 15px;
 }
 
+.qz-clear {
+	display: block;
+	clear: both;
+}
+
 .qz-space-lr {
 	padding: 0 1rem;
 }
