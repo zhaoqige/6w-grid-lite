@@ -236,7 +236,7 @@ if (store.debug)
 				if (idx >= 21) {
 					console.log('scan > ', idx, noise, cs.length);
 					if (noise > -999) {
-						cs.push([idx, noise]);
+						cs.push([470+(idx-21)*8, noise]);
 					} else {
 						cs.push(null);
 					}
@@ -486,7 +486,7 @@ if (store.debug)
 				case 'CAR':
 					_val = 2;
 					break;
-				case 'Mesh':
+				case 'Mesh Point':
 					_val = 0;
 					break;
 				case 'EAR':
@@ -736,7 +736,7 @@ if (store.debug)
 				$('#qz-btn-confirm-change').click(function() { // 2017.02.28
 					var ops = $(this).attr('ops');
 					var val = $(this).attr('val');
-if (store.debug)
+//if (store.debug)
 					console.log('ops>', ops, val);
 
 					var url = '/cgi-bin/' + ops;
@@ -872,29 +872,46 @@ if (store.debug)
 				}, obj);
 			},
 			scan: function() {
-				var _rgn = 1, _b = 19, _e = 51;
+				var _rgn = 1, _b = 21, _e = 51;
 				store.chscan = null;
-				$.ops.tool.scan_read(_rgn, _b, _e);
+				store.chscan_flag = 'go';
+				$.materialize.toast('正在准备频率扫描，请稍候 ...', 6000);
+				$('#qz-btn-chscan-start').attr('disabled', true);
+				$('#qz-btn-chscan-stop').attr('disabled', false);
+				setTimeout("$.ops.tool.scan_read("+_rgn+","+_b+","+_e+")", 8000);
+			},
+			scan_abord: function() {
+				store.chscan_flag = 'abord';
+				$.materialize.toast('已经根据用户要求停止频率扫描。');
+//if (store.debug)
+				console.log('scan > abort by user');
 			},
 			scan_read: function(_rgn, _b, _e) {
-				if (_b <= _e) {
+				var flag = ('chscan_flag' in store ? store.chscan_flag : 'abord');
+				console.log('scan> flag', flag);
+				if (_b <= _e && flag == 'go') {
 					$.get('/cgi-bin/tool', { k: 'scan_read', rgn: _rgn, ch: _b },
 						function(resp) {
 							var freq = _rgn > 0 ? 474+8*(_b-21) : 473+6*(_b-14);
 							var noise = resp.data.noise;
 if (store.debug)
-							console.log('scan >', freq, noise);
+							console.log('scan >', _b, freq, noise);
 
 							$.cache.parse.chscan(_b, noise+110);
 							$.flot.sync.chscan();
 						},
 					'json')
 					.fail(function() {
+						$.materialize.toast('请留意：频道'+_b+'扫描结果读取失败。');
 						console.log('unknown noise of ch', _b);
 					});
 
 					var next = _b+1;
 					setTimeout("$.ops.tool.scan_read("+_rgn+","+next+","+_e+")", 2250);
+				} else {
+					$('#qz-btn-chscan-start').attr('disabled', false);
+					$('#qz-btn-chscan-stop').attr('disabled', true);
+					$.materialize.toast('频率扫描已经完成，感谢您的使用。');
 				}
 			}
 		},
@@ -919,6 +936,8 @@ if (store.debug)
 
 			if (ops == 'scan') {
 				$.ops.tool.scan();
+			} else if (ops == 'scan_abord') {
+				$.ops.tool.scan_abord();
 			}
 
 			$.ajax({
@@ -957,6 +976,8 @@ if (store.debug)
 				case 'scan':
 					//prompt = 'Spectrum Scan Started';
 					break;
+				case 'scan_abord':
+					break;
 				default:
 					prompt = '操作已完成。';
 					break;
@@ -993,6 +1014,8 @@ if (store.debug)
 					$('#qz-tool-cmd-result').val(prompt);
 					break;
 				case 'scan':
+					break;
+				case 'scan_abord':
 					break;
 				default:
 					prompt = '操作失败 ！ ';

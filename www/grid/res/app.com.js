@@ -38,7 +38,7 @@ var store = {
 		// chart handlers
 		chart: [],
 		// chart for channel scan
-		chart_chscan: null
+		chart_chscan: null,
 	},
 
 	// every ajax query result
@@ -57,6 +57,7 @@ var store = {
 
 	// spectrum scan result
 	chscan: [],
+	chscan_flag: null,
 
 	// peers proxy data
 	proxy: null
@@ -189,14 +190,14 @@ var store = {
 				}];
 				var flot = $.plot(item, data, {
 					series: {
-						bars: { show: true, barWidth: 0.8 },
+						bars: { show: true, barWidth: 8 },
 						//lines: { show: true }, points: { show: true },
 						shadowSize: 0
 					},
 					crosshair: { mode: 'xy' },
 					xaxes: [
 						{ show: true, tickDecimals: 0, min: 20, max: 52, position: 'bottom' },
-						{ show: true, tickDecimals: 0, min: 470, max: 720, position: 'bottom' }
+						{ show: true, tickDecimals: 0, min: 466, max: 720, position: 'bottom' }
 					],
 					//yaxis: { show: true, min: -110, max: -56, position: 'left' },
 					yaxes: [
@@ -235,7 +236,7 @@ var store = {
 				var fchart = store.flot.chart_chscan;
 				var chscan = store.chscan;
 				var fd_chscan = [{
-					label: 'Noise (dBm)', data: chscan, color: 'navy', xaxis: 1, yaxis: 2
+					label: 'Noise (dBm)', data: chscan, color: 'navy', xaxis: 2, yaxis: 2
 				}]
 				$.flot.chart.update(fchart, fd_chscan);
 			},
