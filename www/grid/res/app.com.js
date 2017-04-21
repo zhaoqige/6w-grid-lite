@@ -448,12 +448,13 @@ var store = {
 					}
 				}
 
-				_peer_cd = [{ label: '< 接收比特率(Mbit/s)', data: _rx_br, color: 'deeppink' },
-				{ label: '< 发送比特率(Mbit/s)', data: _tx_br, color: 'forestgreen' },
-				//{ label: '<< 接收MCS', data: _rx_mcs, yaxis: 3 },
-				//{ label: '<< 发送MCS', data: _tx_mcs, yaxis: 3 },
-				{ label: '> 信噪比(db)', data: _snr_fd, yaxis: 2, color: 'navy' }];
-
+				_peer_cd = [
+					{ label: '< 信噪比(db)', data: _snr_fd, yaxis: 2, color: 'navy' },
+					{ label: '> 接收比特率(Mbit/s)', data: _rx_br, color: 'deeppink' },
+					{ label: '> 发送比特率(Mbit/s)', data: _tx_br, color: 'forestgreen' },
+					//{ label: '>> 接收MCS', data: _rx_mcs, yaxis: 3 },
+					//{ label: '>> 发送MCS', data: _tx_mcs, yaxis: 3 },
+				];
 				$.flot.chart.update(peer_chart, _peer_cd);
 			}
 		},
