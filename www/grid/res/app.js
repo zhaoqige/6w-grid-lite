@@ -1,4 +1,4 @@
-// by 6Harmonics Qige @ 2017.02.22 - 2017.03.30
+// by 6Harmonics Qige @ 2017.02.22 - 2017.03.30 14:09
 
 // data controller
 (function($) {
@@ -747,7 +747,7 @@ if (store.debug)
 					$.ops.ajax(val, url, null);
 				});
 
-				$('.qz-input-submit').keydown(function(e) { // 2017.02.28
+				$('.qz-setio-input').keydown(function(e) { // 2017.02.28
 					if (e.keyCode == 13) {
 						var obj = $(this);
 						obj.qz = {
@@ -764,7 +764,7 @@ if (store.debug)
 					var obj = $(this);
 					$.ui.obj.unlock(obj);
 				});
-				$(':checkbox').click(function() { // 2017.02.28
+				$('.qz-setio-checkbox').click(function() { // 2017.02.28
 					var obj = $(this);
 					var current = (obj.attr('checked') == 'checked') || false;
 					if (current) {
@@ -783,7 +783,7 @@ if (store.debug)
 						$.ops.change(obj);
 					}
 				});
-				$('select').change(function() { // 2017.02.28
+				$('.qz-setio-select').change(function() { // 2017.02.28
 					var obj = $(this);
 					obj.qz = {
 						_com: obj.attr('alt'),

@@ -71,7 +71,7 @@
 							<div class="col s5">
 								<div class="row">
 									<div class="input-field col s12">
-										<select alt="abb" name="mode" id="qz-set-abb-mode" class="browser-default">
+										<select alt="abb" name="mode" id="qz-set-abb-mode" class="browser-default qz-setio-select">
 											<option value="2" selected>基站自适应设备（CAR，Core Adaptive Radio）</option>
 											<option value="1">子站自适应设备（EAR，Edge Adaptive Radio）</option>
 											<option value="0">自组网自适应设备（Mesh Point）</option>
@@ -87,11 +87,11 @@
 							<div class="col s6 offset-s1">
 								<div class="row">
 									<div class="input-field col s12">
-										<input alt="abb" name="ssid" id="qz-set-abb-ssid" placeholder="默认为gws5000" class="validate qz-input-submit" type="text" value="gws5000" disabled />
+										<input alt="abb" name="ssid" id="qz-set-abb-ssid" placeholder="默认为gws5000" class="validate qz-setio-input" type="text" value="gws5000" disabled />
 										<label for="qz-set-abb-ssid">SSID服务集标识</label>
 									</div>
 									<div class="input-field col s12">
-										<input alt="abb" name="passwd" id="qz-set-abb-passwd" placeholder="默认为6Harmonics或12345678" class="validate qz-input-submit" type="password" value="6Harmonics" disabled />
+										<input alt="abb" name="passwd" id="qz-set-abb-passwd" placeholder="默认为6Harmonics或12345678" class="validate qz-setio-input" type="password" value="6Harmonics" disabled />
 										<label for="qz-set-abb-passwd">接入密码</label>
 									</div>
 								</div>
@@ -107,19 +107,19 @@
 								<div class="row">
 									<h6>发射链路</h6>
 									<div class="input-field col s5">
-										<input alt="gws" name="tpc" id="qz-set-gws-tpc" type="checkbox" class="filled-in" checked disabled />
+										<input alt="gws" name="tpc" id="qz-set-gws-tpc" type="checkbox" class="filled-in qz-setio-checkbox" checked disabled />
 										<label for="qz-set-gws-tpc">发射功率控制</label>
 									</div>
 									<div class="input-field col s7">
-										<input alt="gws" name="txpwr" id="qz-set-gws-txpwr" placeholder="Unit: dBm" class="validate qz-input-submit" type="text" value="-" />
+										<input alt="gws" name="txpwr" id="qz-set-gws-txpwr" placeholder="Unit: dBm" class="validate qz-setio-input" type="text" value="-" />
 										<label for="qz-set-gws-txpwr">发射功率</label>
 									</div>
 									<div class="input-field col s12">
-										<input alt="gws" name="ch" id="qz-set-gws-ch" placeholder="Unit: dBm" class="validate qz-input-submit" type="text" value="-" />
+										<input alt="gws" name="ch" id="qz-set-gws-ch" placeholder="Unit: dBm" class="validate qz-setio-input" type="text" value="-" />
 										<label for="qz-set-gws-ch">频道</label>
 									</div>
 									<div class="input-field col s12">
-										<select alt="gws" name="rgn" id="qz-set-gws-rgn" class="browser-default">
+										<select alt="gws" name="rgn" id="qz-set-gws-rgn" class="browser-default qz-setio-select">
 											<option value="0">区域0 - 6MHz</option>
 											<option value="1">区域1 - 8MHz</option>
 										</select>
@@ -135,11 +135,11 @@
 								<div class="row">
 									<h6>接收链路</h6>
 									<div class="input-field col s5">
-										<input alt="gws" name="rxagc" id="qz-set-gws-rxagc" type="checkbox" class="filled-in" checked="checked" />
+										<input alt="gws" name="rxagc" id="qz-set-gws-rxagc" type="checkbox" class="filled-in qz-setio-checkbox" checked="checked" />
 										<label for="qz-set-gws-rxagc">自动增益控制</label>
 									</div>
 									<div class="input-field col s7">
-										<input alt="gws" name="rxg" id="qz-set-gws-rxg" placeholder="Unit: dBm" class="validate qz-input-submit" type="text" value="-" />
+										<input alt="gws" name="rxg" id="qz-set-gws-rxg" placeholder="Unit: dBm" class="validate qz-setio-input" type="text" value="-" />
 										<label for="qz-set-gws-rxg">接收增益</label>
 									</div>
 								</div>
@@ -154,21 +154,21 @@
 							<div class="col s5">
 								<div class="row">
 									<div class="input-field col s12">
-										<select alt="nw" name="br" id="qz-set-nw-type" class="browser-default" disabled>
+										<select alt="nw" name="br" id="qz-set-nw-type" class="browser-default qz-setio-select" disabled>
 											<option value="1" selected>接入点模式 (2层交换)</option>
 											<option value="0">路由器模式 (3层交换)</option>
 										</select>
 									</div>
 									<div class="input-field col s12">
-										<input alt="serv" name="dhcp" id="qz-set-serv-dhcp" type="checkbox" class="filled-in" disabled />
+										<input alt="serv" name="dhcp" id="qz-set-serv-dhcp" type="checkbox" class="filled-in qz-setio-checkbox" disabled />
 										<label for="qz-set-serv-dhcp">开启DHCP服务</label>
 									</div>
 									<div class="input-field col s12">
-										<input alt="serv" name="firewall" id="qz-set-serv-firewall" type="checkbox" class="filled-in" disabled />
+										<input alt="serv" name="firewall" id="qz-set-serv-firewall" type="checkbox" class="filled-in qz-setio-checkbox" disabled />
 										<label for="qz-set-serv-firewall">防火墙</label>
 									</div>
 									<div class="input-field col s12">
-										<input alt="serv" name="qos" id="qz-set-serv-qos" type="checkbox" class="filled-in" disabled />
+										<input alt="serv" name="qos" id="qz-set-serv-qos" type="checkbox" class="filled-in qz-setio-checkbox" disabled />
 										<label for="qz-set-serv-qos">服务质量QoS</label>
 									</div>
 								</div>
@@ -176,11 +176,11 @@
 							<div class="col s6 offset-s1">
 								<div class="row">
 									<div class="input-field col s12">
-										<input alt="nw" name="wanip" id="qz-set-wan-ip" placeholder="默认值为10.10.66.1。如果想使用DHCP自动分配，请输入\"-\"" class="validate qz-input-submit" type="text" value="-" disabled />
+										<input alt="nw" name="wanip" id="qz-set-wan-ip" placeholder="默认值为10.10.66.1。如果想使用DHCP自动分配，请输入\"-\"" class="validate qz-setio-input" type="text" value="-" disabled />
 										<label for="qz-set-wan-ip">广域网WAN地址</label>
 									</div>
 									<div class="input-field col s12">
-										<input alt="nw" name="lanip" id="qz-set-lan-ip" placeholder="默认值为192.168.66.1" class="validate qz-input-submit" type="text" value="192.168.66.1" disabled />
+										<input alt="nw" name="lanip" id="qz-set-lan-ip" placeholder="默认值为192.168.66.1" class="validate qz-setio-input" type="text" value="192.168.66.1" disabled />
 										<label for="qz-set-lan-ip">局域网LAN地址</label>
 									</div>
 								</div>
@@ -201,7 +201,7 @@
 								<div class="row">
 									<h6>时间日期</h6>
 									<div class="input-field col s12">
-										<input alt="serv" name="ntpd" id="qz-set-serv-ntpd" type="checkbox" class="filled-in" disabled />
+										<input alt="serv" name="ntpd" id="qz-set-serv-ntpd" type="checkbox" class="filled-in qz-setio-checkbox" disabled />
 										<label for="qz-set-serv-ntpd">开启网络时间同步NTP服务</label>
 									</div>
 								</div>
@@ -210,11 +210,11 @@
 								<div class="row">
 									<h6>FCC Regulation</h6>
 									<div class="input-field col s12">
-										<input alt="serv" name="paws" id="qz-set-serv-paws" type="checkbox" class="filled-in" disabled />
+										<input alt="serv" name="paws" id="qz-set-serv-paws" type="checkbox" class="filled-in qz-setio-checkbox" disabled />
 										<label for="qz-set-serv-paws">PAWS Database</label>
 									</div>
 									<div class="input-field col s12">
-										<select alt="serv" name="paws" id="qz-set-serv-paws-vendor" class="browser-default" disabled>
+										<select alt="serv" name="paws" id="qz-set-serv-paws-vendor" class="browser-default qz-setio-select" disabled>
 											<option value="uk_google">Google in UK</option>
 											<option value="us_microsoft" selected>Microsoft in US</option>
 										</select>
@@ -237,7 +237,7 @@
 								<div class="row">
 									<h6>HTTPS</h6>
 									<div class="input-field col s12">
-										<input id="qz-set-serv-https" type="checkbox" class="filled-in" disabled />
+										<input id="qz-set-serv-https" type="checkbox" class="filled-in qz-setio-checkbox" disabled />
 										<label for="qz-set-serv-https">开启HTTPs</label>
 									</div>
 								</div>
@@ -251,7 +251,7 @@
 								<div class="row">
 									<h6>下行链路</h6>
 									<div class="input-field col s12">
-										<input id="qz-set-serv-atf" type="checkbox" class="filled-in" disabled />
+										<input id="qz-set-serv-atf" type="checkbox" class="filled-in qz-setio-checkbox" disabled />
 										<label for="qz-set-serv-atf">开启ATF</label>
 									</div>
 								</div>
@@ -260,7 +260,7 @@
 								<div class="row">
 									<h6>上行链路</h6>
 									<div class="input-field col s12">
-										<input id="qz-set-serv-tdma" type="checkbox" class="filled-in" disabled />
+										<input id="qz-set-serv-tdma" type="checkbox" class="filled-in qz-setio-checkbox" disabled />
 										<label for="qz-set-serv-tdma">开启TDMA</label>
 									</div>
 								</div>
