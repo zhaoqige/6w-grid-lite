@@ -145,11 +145,11 @@ var store = {
 		chart: {
 			new: function(idx, item) { // 2017.03.01
 				var data = [
-					{ label: '> Noise (dBm)', data: [], color: 'navy' },
-					{ label: '< Eth Tx(Mbps)', data: [], color: 'deeppink' },
-					{ label: '< Eth Rx(Mbps)', data: [], color: 'magenta' },
-					{ label: '< Wls Tx(Mbps)', data: [], color: 'forestgreen' },
-					{ label: '< Wls Rx(Mbps)', data: [], color: 'gold' }
+					{ label: '< Noise (dBm)', data: [], color: 'navy' },
+					{ label: '> Eth Tx(Mbps)', data: [], color: 'deeppink' },
+					{ label: '> Eth Rx(Mbps)', data: [], color: 'magenta' },
+					{ label: '> Wls Tx(Mbps)', data: [], color: 'forestgreen' },
+					{ label: '> Wls Rx(Mbps)', data: [], color: 'gold' }
 				];
 				var flot = $.plot(item, data, {
 					series: { lines: { show: true }, shadowSize: 0 },
