@@ -165,11 +165,11 @@ var store = {
 			},
 			peer: function(item) {
 				var data = [
-					{ label: '> Rx Br (Mbit/s)', data: [], color: 'navy' },
-					{ label: '> Tx Br (Mbit/s)', data: [], color: 'deeppink' },
+					{ label: '< SNR (db)', data: [], color: 'navy' },
+					{ label: '> Rx Br (Mbit/s)', data: [], color: 'deeppink' },
+					{ label: '> Tx Br (Mbit/s)', data: [], color: 'magenta' },
 					//{ label: '>> Rx MCS', data: [], color: 'forestgreen' },
-					//{ label: '>> Tx MCS', data: [], color: 'forestgreen' },
-					{ label: '< SNR (db)', data: [], color: 'forestgreen' }
+					//{ label: '>> Tx MCS', data: [], color: 'gold' },
 				];
 				var flot = $.plot(item, data, {
 					series: { lines: { show: true }, shadowSize: 0 },
@@ -297,10 +297,10 @@ var store = {
 				var _fields = store.flot.fields;
 
 				var _noise = { label: '> Noise', data: fd_noise, yaxis: 2, color: 'navy' };
-				var _eth_tx = { label: '< Eth TxBr', data: fd_eth_tx_thrpt, color: 'forestgreen' };
-				var _eth_rx = { label: '< Eth RxBr', data: fd_eth_rx_thrpt, color: 'gold' };
 				var _wls_tx = { label: '< Wls TxBr', data: fd_wls_tx_thrpt, color: 'deeppink' };
 				var _wls_rx = { label: '< Wls RxBr', data: fd_wls_rx_thrpt, color: 'magenta' };
+				var _eth_tx = { label: '< Eth TxBr', data: fd_eth_tx_thrpt, color: 'forestgreen' };
+				var _eth_rx = { label: '< Eth RxBr', data: fd_eth_rx_thrpt, color: 'gold' };
 				if (_fields == 'eth') {
 					cd.push(_eth_rx, _eth_tx);
 				} else if (_fields == 'wls') {
@@ -448,11 +448,13 @@ var store = {
 					}
 				}
 
-				_peer_cd = [{ label: '< RxBr (Mbit/s)', data: _rx_br, color: 'deeppink' },
-				{ label: '< TxBr(Mbit/s)', data: _tx_br, color: 'forestgreen' },
-				//{ label: '<< Rx MCS', data: _rx_mcs, yaxis: 3 },
-				//{ label: '<< Tx MCS', data: _tx_mcs, yaxis: 3 },
-				{ label: '> SNR (db)', data: _snr_fd, yaxis: 2, color: 'navy' }];
+				_peer_cd = [
+					{ label: '> SNR (db)', data: _snr_fd, yaxis: 2, color: 'navy' },
+					{ label: '< RxBr (Mbit/s)', data: _rx_br, color: 'deeppink' },
+					{ label: '< TxBr(Mbit/s)', data: _tx_br, color: 'magenta' },
+					//{ label: '<< Rx MCS', data: _rx_mcs, color: 'forestgreen', yaxis: 3 },
+					//{ label: '<< Tx MCS', data: _tx_mcs, color: 'gold', yaxis: 3 },
+				];
 
 				$.flot.chart.update(peer_chart, _peer_cd);
 			}
