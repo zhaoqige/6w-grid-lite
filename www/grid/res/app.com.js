@@ -449,9 +449,9 @@ var store = {
 				}
 
 				_peer_cd = [
-					{ label: '> SNR (db)', data: _snr_fd, yaxis: 2, color: 'navy' },
-					{ label: '< RxBr (Mbit/s)', data: _rx_br, color: 'deeppink' },
-					{ label: '< TxBr(Mbit/s)', data: _tx_br, color: 'forestgreen' }, // magenta
+					{ label: '< SNR (db)', data: _snr_fd, yaxis: 2, color: 'navy' },
+					{ label: '> RxBr (Mbit/s)', data: _rx_br, color: 'deeppink' },
+					{ label: '> TxBr(Mbit/s)', data: _tx_br, color: 'forestgreen' }, // magenta
 					//{ label: '<< Rx MCS', data: _rx_mcs, color: 'forestgreen', yaxis: 3 },
 					//{ label: '<< Tx MCS', data: _tx_mcs, color: 'gold', yaxis: 3 },
 				];
