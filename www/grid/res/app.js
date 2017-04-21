@@ -1,4 +1,4 @@
-// by 6Harmonics Qige @ 2017.02.22
+// by 6Harmonics Qige @ 2017.02.22 - 2017.03.30 14:09
 
 // data controller
 (function($) {
@@ -82,7 +82,7 @@
 				instant: function(idx) { // 2017.02.28
 					var x = $.cache.RANDOM.int(100);
 					var peers;
-					if (x > 10) {
+					if (x > 5) {
 						peers = [{
 							mac: '01:53:01:09:19:15',
 							ip: '192.168.1.211',
@@ -122,7 +122,7 @@
 						},
 						nw: {
 							bridge: 1,
-							wmac: '13:51:10:53:55:6'+idx,					
+							wmac: '13:51:10:53:55:6'+idx,
 							wan_ip: '',
 							lan_ip: '192.168.1.21'+idx,
 							eth_txb: $.cache.RANDOM.int(4*1024*1024),
@@ -161,8 +161,8 @@
 			local: {
 				instant: function() { // 2017.02.28
 					$.ajax({
-						url: '/cgi-bin/get', 
-						data: { k: 'instant' }, 
+						url: '/cgi-bin/get',
+						data: { k: 'instant' },
 						success: function(resp) {
 							//console.log('get?k=instant', resp);
 							store.query = {
@@ -180,12 +180,12 @@ if (store.debug)
 				},
 				delayed: function() {
 					$.ajax({
-						url: '/cgi-bin/get', 
-						data: { k: 'delayed' }, 
+						url: '/cgi-bin/get',
+						data: { k: 'delayed' },
 						success: function(resp) {
 							//console.log('get?k=delayed', resp);
 							store.delayed = resp;
-						}, 
+						},
 						error: function(xhr, status, error) {
 if (store.debug)
 							console.log('get?k=delayed', "error> local (delayed) failed", error);
@@ -200,8 +200,8 @@ if (store.debug)
 			proxy: function() {
 				// TODO: call & handle ajax fails
 				$.ajax({
-					url: '/cgi-bin/proxy', 
-					data: { mac: '', ip: '' }, 
+					url: '/cgi-bin/proxy',
+					data: { mac: '', ip: '' },
 					success: function(resp) {
 					},
 					error: function() {
@@ -236,7 +236,7 @@ if (store.debug)
 				if (idx >= 21) {
 					console.log('scan > ', idx, noise, cs.length);
 					if (noise > -999) {
-						cs.push([idx, noise]);
+						cs.push([470+(idx-21)*8, noise]);
 					} else {
 						cs.push(null);
 					}
@@ -251,15 +251,15 @@ if (store.debug)
 
 					// check history, query first
 					var query = (store && "query" in store) ? store.query : null;
-					var query_last = (store && "query_last" in store) ? 
+					var query_last = (store && "query_last" in store) ?
 							store.query_last : null;
 
 					var local = (query && "local" in query) ? query.local : null;
-					var local_last = (query_last && "local" in query_last) ? 
+					var local_last = (query_last && "local" in query_last) ?
 							query_last.local : null;
 
 					var history = (store && "history" in store) ? store.history : null;
-					var local_history = (history && "local" in history) ? 
+					var local_history = (history && "local" in history) ?
 							history.local : null;
 
 
@@ -277,7 +277,7 @@ if (store.debug)
 
 					if (local) {
 						// calc & save snr
-						if ("abb" in local) {						
+						if ("abb" in local) {
 							if ("noise" in local.abb) {
 								noise = local.abb.noise || $.cache._invalid; // fix gws4k noise=unknown
 							}
@@ -313,10 +313,10 @@ if (store.debug)
 								}
 							}
 
-							eth_tx_thrpt = $.cache.fmt.float(eth_tx_thrpt); 
-							eth_rx_thrpt = $.cache.fmt.float(eth_rx_thrpt); 
-							wls_tx_thrpt = $.cache.fmt.float(wls_tx_thrpt); 
-							wls_rx_thrpt = $.cache.fmt.float(wls_rx_thrpt); 
+							eth_tx_thrpt = $.cache.fmt.float(eth_tx_thrpt);
+							eth_rx_thrpt = $.cache.fmt.float(eth_rx_thrpt);
+							wls_tx_thrpt = $.cache.fmt.float(wls_tx_thrpt);
+							wls_rx_thrpt = $.cache.fmt.float(wls_rx_thrpt);
 if (store.debug)
 							console.log('realtime> eth/wls tx/rx Thrpt:', eth_tx_thrpt, eth_rx_thrpt, wls_tx_thrpt, wls_rx_thrpt);
 						}
@@ -332,7 +332,7 @@ if (store.debug)
 					_eth_rx_thrpt = $.flot.one(local_history.eth_rx_thrpt, eth_rx_thrpt, 60);
 					_wls_tx_thrpt = $.flot.one(local_history.wls_tx_thrpt, wls_tx_thrpt, 60);
 					_wls_rx_thrpt = $.flot.one(local_history.wls_rx_thrpt, wls_rx_thrpt, 60);
-					
+
 					// save to store.history
 					_local_history = {
 						noise: _noise,
@@ -367,12 +367,11 @@ if (store.debug)
 
 							var _peer = {};
 							var history = (store && "history" in store) ? store.history : null;
-							var peers_history = (history && "peers" in history) ? 
+							var peers_history = (history && "peers" in history) ?
 									history.peers : null;
-							var peer_history = (peers_history && peers_history.length > idx) ? 
+							var peer_history = (peers_history && peers_history.length > idx) ?
 									peers_history[idx] : null;
 							//console.log("dbg 0307> this peer_history", history, peers_history, peer_history);
-
 
 							var _rx_br = [], _rx_mcs = [], _tx_br = [], _tx_mcs = [], _snr = [];
 
@@ -389,7 +388,7 @@ if (store.debug)
 							} else {
 								snr = 0;
 							}
-							
+
 							if (snr < 0) {
 								snr = 0;
 							}
@@ -403,7 +402,7 @@ if (store.debug)
 							}
 
 if (store.debug)
-							console.log('realtime> peer'+idx+' rxbr/rxmcs/txbr/txmcs/snr=', 
+							console.log('realtime> peer'+idx+' rxbr/rxmcs/txbr/txmcs/snr=',
 								rx_br, rx_mcs, tx_br, tx_mcs, snr);
 							if (peer_history) {
 								_rx_br = $.flot.one(peer_history.rx_br, rx_br, 60);
@@ -487,7 +486,7 @@ if (store.debug)
 				case 'CAR':
 					_val = 2;
 					break;
-				case 'Mesh':
+				case 'Mesh Point':
 					_val = 0;
 					break;
 				case 'EAR':
@@ -503,20 +502,16 @@ if (store.debug)
 			peer: function(idx, peer_cache) {
 				var _p = $('.qz-peer-chart-n').eq(idx);
 				if (_p) {
-					var text1 = '', text2 = '';
+					var text1 = (idx+1) + '#Peer：';
 					var mac = (peer_cache && "mac" in peer_cache) ? peer_cache.mac : '';
 					var ip = (peer_cache && "ip" in peer_cache) ? peer_cache.ip : '';
 
 					if (ip) {
-						text1 = ip;
-						text2 = mac;
+						text1 += ip;
 					} else {
-						text1 = mac;
-						text = '';
+						text1 += mac;
 					}
 					_p.find('.qz-peer-name').text(text1);
-					_p.find('.qz-peer-desc').text(text2);
-					_p.find('.qz-btn-peer-proxy').attr('alt', mac);
 				}
 			},
 			instant: function() { // 2017.03.03
@@ -539,7 +534,7 @@ if (store.debug)
 					$.ui.settings.mode(abb.mode);
 				}
 				if (nw) {
-					var text = '';
+					var text = abb.mode + ' ';
 					if (nw.lan_ip && nw.lan_ip != '-') {
 						text += nw.lan_ip;
 						$('#qz-set-lan-ip').val(nw.lan_ip);
@@ -548,22 +543,23 @@ if (store.debug)
 						text += ' / '+nw.wan_ip;
 						$('#qz-set-wan-ip').val(nw.lan_ip);
 					}
+					text += ' Status'
 					$('#qz-local-nw').text(text);
 
-					text = abb_text;
+					/*text = abb_text;
 					if (nw.bridge) {
-						text += ' (bridge)';
+						text += ' (Bridge)';
 					} else {
-						text += ' (router)';	
+						text += ' (Router)';
 					}
 
-					if (sys) {						
+					if (sys) {
 						if (sys.qos > 0)		text += ' | QoS';
-						if (sys.firewall > 0)	text += ' | Firweall'
+						if (sys.firewall > 0)	text += ' | Firewall'
 						if (sys.tdma > 0)		text += ' | TDMA';
 						if (sys.atf > 0)		text += ' | ATF';
 					}
-					$('#qz-local-sts').text(text);
+					$('#qz-local-sts').text(text);*/
 				}
 			},
 			delayed: function() {
@@ -591,7 +587,7 @@ if (store.debug)
 					if (bw > 0) {
 						text = freq+'MHz - '+bw+'M';
 					} else {
-						text = freq+'MHz - (unknown)';
+						text = freq+'MHz - (Unknown)';
 					}
 					$('#qz-local-gws2').text(text);
 
@@ -634,7 +630,7 @@ if (store.debug)
 
 					text = ("note" in gws) ? gws.note : '...';
 					$('#qz-local-gws5').text(text);
-					
+
 if (store.debug)
 					console.log("gws> region/channel/txpwr/tpc/rxgain/agc", rgn, ch, txpwr, tpc, rxgain, agc);
 				}
@@ -685,7 +681,7 @@ if (store.debug)
 					var tid = store.typing_id;
 					if (tid != id) {
 						obj.val(val);
-					} 
+					}
 				}
 			}
 		}
@@ -706,7 +702,7 @@ if (store.debug)
 					$.materialize.toast('Not available in "DEMO" mode');
 				});
 			} else {
-				// bind these buttons click() 
+				// bind these buttons click()
 				$('#qz-btn-sys-reset').click(function() { // 2017.02.28
 					$('#qz-modal-chcfm-items').text('Reset Network');
 					$('#qz-modal-chcfm-affected').text('This Operation Will REBOOT This Device');
@@ -751,7 +747,7 @@ if (store.debug)
 					$.ops.ajax(val, url, null);
 				});
 
-				$('.qz-input-submit').keydown(function(e) { // 2017.02.28
+				$('.qz-setio-input').keydown(function(e) { // 2017.04.21
 					if (e.keyCode == 13) {
 						var obj = $(this);
 						obj.qz = {
@@ -768,7 +764,7 @@ if (store.debug)
 					var obj = $(this);
 					$.ui.obj.unlock(obj);
 				});
-				$('.qz-checkbox-submit').click(function() { // 2017.02.28
+				$('.qz-setio-checkbox').click(function() { // 2017.04.21
 					var obj = $(this);
 					var current = (obj.attr('checked') == 'checked') || false;
 					if (current) {
@@ -787,7 +783,7 @@ if (store.debug)
 						$.ops.change(obj);
 					}
 				});
-				$('.qz-select-submit').change(function() { // 2017.02.28
+				$('.qz-setio-select').change(function() { // 2017.04.21
 					var obj = $(this);
 					obj.qz = {
 						_com: obj.attr('alt'),
@@ -818,6 +814,11 @@ if (store.debug)
 					var obj = $(this);
 					$.ops.tool.ping(obj);
 				});
+
+				$('#qz-btn-cmd-start').click(function() {
+					var obj = $(this);
+					$.ops.tool.cmd(obj);
+				});
 			}
 
 			$('.qz-btn-local-chart-fields').click(function() { // 2017.02.28
@@ -825,25 +826,26 @@ if (store.debug)
 				store.flot.fields = type;
 			});
 
- 		},
- 		bind: {
- 			peer_btn: function() {
+		},
+		bind: {
+			peer_btn: function() {
 				$('.qz-btn-peer-proxy').click(function() {
 					var mac = $(this).attr('alt');
 					console.log('> prepare proxy dialog/modal. dev=', mac);
-					$('.qz-btn-proxy-agree').attr('href', '/cgi-bin/proxy?target='+mac);
+					//$('.qz-btn-proxy-agree').attr('href', '/cgi-bin/proxy?target='+mac);
+					$.materialize.toast('Please upgrade to PRO version');
 				});
- 			}
- 		},
- 		tool: {
- 			flood: function(obj) { // 2017.03.02
+			}
+		},
+		tool: {
+			flood: function(obj) { // 2017.03.02
 				var target = $('#qz-tool-flood-target').val();
 				var times = $('#qz-tool-flood-times').val();
 				var bw = $('#qz-tool-flood-bw').val();
 				var as = $('#qz-tool-flood-as').attr('checked');
 
 if (store.debug)
-				console.log('tool > flooding now: to/times/bw/as =', target, times, bw, as);
+				console.log('tools> flooding now: to/times/bw/as =', target, times, bw, as);
 				$.ops.ajax('flood', '/cgi-bin/tool', {
 					k: 'flood', to: target, times: times, bw: bw
 				}, obj);
@@ -854,38 +856,67 @@ if (store.debug)
 				//var times = $('#qz-tool-ping-times').val();
 
 if (store.debug)
-				console.log('tool > ping now ...', target, times);
+				console.log('tool> ping now ...', target, times);
 				$.ops.ajax('ping', '/cgi-bin/tool', {
 					k: 'ping', to: target, times: times
 				}, obj);
 			},
+			cmd: function(obj) { // 2017.03.29
+				var cmd = $('#qz-tool-cmd-command').val();
+				//var times = $('#qz-tool-ping-times').val();
+
+if (store.debug)
+				console.log('tool> cmd now ...', cmd);
+				$.ops.ajax('cmd', '/cgi-bin/tool', {
+					k: 'cmd', cmd: cmd
+				}, obj);
+			},
 			scan: function() {
-				var _rgn = 1, _b = 19, _e = 51;
+				var _rgn = 1, _b = 21, _e = 51;
 				store.chscan = null;
-				$.ops.tool.scan_read(_rgn, _b, _e);
+				store.chscan_flag = 'go';
+				$.materialize.toast('Preparing Scanning, please wait ...', 6000);
+				$('#qz-btn-chscan-start').attr('disabled', true);
+				$('#qz-btn-chscan-stop').attr('disabled', false);
+				setTimeout("$.ops.tool.scan_read("+_rgn+","+_b+","+_e+")", 8000);
+			},
+			scan_abord: function() {
+				store.chscan_flag = 'abord';
+				$.materialize.toast('Scanning abort by user.');
+//if (store.debug)
+				console.log('scan > abort by user');
 			},
 			scan_read: function(_rgn, _b, _e) {
-				if (_b <= _e) {
-					$.get('/cgi-bin/tool', { k: 'scan_read', rgn: _rgn, ch: _b }, 
+				var flag = ('chscan_flag' in store ? store.chscan_flag : 'abord');
+				console.log('scan> flag', flag);
+				if (_b <= _e && flag == 'go') {
+					$.get('/cgi-bin/tool', { k: 'scan_read', rgn: _rgn, ch: _b },
 						function(resp) {
 							var freq = _rgn > 0 ? 474+8*(_b-21) : 473+6*(_b-14);
 							var noise = resp.data.noise;
 if (store.debug)
-							console.log('scan >', freq, noise);
+							console.log('scan >', _b, freq, noise);
 
-							$.cache.parse.chscan(_b, noise);
+							$.cache.parse.chscan(_b, noise+110);
 							$.flot.sync.chscan();
+
+							$('#qz-local-chscan-stat').show().text('Channel: '+_b+', Frequency: '+freq+' MHz, Noise: '+noise+' dBm');
 						},
 					'json')
 					.fail(function() {
+						$.materialize.toast('NOTICE: Channel '+_b+' failed to scan');
 						console.log('unknown noise of ch', _b);
 					});
 
 					var next = _b+1;
-					setTimeout("$.ops.tool.scan_read("+_rgn+","+next+","+_e+")", 3500);
+					setTimeout("$.ops.tool.scan_read("+_rgn+","+next+","+_e+")", 2250);
+				} else {
+					$('#qz-btn-chscan-start').attr('disabled', false);
+					$('#qz-btn-chscan-stop').attr('disabled', true);
+					$.materialize.toast('Scanning completed, thank you for trying');
 				}
 			}
- 		},
+		},
 		change: function(obj) { // 2017.02.28
 			if (obj.qz._val != '' && obj.qz._val != '-') {
 if (store.debug)
@@ -906,11 +937,13 @@ if (store.debug)
 			}
 
 			if (ops == 'scan') {
-				$.ops.tool.scan();				
+				$.ops.tool.scan();
+			} else if (ops == 'scan_abord') {
+				$.ops.tool.scan_abord();
 			}
 
 			$.ajax({
-				url: url, 
+				url: url,
 				method: 'get',
 				data: params,
 				timeout: 120000
@@ -937,8 +970,15 @@ if (store.debug)
 					prompt = 'PING target done';
 					$('#qz-tool-ping-result').val(resp);
 					break;
+				case 'cmd':
+					prompt = 'Command executed successfully';
+					console.log(resp);
+					$('#qz-tool-cmd-result').val(resp);
+					break;
 				case 'scan':
-					prompt = 'Spectrum Scan Started';
+					//prompt = 'Spectrum Scan Started';
+					break;
+				case 'scan_abord':
 					break;
 				default:
 					prompt = 'Operation completed';
@@ -974,12 +1014,14 @@ if (store.debug)
 					break;
 				case 'scan':
 					break;
+				case 'scan_abord':
+					break;
 				default:
 					prompt = 'Operation FAILED > ' + ops;
 					break;
 				}
 				//console.log('ajax (fail) result:', prompt);
-				
+
 				$.materialize.toast(prompt);
 
 				// reset nw: reload
@@ -1028,7 +1070,7 @@ if (store.debug)
 		},
 		// update store.query.cache with "ajax"
 		// there 2 types of ajax query
-		// 1. these return immediately, 
+		// 1. these return immediately,
 		// like query abb via "libiwinfo-lua", "cat /proc/net/dev"
 		// so use "$.app.update.instant()";
 		// 2. those will take few seconds, like "rfinfo"
@@ -1085,4 +1127,3 @@ $(function() { // 2017.02.28
 	var m = $.url.get('k') || 'demo';
 	$.app.run(m);
 });
-

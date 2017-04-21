@@ -1,74 +1,63 @@
-// by 6Harmonics Qige @ 2017.02.18
+// by 6Harmonics Qige @ 2017.02.18 - 2017.03.29
 
-//TODO:
+//FIXME:
 // 1. handle too much ajax failed: if device offline, then close
 // 2. calc ajax interval in ms, re-calibrate thrpt
 // 3. manage peers, and test if peers left, redraw charts
 
 
-
 // public data object
 var store = {
-	// default is 'DEMO' ('realtime', 'proxy')
-	mode: 'demo',
-	debug: 0,
-
-	invalid: -999,
-
+	// default is 'DEMO' ['realtime', 'proxy', 'demo']
+	mode: 'demo', debug: 0,
 	invalid: -999,
 
 	// ajax failes when gws reboot
-	offlineCounter: 0,
-	offlineCounterBar: 6,
+	offlineCounter: 0, offlineCounterBar: 6,
 
 	// 200 records for each chart
-	defaultRecordQty: 200, 
+	defaultRecordQty: 200,
 
 	// flot related data
 	flot: {
-		fields: 'all',
+		fields: 'dfl',
 		// setInterval handlers
 		intl: {
 			local: {
-				instant: null,
-				delayed: null
+				instant: null, delayed: null
 			},
-			peers: [],
-			DEMO: null
+			peers: [], DEMO: null
 		},
 		// color index for Flot charts
 		color: [
-			'lime', 'red', 'blue', 'purple', 'deep-purple', 
-			'indigo', 'pink', 'light-blue', 'cyan', 'teal', 
-			'green', 'light-green', 'yellow', 'amber', 'orange', 
+			'blue', 'lime', 'red', 'purple', 'deep-purple',
+			'indigo', 'pink', 'light-blue', 'cyan', 'teal',
+			'green', 'light-green', 'yellow', 'amber', 'orange',
 			'deep-orange', 'brown', 'grey', 'blue-grey'
 		],
 		// chart handlers
 		chart: [],
 		// chart for channel scan
-		chart_chscan: null
+		chart_chscan: null,
 	},
 
 	// every ajax query result
-	query: null,
-	query_last: null,
+	query: null, query_last: null,
 
 	// save these parameters not frequently updated
 	// and not calculate gap between each time
-	delayed: null, 
+	delayed: null,
 
 	// history data
 	history: {
 		local: {
-			snr: [],
-			br: [],
-			eth_tx_thrpt: [], eth_rx_thrpt: [],
-			wls_tx_thrpt: [], wls_rx_thrpt: []
+			snr: [], br: [], eth_tx_thrpt: [], eth_rx_thrpt: [], wls_tx_thrpt: [], wls_rx_thrpt: []
 		}
 	},
 
 	// spectrum scan result
 	chscan: [],
+	chscan_flag: null,
 
 	// peers proxy data
 	proxy: null
@@ -82,12 +71,14 @@ var store = {
 		get: function(key) {
 			var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
 			var r = window.location.search.substr(1).match(reg);
-			if (r != null) return unescape(r[2]); return null;
+			if (r != null)
+				return unescape(r[2]);
+			return null;
 		},
 		// redirect
 		goto: function(url, reason) {
 			if (confirm('Will leave current page due to ' + reason)) {
-					$(window.location).attr('href', url);
+				$(window.location).attr('href', url);
 			}
 		},
 		// wrapper when ajax fail
@@ -116,7 +107,7 @@ var store = {
 			$('.modal').modal();
 		},
 		toast: function(msg, timeout) {
-			if (msg && msg.length > 0) {	
+			if (msg && msg.length > 0) {
 				var $toastContent = $('<span>'+msg+'</span>');
 				Materialize.toast($toastContent, timeout || 3000);
 			}
@@ -145,141 +136,82 @@ var store = {
 		bg: function(idx, item) {
 				var color = $.flot.color(idx) || 'cyan';
 				if (typeof(item) == 'object') {
-					item.addClass(color)
-					.resize(function() { if (store.debug) console.log('Flot Chart(s) resized.'); });
+					item.addClass(color).resize(function() {
+						if (store.debug) console.log('Flot Chart(s) resized.');
+					});
 				}
 		},
 		// init & create a flot chart, return handler
 		chart: {
 			new: function(idx, item) { // 2017.03.01
-				var data = [{
-					label: '> Noise (dBm)', data: []
-				},{
-					label: '< Eth Tx(Mbps)', data: []
-				},{
-					label: '< Eth Rx(Mbps)', data: []
-				},{
-					label: '< Wls Tx(Mbps)', data: []
-				},{
-					label: '< Wls Rx(Mbps)', data: []
-				}];
+				var data = [
+					{ label: '> Noise (dBm)', data: [], color: 'navy' },
+					{ label: '< Eth Tx(Mbps)', data: [], color: 'deeppink' },
+					{ label: '< Eth Rx(Mbps)', data: [], color: 'magenta' },
+					{ label: '< Wls Tx(Mbps)', data: [], color: 'forestgreen' },
+					{ label: '< Wls Rx(Mbps)', data: [], color: 'gold' }
+				];
 				var flot = $.plot(item, data, {
-					series: {
-						//stack: true, // stack lines
-						//points: { show: true },
-						lines: {
-							show: true,
-							//fill: true,
-							//steps: true,
-						},
-						shadowSize: 0 // remove shadow to draw faster
-					},
-					crosshair: {
-						mode: 'y'
-					},
-					grid: {
-						//hoverable: true,
-						//clickable: true
-					},
-					xaxis: {
-						show: true, tickDecimals: 0, min: 0, max: 59
-					},
-					yaxes: [{
-						show: true, min: 0, max: 32,
-						steps: true
-					},{
-						show: true, tickDecimals: 0, min: -110, max: -78,
-						//alignTicksWithAxis: 1, 
-						//steps: true,
-						position: 'right'
-					}],
+					series: { lines: { show: true }, shadowSize: 0 },
+					crosshair: { mode: 'y' },
+					//grid: { hoverable: true, clickable: true },
+					xaxis: { show: true, tickDecimals: 0, min: -59, max: 0 },
+					yaxes: [{ show: true, min: 0, max: 32, steps: true, position:'right' },
+					{ show: true, tickDecimals: 0, min: -110, max: -56 }],
 					// TODO: fix legend size
-					legend: {
-						//position: 'sw',
-						show: true
-					}
+					legend: { position: 'nw', show: true }
 				});
 				return flot;
 			},
 			peer: function(item) {
-				var data = [{
-					label: '< Rx Br (Mbit/s)', data: []
-				},{
-					label: '< Tx Br (Mbit/s)', data: []
-				},{
-					label: '<< Rx MCS', data: []
-				},{
-					label: '<< Tx MCS', data: []
-				},{
-					label: '> SNR (db)', data: []
-				}];
+				var data = [
+					{ label: '< Rx Br (Mbit/s)', data: [], color: 'navy' },
+					{ label: '< Tx Br (Mbit/s)', data: [], color: 'deeppink' },
+					{ label: '<< Rx MCS', data: [], color: 'forestgreen' },
+					//{ label: '<< Tx MCS', data: [], color: 'forestgreen' },
+					//{ label: '> SNR (db)', data: [], color: 'forestgreen' }
+				];
 				var flot = $.plot(item, data, {
-					series: {
-						lines: {
-							show: true
-						},
-						shadowSize: 0
-					},
-					crosshair: {
-						mode: 'y'
-					},
-					xaxis: {
-						show: true, tickDecimals: 0, min: 0, max: 59
-					},
-					yaxes: [{
-						show: true, min: 0, max: 32,
-						steps: true
-					},{
-						show: true, tickDecimals: 0, min: 0, max: 64,
-						position: 'right'
-					},{
-						show: true, tickDecimals: 0, min: 0, max: 8,
-						position: 'left'
-					}],
-					legend: {
-						show: true
-					}
+					series: { lines: { show: true }, shadowSize: 0 },
+					crosshair: { mode: 'y' },
+					xaxis: { show: true, tickDecimals: 0, min: -59, max: 0 },
+					yaxes: [
+						{ show: true, min: 0, max: 32, steps: true, position: 'right' },
+						{ show: true, tickDecimals: 0, min: 0, max: 64 },
+						{ show: false, tickDecimals: 0, min: 0, max: 8, position: 'right' }
+					],
+					legend: { show: true, position: 'nw' }
 				});
 				return flot;
 			},
 			scan: function(item) {
 				var data = [{
-					label: 'Noise (dBm)', data: [], color: 'red'
+					//label: 'Noise (dBm)', data: [], color: 'red'
 				}];
 				var flot = $.plot(item, data, {
 					series: {
-						lines: {
-							show: true, //steps: true
-						},
-						points: {
-							show: true
-						},
+						bars: { show: true, barWidth: 8 },
+						//lines: { show: true }, points: { show: true },
 						shadowSize: 0
 					},
-					crosshair: {
-						mode: 'xy'
-					},
-					xaxes: [{
-						show: true, tickDecimals: 0, min: 20, max: 52,
-						position: 'bottom'
-					},{
-						show: true, tickDecimals: 0, min: 470, max: 720,
-						position: 'bottom'
-					}],
-					yaxis: {
-						show: true, min: -110, max: -56,
-						position: 'left'
-					},
-					legend: {
-						show: true
-					}
+					crosshair: { mode: 'xy' },
+					xaxes: [
+						{ show: true, tickDecimals: 0, min: 20, max: 52, position: 'bottom' },
+						{ show: true, tickDecimals: 0, min: 466, max: 720, position: 'bottom' }
+					],
+					//yaxis: { show: true, min: -110, max: -56, position: 'left' },
+					yaxes: [
+						{ show: true, min: -110, max: -56, position: 'left' },
+						{ show: false, min: 0, max: 64, position: 'left' }
+					],
+					legend: { show: true }
 				});
 				return flot;
 			},
 			// update & redraw chart
 			update: function(flot, data) { // 2017.02.28
 				flot.setData(data);
-				flot.draw();		
+				flot.draw();
 			}
 		},
 		// save value to object with max length
@@ -304,7 +236,7 @@ var store = {
 				var fchart = store.flot.chart_chscan;
 				var chscan = store.chscan;
 				var fd_chscan = [{
-					label: 'Noise (dBm)', data: chscan, color: 'red', xaxis: 1
+					label: 'Noise (dBm)', data: chscan, color: 'navy', xaxis: 2, yaxis: 2
 				}]
 				$.flot.chart.update(fchart, fd_chscan);
 			},
@@ -329,7 +261,7 @@ var store = {
 					for(i = 0, j = noise.length; i < noise.length; i ++) {
 						var val = noise[i];
 						if (val > invalid) {
-							fd_noise.push([j-i-1, val]);
+							fd_noise.push([i+1-j, val]);
 						} else {
 							fd_noise.push(null);
 						}
@@ -338,63 +270,47 @@ var store = {
 
 				if (eth_tx_thrpt && eth_tx_thrpt.length > 0) {
 					for(i = 0, j = eth_tx_thrpt.length; i < eth_tx_thrpt.length; i ++) {
-						fd_eth_tx_thrpt.push([j-i-1, eth_tx_thrpt[i]]);
+						fd_eth_tx_thrpt.push([i+1-j, eth_tx_thrpt[i]]);
 					}
 				}
 
 				if (eth_rx_thrpt && eth_rx_thrpt.length > 0) {
 					for(i = 0, j = eth_rx_thrpt.length; i < eth_rx_thrpt.length; i ++) {
-						fd_eth_rx_thrpt.push([j-i-1, eth_rx_thrpt[i]]);
+						fd_eth_rx_thrpt.push([i+1-j, eth_rx_thrpt[i]]);
 					}
 				}
 
 				if (wls_tx_thrpt && wls_tx_thrpt.length > 0) {
 					for(i = 0, j = wls_tx_thrpt.length; i < wls_tx_thrpt.length; i ++) {
-						fd_wls_tx_thrpt.push([j-i-1, wls_tx_thrpt[i]]);
+						fd_wls_tx_thrpt.push([i+1-j, wls_tx_thrpt[i]]);
 					}
 				}
 
 				if (wls_rx_thrpt && wls_rx_thrpt.length > 0) {
 					for(i = 0, j = wls_rx_thrpt.length; i < wls_rx_thrpt.length; i ++) {
-						fd_wls_rx_thrpt.push([j-i-1, wls_rx_thrpt[i]]);
+						fd_wls_rx_thrpt.push([i+1-j, wls_rx_thrpt[i]]);
 					}
 				}
 
 				// custom chart lines
-				var cd;
+				var cd = [];
 				var _fields = store.flot.fields;
+
+				var _noise = { label: '> Noise', data: fd_noise, yaxis: 2, color: 'navy' };
+				var _eth_tx = { label: '< Eth TxBr', data: fd_eth_tx_thrpt, color: 'forestgreen' };
+				var _eth_rx = { label: '< Eth RxBr', data: fd_eth_rx_thrpt, color: 'gold' };
+				var _wls_tx = { label: '< Wls TxBr', data: fd_wls_tx_thrpt, color: 'deeppink' };
+				var _wls_rx = { label: '< Wls RxBr', data: fd_wls_rx_thrpt, color: 'magenta' };
 				if (_fields == 'eth') {
-					cd = [
-						{ label: '> Noise', data: null, yaxis: 2 },
-						{ label: '< Eth Tx Thrpt', data: fd_eth_tx_thrpt },
-						{ label: '< Eth Rx Thrpt', data: fd_eth_rx_thrpt },
-						{ label: '< Wls Tx Thrpt', data: null },
-						{ label: '< Wls Rx Thrpt', data: null }
-					];
+					cd.push(_eth_rx, _eth_tx);
 				} else if (_fields == 'wls') {
-					cd = [
-						{ label: '> Noise', data: null, yaxis: 2 },
-						{ label: '< Eth Tx Thrpt', data: null },
-						{ label: '< Eth Rx Thrpt', data: null },
-						{ label: '< Wls Tx Thrpt', data: fd_wls_tx_thrpt },
-						{ label: '< Wls Rx Thrpt', data: fd_wls_rx_thrpt }
-					];
+					cd.push(_wls_rx, _wls_tx);
 				} else if (_fields == 'abb') {
-					cd = [
-						{ label: '> Noise', data: fd_noise, yaxis: 2 },
-						{ label: '< Eth Tx Thrpt', data: null },
-						{ label: '< Eth Rx Thrpt', data: null },
-						{ label: '< Wls Tx Thrpt', data: null },
-						{ label: '< Wls Rx Thrpt', data: null }
-					];
+					cd.push(_noise);
+				} else if (_fields == 'dfl') {
+					cd.push(_noise, _wls_rx, _wls_tx);
 				} else {
-					cd = [
-						{ label: '> Noise', data: fd_noise, yaxis: 2 },
-						{ label: '< Eth Tx Thrpt', data: fd_eth_tx_thrpt },
-						{ label: '< Eth Rx Thrpt', data: fd_eth_rx_thrpt },
-						{ label: '< Wls Tx Thrpt', data: fd_wls_tx_thrpt },
-						{ label: '< Wls Rx Thrpt', data: fd_wls_rx_thrpt }
-					];
+					cd.push(_noise, _wls_rx, _wls_tx, _eth_rx, _eth_tx);
 				}
 
 				$.flot.chart.update(chart, cd);
@@ -463,7 +379,7 @@ var store = {
 					// delete last chart html
 					$.html.abb.peer.del();
 				}
-			}, 
+			},
 			update: function(idx, peer_cache, peer_chart) {
 				//console.log("dbg 0307> $.flot.peers.calc()", peer_cache, peer_chart);
 				var invalid = store.invalid;
@@ -481,7 +397,7 @@ var store = {
 					for(i = 0, j = rx_br.length; i < rx_br.length; i ++) {
 						var val = rx_br[i];
 						if (val > invalid) {
-							_rx_br.push([j-i-1, val]);
+							_rx_br.push([i+1-j, val]);
 						} else {
 							_rx_br.push(null);
 						}
@@ -492,7 +408,7 @@ var store = {
 					for(i = 0, j = rx_mcs.length; i < rx_mcs.length; i ++) {
 						var val = rx_mcs[i];
 						if (val > invalid) {
-							_rx_mcs.push([j-i-1, val]);
+							_rx_mcs.push([i+1-j, val]);
 						} else {
 							_rx_mcs.push(null);
 						}
@@ -503,7 +419,7 @@ var store = {
 					for(i = 0, j = tx_br.length; i < tx_br.length; i ++) {
 						var val = tx_br[i];
 						if (val > invalid) {
-							_tx_br.push([j-i-1, val]);
+							_tx_br.push([i+1-j, val]);
 						} else {
 							_tx_br.push(null);
 						}
@@ -514,7 +430,7 @@ var store = {
 					for(i = 0, j = tx_mcs.length; i < tx_mcs.length; i ++) {
 						var val = tx_mcs[i];
 						if (val > invalid) {
-							_tx_mcs.push([j-i-1, val]);
+							_tx_mcs.push([i+1-j, val]);
 						} else {
 							_tx_mcs.push(null);
 						}
@@ -525,20 +441,18 @@ var store = {
 					for(i = 0, j = snr.length; i < snr.length; i ++) {
 						var val = snr[i];
 						if (val > invalid) {
-							_snr_fd.push([j-i-1, val]);
+							_snr_fd.push([i+1-j, val]);
 						} else {
 							_snr_fd.push(null);
 						}
 					}
 				}
 
-				_peer_cd = [
-					{ label: '< Rx Br (Mbit/s)', data: _rx_br },
-					{ label: '< Tx Br (Mbit/s)', data: _tx_br },
-					{ label: '<< Rx MCS', data: _rx_mcs, yaxis: 3 },
-					{ label: '<< Tx MCS', data: _tx_mcs, yaxis: 3 },
-					{ label: '> SNR (db)', data: _snr_fd, yaxis: 2 }
-				];
+				_peer_cd = [{ label: '< RxBr (Mbit/s)', data: _rx_br, color: 'deeppink' },
+				{ label: '< TxBr(Mbit/s)', data: _tx_br, color: 'forestgreen' },
+				//{ label: '<< Rx MCS', data: _rx_mcs, yaxis: 3 },
+				//{ label: '<< Tx MCS', data: _tx_mcs, yaxis: 3 },
+				{ label: '> SNR (db)', data: _snr_fd, yaxis: 2, color: 'navy' }];
 
 				$.flot.chart.update(peer_chart, _peer_cd);
 			}
@@ -578,42 +492,39 @@ var store = {
 				offline: function() {
 					var _h = $.html.abb.peer_html.empty();
 					$('#qz-peers').html(_h);
-				}				
+				}
 			},
 			peer_html: {
 				new: function() {
-					return `
-<div class="col s12 qz-peer-chart-n">
-	<div class="card">
-		<div class="card-image waves-effect waves-block waves-light">
-			<div class="qz-space">
-				<div class="qz-chart-holder qz-chart-peer lighten-5"></div>
-			</div>
-		</div>
-		<div class="card-content center">
-			<p class="card-title grey-text text-darken-4 qz-peer-name">...</p>
-			<p class="qz-peer-desc">...</p>
-		</div>
-		<div class="card-reveal">
-			<span class="card-title grey-text text-darken-4">GWS Params<i class="material-icons right">.</i></span>
-				<ul class="collection">
-				<li class="collection-item"><span class="badge qz-peer-txpwr">...</span>Tx Power</li>
-				<li class="collection-item"><span class="badge qz-peer-rxg">...</span>Rx Gain</li>
-				<li class="collection-item"><span class="badge qz-peer-rxagc">...</span>AGC</li>
-				<li class="collection-item"><span class="badge qz-peer-tpc">...</span>TPC</li>
-				<li class="collection-item"><span class="badge qz-peer-atf">...</span>ATF</li>
-				<li class="collection-item"><span class="badge qz-peer-tdma">...</span>TDMA</li>
-			</ul>
-		</div>
-		<!--<div class="card-action">
-			<a href="#model_proxy_leagal" class="qz-btn-peer-proxy" alt="">Manage</a>
-		</div>-->
-	</div>
-</div>
-					`;
+					return '\
+<div class="col s12 qz-peer-chart-n"> \
+	<div class="card"> \
+		<div class="card-image waves-effect waves-block waves-light"> \
+			<div class="qz-space"> \
+				<div class="qz-chart-holder qz-chart-peer lighten-5"></div> \
+			</div> \
+		</div> \
+		<!--<div class="card-reveal"> \
+			<span class="card-title grey-text text-darken-4">RF Params<i class="material-icons right">.</i></span> \
+				<ul class="collection"> \
+					<li class="collection-item"><span class="badge qz-peer-txpwr">...</span>TxPower</li> \
+					<li class="collection-item"><span class="badge qz-peer-rxg">...</span>RxGain</li> \
+					<li class="collection-item"><span class="badge qz-peer-rxagc">...</span>AGC</li> \
+					<li class="collection-item"><span class="badge qz-peer-tpc">...</span>TPC</li> \
+					<li class="collection-item"><span class="badge qz-peer-atf">...</span>ATF</li> \
+					<li class="collection-item"><span class="badge qz-peer-tdma">...</span>TDMA</li> \
+				</ul> \
+		</div>--> \
+		<div class="card-action"> \
+			<span class="qz-peer-name">...</span> \
+			<!--<p class="qz-peer-desc">...</p> \
+			<a href="#model_proxy_leagal" class="qz-btn-peer-proxy" alt="">Manage</a>--> \
+		</div> \
+	</div> \
+</div>';
 				},
 				empty: function() {
-					return '<div id="qz-peers-none" class="col s12 section">( Not connected )</div>';
+					return '<div id="qz-peers-none" class="col s12 section">( Not Connected )</div>';
 				},
 			},
 		}

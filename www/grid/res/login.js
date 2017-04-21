@@ -1,3 +1,4 @@
+// by 6Harmonics Qige @ 2017.02.22 - 2017.04.21
 
 $(document).ready(function(){
 	$('.modal').modal();
