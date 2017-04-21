@@ -167,7 +167,7 @@ var store = {
 				var data = [
 					{ label: '< SNR (db)', data: [], color: 'navy' },
 					{ label: '> Rx Br (Mbit/s)', data: [], color: 'deeppink' },
-					{ label: '> Tx Br (Mbit/s)', data: [], color: 'magenta' },
+					{ label: '> Tx Br (Mbit/s)', data: [], color: 'forestgreen' }, // magenta
 					//{ label: '>> Rx MCS', data: [], color: 'forestgreen' },
 					//{ label: '>> Tx MCS', data: [], color: 'gold' },
 				];
@@ -451,7 +451,7 @@ var store = {
 				_peer_cd = [
 					{ label: '> SNR (db)', data: _snr_fd, yaxis: 2, color: 'navy' },
 					{ label: '< RxBr (Mbit/s)', data: _rx_br, color: 'deeppink' },
-					{ label: '< TxBr(Mbit/s)', data: _tx_br, color: 'magenta' },
+					{ label: '< TxBr(Mbit/s)', data: _tx_br, color: 'forestgreen' }, // magenta
 					//{ label: '<< Rx MCS', data: _rx_mcs, color: 'forestgreen', yaxis: 3 },
 					//{ label: '<< Tx MCS', data: _tx_mcs, color: 'gold', yaxis: 3 },
 				];
