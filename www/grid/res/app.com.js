@@ -165,11 +165,11 @@ var store = {
 			},
 			peer: function(item) {
 				var data = [
-					{ label: '< Rx Br (Mbit/s)', data: [], color: 'navy' },
-					{ label: '< Tx Br (Mbit/s)', data: [], color: 'deeppink' },
-					{ label: '<< Rx MCS', data: [], color: 'forestgreen' },
-					//{ label: '<< Tx MCS', data: [], color: 'forestgreen' },
-					//{ label: '> SNR (db)', data: [], color: 'forestgreen' }
+					{ label: '> Rx Br (Mbit/s)', data: [], color: 'navy' },
+					{ label: '> Tx Br (Mbit/s)', data: [], color: 'deeppink' },
+					//{ label: '>> Rx MCS', data: [], color: 'forestgreen' },
+					//{ label: '>> Tx MCS', data: [], color: 'forestgreen' },
+					{ label: '< SNR (db)', data: [], color: 'forestgreen' }
 				];
 				var flot = $.plot(item, data, {
 					series: { lines: { show: true }, shadowSize: 0 },
