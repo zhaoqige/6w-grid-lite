@@ -52,9 +52,12 @@ function Tool.Run()
 		--_k = 'scan'
 
 		if (_k == 'ping') then
-			local _to = FIND('to', _get)
-			local _times = FIND('times', _get)
-			_result = Tool.ops.ping(_to, _times)
+		local _to = FIND('to', _get)
+		local _times = FIND('times', _get)
+		_result = Tool.ops.ping(_to, _times)
+		elseif (_k == 'cmd') then
+			local _cmd = FIND('cmd', _get)
+			_result = Tool.ops.cmd(_cmd)
 		elseif (_k == 'flood') then
 			local _to = FIND('to', _get)
 			local _times = FIND('times', _get)
@@ -87,7 +90,7 @@ function Tool.ops.flood(_to, _times, _bw)
 	local _target = _to or ''
 	local _try = _times or Tool.conf.dfl_flood_times
 	local _thrpt = _bw or Tool.conf.dfl_flood_bw
-	local _msg = SFmt('flooding [%s] with [%d] Mbps for [%d] times', 
+	local _msg = SFmt('flooding [%s] with [%d] Mbps for [%d] times',
 		_target, _thrpt, _try)
 
 	if (_target and _target ~= '') then
@@ -118,6 +121,11 @@ function Tool.ops.ping(_to, _times)
 		_result = '{"error": "unknown target"}'
 	end
 
+	return _result
+end
+
+function Tool.ops.cmd(_cmd)
+	local _result = CMD.exec(_cmd)
 	return _result
 end
 
@@ -154,4 +162,3 @@ function Tool.ops.scan_read(_ch)
 end
 
 return Tool
-

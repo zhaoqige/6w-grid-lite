@@ -5,7 +5,8 @@
 local html = {}
 
 function html.head(text)
-	return "<head>\n"..text.."\n</head>\n"
+	return "<head>\n<meta charset=\"utf-8\">\n<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\n"
+		..text.."\n</head>\n"
 end
 
 function html.body(text)

@@ -1,6 +1,6 @@
 -- user login, check peer state, logout
 -- by Qige
--- 2016.04.05/2017.01.03/2017.01.16
+-- 2016.04.05/2017.01.03/2017.04.21
 
 local fmt = require 'six.fmt'
 local file = require 'six.file'
@@ -29,9 +29,7 @@ function Auth.Https()
 end
 
 function Auth.Logout()
-	file.write('/tmp/.auth-start', os.time())
 	cgi.Save()
-	file.write('/tmp/.auth-stop', os.time())
 	Auth.verify.init()
 	cgi.job.Redirect(Auth.user.logout())
 end
@@ -141,4 +139,3 @@ function Auth.user.logout()
 end
 
 return Auth
-
