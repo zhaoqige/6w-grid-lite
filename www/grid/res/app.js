@@ -534,7 +534,7 @@ if (store.debug)
 					$.ui.settings.mode(abb.mode);
 				}
 				if (nw) {
-					var text = '';
+					var text = abb.mode + ' ';
 					if (nw.lan_ip && nw.lan_ip != '-') {
 						text += nw.lan_ip;
 						$('#qz-set-lan-ip').val(nw.lan_ip);
@@ -546,7 +546,7 @@ if (store.debug)
 					text += ' 详情'
 					$('#qz-local-nw').text(text);
 
-					text = abb_text;
+					/*text = abb_text;
 					if (nw.bridge) {
 						text += ' (桥接)';
 					} else {
@@ -559,7 +559,7 @@ if (store.debug)
 						if (sys.tdma > 0)		text += ' | TDMA';
 						if (sys.atf > 0)		text += ' | ATF';
 					}
-					$('#qz-local-sts').text(text);
+					$('#qz-local-sts').text(text);*/
 				}
 			},
 			delayed: function() {

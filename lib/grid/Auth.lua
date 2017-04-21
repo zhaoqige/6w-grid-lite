@@ -1,6 +1,6 @@
 -- user login, check peer state, logout
 -- by Qige
--- 2016.04.05/2017.01.03/2017.01.16
+-- 2016.04.05/2017.01.03/2017.04.21
 
 local fmt = require 'six.fmt'
 local file = require 'six.file'
@@ -74,7 +74,8 @@ function Auth.verify.all()
 	-- check ip first, then check user/passwd
 	if (user.verify.Remote(_remote)) then
 		user.ops.Save(_remote)
-		reason = 'valid ip'
+		--reason = 'valid ip'
+		reason = '无效的IP地址'
 		return true, reason
 	else
     	local _user = Auth.verify._user
@@ -134,7 +135,7 @@ function Auth.user.logout()
   	if (flag) then
   		user.ops.Logout()
   		--_result = 'Thank you. Have a nice day.'
-  		_result = '谢谢，祝您好运。'
+  		_result = '谢谢，感谢您的使用。'
   		_target = Auth.conf.path_exit
   		_delay = 3
   	else
@@ -147,4 +148,3 @@ function Auth.user.logout()
 end
 
 return Auth
-
