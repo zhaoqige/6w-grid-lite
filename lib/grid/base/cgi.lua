@@ -68,7 +68,7 @@ end
 
 cgi.out = {}
 function cgi.out.Reply(text)
-	io.write("Content-type: text/html\n\n")
+	io.write("Content-type: text/html\nCache-Control: no-cache, must-revalidate\n\n")
 	if (text) then
 		io.write(text .. '\n')
 	end
